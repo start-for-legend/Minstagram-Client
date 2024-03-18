@@ -10,5 +10,4 @@ export const ReelsContainer = styled.div<reelsPropsType>`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #c5c5c5;
 `;

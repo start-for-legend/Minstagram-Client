@@ -16,5 +16,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "src/assets/files.tsx"]
+  "include": ["src", "src/assets/files.tsx"],
+  "typeRoots": ["src/assets"]
 }

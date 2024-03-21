@@ -1,26 +1,23 @@
+import { styleProps } from "../types/files";
+import B from "./SIUUU.gif";
 import * as S from "./style";
 
-export interface styleProps {
-  width?: string | undefined;
-  height?: string | undefined;
-}
-
-export const SIUU = (props: styleProps) => {
+export const SIUU = ({ height, width }: styleProps) => {
   return (
-    <S.Nkunku width={props.width} height={props.height}>
-      <img src={require("./SIUUU.gif")} alt="왜 안돼 ㅅㅂ" />
+    <S.Nkunku width={width} height={height}>
+      <img src={B} alt="왜 안돼 ㅅㅂ" />
     </S.Nkunku>
   );
 };
 
-export const DarkLogo = (props: styleProps) => {
+export const DarkLogo = ({ height, width }: styleProps) => {
   return (
     <S.Logo>
       <svg
         version="1.0"
         xmlns="http://www.w3.org/2000/svg"
-        width={props.width ? props.width : "auto"}
-        height={props.height ? props.height : "auto"}
+        width={width ?? "auto"}
+        height={height ?? "auto"}
         viewBox="0 0 1000.000000 1000.000000"
         preserveAspectRatio="xMidYMid meet"
       >
@@ -73,13 +70,13 @@ c-95 267 -189 529 -208 583 -20 55 -30 97 -24 97 6 0 86 -21 177 -46z m2476
   );
 };
 
-export const LightLogo = (props: styleProps) => {
+export const LightLogo = ({ height, width }: styleProps) => {
   return (
     <svg
       version="1.0"
       xmlns="http://www.w3.org/2000/svg"
-      width={props.width ? props.width : "auto"}
-      height={props.height ? props.height : "auto"}
+      width={width ?? "auto"}
+      height={height ?? "auto"}
       viewBox="0 0 1000.000000 1000.000000"
       preserveAspectRatio="xMidYMid meet"
     >

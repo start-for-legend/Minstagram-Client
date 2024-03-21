@@ -1,12 +1,8 @@
 import styled from "styled-components";
 
-interface propsType {
-  search: boolean;
-}
-
-export const SidebarItem = styled.div<propsType>`
+export const SidebarItem = styled.div`
   padding-top: 1em;
-  width: ${(props) => (props.search ? "5em" : "100%")};
+  width: 100%;
   cursor: pointer;
   height: 3.5em;
 

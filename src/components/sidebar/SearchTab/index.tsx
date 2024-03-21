@@ -1,7 +1,8 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as S from "./style";
-import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
+
+import * as S from "./style";
 
 const SearchTab = () => {
   const [searchWord, setSearchWord] = useState("");

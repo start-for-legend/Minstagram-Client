@@ -1,34 +1,33 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as S from "./style";
-import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import { searchStateAtom } from "../../../recoil/Atoms/atoms";
 import { sideBarItemType, sideBarPageType } from "../../../types/sideBarType";
-import { useNavigate } from "react-router-dom";
+import * as S from "./style";
 
 interface propsType {
-  onClickEvent?: React.MouseEventHandler;
   icon: any;
   name: string;
   pageType?: sideBarPageType;
   itemType?: sideBarItemType;
 }
 
-const SideBarItem = (props: propsType) => {
+const SideBarItem = ({ pageType, itemType, name, icon }: propsType) => {
   const [searchState, setSearchState] = useRecoilState(searchStateAtom);
-  const curTab = window.location.pathname.substring(1);
+  const curTab = window.location.pathname.split("/");
   const navigate = useNavigate();
-  const { pageType, itemType, name, icon } = props;
 
   const itemOnClick = () => {
-    console.log(itemType);
+    console.log(curTab);
     if (itemType === "search") {
       setSearchState(!searchState);
     }
   };
 
   const pageOnClick = () => {
-    if (curTab !== pageType) {
+    console.log(curTab);
+    if (curTab[1] !== pageType) {
       setSearchState(false);
       navigate(`../${pageType}`);
     } else {
@@ -37,12 +36,9 @@ const SideBarItem = (props: propsType) => {
   };
 
   return (
-    <S.SidebarItem
-      search={searchState}
-      onClick={pageType ? pageOnClick : itemOnClick}
-    >
+    <S.SidebarItem onClick={pageType ? pageOnClick : itemOnClick}>
       <FontAwesomeIcon icon={icon} size="2x" />
-      {searchState ? "" : <div>{name}</div>}
+      {searchState || curTab[1] === "message" ? "" : <div>{name}</div>}
     </S.SidebarItem>
   );
 };

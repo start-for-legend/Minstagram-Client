@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { chatterType } from "../../../types/chattingType";
+import { chatterType } from "../../../types/msgType";
 
 interface chatMsgProps {
   chatterType: chatterType;
@@ -51,7 +51,7 @@ export const ChatInput = styled.input`
 export const ChatContents = styled.div`
   display: flex;
   flex-direction: column-reverse;
-  width: calc(100% - 4em);
+  width: 100%;
   height: calc(100vh - 14em);
   margin-bottom: 1em;
   margin-top: 2em;
@@ -60,15 +60,16 @@ export const ChatContents = styled.div`
 
 export const ChatMsg = styled.div<chatMsgProps>`
   width: fit-content;
+  max-width: 20em;
   font-size: 1.5em;
   padding: 0.25em 0.5em 0.25em 0.5em;
-  max-width: 20em;
   color: #fff;
-  text-align: center;
   border-radius: 1em;
   margin-bottom: 0.25em;
+  word-wrap: break-word;
 
-  margin-left: ${(props) => (props.chatterType === "self" ? "auto" : "0")};
+  margin-left: ${(props) => (props.chatterType === "self" ? "auto" : "1em")};
+  margin-right: ${(props) => (props.chatterType === "self" ? "1em" : "auto")};
   background-color: ${(props) =>
     props.chatterType === "self" ? "#0095f6" : "#000"};
 `;

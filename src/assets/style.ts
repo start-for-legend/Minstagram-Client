@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { styleProps } from "./files";
+
+import { styleProps } from "../types/files";
 
 export const Nkunku = styled.div<styleProps>`
   img {

@@ -1,5 +1,10 @@
 import styled from "styled-components";
 
+interface sideBarProps {
+  search: boolean;
+  curLocation: string;
+}
+
 export const SideBarContainer = styled.div`
   .box {
     float: left;
@@ -7,7 +12,8 @@ export const SideBarContainer = styled.div`
 `;
 
 export const SidebarBox = styled.div<any>`
-  width: ${(props) => (props.search ? "6em" : "22em")};
+  width: ${({ search, curLocation }: sideBarProps) =>
+    search || curLocation === "message" ? "6em" : "22em"};
   height: 100vh;
   border-right: 1px solid #c5c5c5;
   display: flex;

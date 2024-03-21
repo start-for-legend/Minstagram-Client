@@ -1,6 +1,6 @@
-import { SIUU } from "../../assets/files";
 import Footer from "../../components/footer";
 import LoginForm from "./Login";
+import { SIUU } from "../../assets/files";
 import * as S from "./style";
 
 const Promotion = () => {
@@ -8,7 +8,7 @@ const Promotion = () => {
     <S.PromotionContainer>
       <S.Minstagram>Minstagram</S.Minstagram>
       <S.PromotionBox>
-        <SIUU height={"37em"} />
+        <SIUU height="37em" />
         <LoginForm />
       </S.PromotionBox>
       <Footer />

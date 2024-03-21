@@ -1,6 +1,4 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { SIUU } from "../../assets/files";
-import * as S from "./style";
 import {
   faComment,
   faPaperPlane,
@@ -8,6 +6,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { far } from "@fortawesome/free-regular-svg-icons";
+
+import { SIUU } from "../../assets/files";
+import * as S from "./style";
 
 const ReelsVideo = () => {
   const [reelsLike, setReelsLike] = useState(false);

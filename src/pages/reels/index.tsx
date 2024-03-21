@@ -1,8 +1,9 @@
 import { useRecoilValue } from "recoil";
+
+import { searchStateAtom } from "../../recoil/Atoms/atoms";
+import { ReelsContainer } from "./style";
 import ReelsVideo from "../../components/reelsVideo";
 import Sidebar from "../../components/sidebar";
-import { ReelsContainer } from "./style";
-import { searchStateAtom } from "../../recoil/Atoms/atoms";
 
 const Reels = () => {
   const searchState = useRecoilValue(searchStateAtom);

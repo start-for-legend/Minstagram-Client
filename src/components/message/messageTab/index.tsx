@@ -5,9 +5,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import MsgProfileItem from "./MsgProfileItem";
+import { profileTypes } from "../../../types/msgType";
 import * as S from "./style";
 
-const MessageTab = () => {
+interface msgTabProps {
+  profiles: profileTypes[];
+}
+
+const MessageTab = ({ profiles }: msgTabProps) => {
   return (
     <S.msgTab>
       <S.myProfile>
@@ -17,20 +22,9 @@ const MessageTab = () => {
       </S.myProfile>
       <S.msgHelp>메세지</S.msgHelp>
       <S.msgProfile>
-        <MsgProfileItem />
-        <MsgProfileItem />
-        <MsgProfileItem />
-        <MsgProfileItem />
-        <MsgProfileItem />
-        <MsgProfileItem />
-        <MsgProfileItem />
-        <MsgProfileItem />
-        <MsgProfileItem />
-        <MsgProfileItem />
-        <MsgProfileItem />
-        <MsgProfileItem />
-        <MsgProfileItem />
-        <MsgProfileItem />
+        {profiles.map((props) => {
+          return <MsgProfileItem userId={props.userId} key={props.userId} />;
+        })}
       </S.msgProfile>
     </S.msgTab>
   );

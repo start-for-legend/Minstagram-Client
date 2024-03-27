@@ -24,6 +24,7 @@ export const LoginBtn = styled.button`
   color: #fff;
   border-radius: 5px;
   margin-top: 0.5em;
+  cursor: pointer;
 `;
 
 export const OtherTool = styled.div`

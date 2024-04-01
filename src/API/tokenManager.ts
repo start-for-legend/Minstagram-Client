@@ -1,3 +1,5 @@
+/* eslint no-underscore-dangle: 0 */
+/* eslint "class-methods-use-this": "off" */
 import { accessExp, accessToken } from "../lib/tokens";
 
 export class TokenManager {

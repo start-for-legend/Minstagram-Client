@@ -1,8 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { searchStateAtom } from "../../../recoil/Atoms/atoms";
+import {
+  reelsModalStateAtom,
+  searchStateAtom,
+} from "../../../recoil/Atoms/atoms";
 import { sideBarItemType, sideBarPageType } from "../../../types/sideBarType";
 import * as S from "./style";
 
@@ -15,6 +18,7 @@ interface propsType {
 
 const SideBarItem = ({ pageType, itemType, name, icon }: propsType) => {
   const [searchState, setSearchState] = useRecoilState(searchStateAtom);
+  const setReelsModalState = useSetRecoilState(reelsModalStateAtom);
   const curTab = window.location.pathname.split("/");
   const navigate = useNavigate();
 
@@ -22,6 +26,8 @@ const SideBarItem = ({ pageType, itemType, name, icon }: propsType) => {
     console.log(curTab);
     if (itemType === "search") {
       setSearchState(!searchState);
+    } else if (itemType === "create") {
+      setReelsModalState(true);
     }
   };
 

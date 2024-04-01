@@ -60,8 +60,8 @@ const CreatePost = () => {
       } else {
         console.log("nono");
       }
-      setModalState(!modalState);
     }
+    setModalState(!modalState);
   };
 
   const uploadPost = () => {

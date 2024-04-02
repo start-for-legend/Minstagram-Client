@@ -42,6 +42,7 @@
     }
   },
   "rules": {
+    "class-methods-use-this": "off",
     "arrow-body-style": "off",
     "no-plusplus": "off",
     "react/display-name": "off",

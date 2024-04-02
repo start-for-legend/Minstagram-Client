@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { RecoilRoot, useRecoilState } from "recoil";
+import { RecoilRoot, useSetRecoilState } from "recoil";
 
 import { searchStateAtom } from "./recoil/Atoms/atoms";
 import Promotion from "./pages/Promotion";
@@ -10,7 +10,7 @@ import Reels from "./pages/reels";
 import Message from "./pages/message";
 
 function App() {
-  const [searchState, setSearchState] = useRecoilState(searchStateAtom);
+  const setSearchState = useSetRecoilState(searchStateAtom);
   useEffect(() => {
     setSearchState(false);
   }, [setSearchState]);

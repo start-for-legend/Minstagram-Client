@@ -1,11 +1,12 @@
 import axios from "axios";
+
 import { TokenManager } from "./tokenManager";
 
 axios.defaults.withCredentials = true;
 const baseURL = process.env.REACT_APP_BASE_URL;
 
 export const API = axios.create({
-  baseURL,
+  baseURL: `${baseURL}`,
   withCredentials: true,
 });
 
@@ -33,7 +34,7 @@ API.interceptors.request.use((config) => {
     reissueToken();
   }
 
-  config.headers["Authorization"] = tokenManager.accessToken
+  config.headers.Authorization = tokenManager.accessToken
     ? `Bearer ${tokenManager.accessToken}`
     : undefined;
 

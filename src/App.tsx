@@ -23,7 +23,7 @@ function App() {
           <Route path="/home" element={<Sidebar />} />
           <Route path="/explore" element={<Sidebar />} />
           <Route path="/reels" element={<Reels />} />
-          <Route path="/message/:userId?" element={<Message />} />
+          <Route path="/message/:roomId?" element={<Message />} />
           <Route path="/profile" element={<Sidebar />} />
           <Route path="/test" element={<Sidebar />} />
         </Routes>

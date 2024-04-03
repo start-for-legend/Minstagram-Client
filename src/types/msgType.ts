@@ -1,7 +1,12 @@
 export type chatterType = "opponent" | "self";
 
 export type profileTypes = {
-  userId: number;
+  chatRoomId: string;
+  lastMessage: string;
+  lastMessageTime: Date;
+  opponentId: number;
+  opponentNickName: string;
+  opponentProfileUrl: string;
 };
 
 export interface msgTypes {

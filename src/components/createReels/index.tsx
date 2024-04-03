@@ -4,8 +4,8 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faPhotoFilm } from "@fortawesome/free-solid-svg-icons";
 import ReactPlayer from "react-player";
+import { faArrowLeft, faPhotoFilm } from "@fortawesome/free-solid-svg-icons";
 
 import { reelsModalStateAtom } from "../../recoil/Atoms/atoms";
 import * as S from "./style";

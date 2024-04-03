@@ -1,13 +1,65 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { CompatClient, Stomp } from "@stomp/stompjs";
+import { useParams } from "react-router-dom";
+import * as StompJs from "@stomp/stompjs";
 
 import { msgTypes } from "../../../types/msgType";
+import { TokenManager } from "../../../API/tokenManager";
+import { API } from "../../../API/API";
 import * as S from "./style";
 
 const ChattingTab = () => {
+  const baseUrl = process.env.REACT_APP_BASE_URL;
+  const socketUrl = process.env.REACT_APP_SOCKET_URL;
   const [msgContent, setMsgContent] = useState("");
   const [msgContents, setMsgContents] = useState<msgTypes[]>([]);
+  const [msg, setMsg] = useState();
+  const params = useParams();
+  const tokenManager = new TokenManager();
+  const client = useRef<any>();
+
+  const getMsg = () => {
+    API({
+      method: "get",
+      url: `${baseUrl}/room/${params.roomId}`,
+    })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
+  const subscribe = () => {
+    client.current.subscribe(`/sub/${params.roomId}`, getMsg);
+  };
+
+  const msgConnect = () => {
+    client.current = new StompJs.Client({
+      brokerURL: socketUrl,
+      connectHeaders: {
+        Authorization: `Bearer ${tokenManager.accessToken}`,
+      },
+      onConnect: () => {
+        subscribe();
+      },
+      debug: (str) => {
+        console.log(str);
+      },
+      onStompError: (err) => {
+        console.log(err);
+      },
+      reconnectDelay: 1000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
+    });
+    client.current.activate();
+  };
+
+  useEffect(() => {
+    msgConnect();
+
+    return () => client.current.deactivate();
+  }, [params]);
 
   const onMsgSend = (event: any) => {
     if (
@@ -15,12 +67,14 @@ const ChattingTab = () => {
       event.code === "Enter" &&
       msgContent
     ) {
-      console.log(msgContent);
-      setMsgContents([
-        { chatterType: "self", message: msgContent, msgId: 1 },
-        ...msgContents,
-      ]);
-      setMsgContent("");
+      client.current.publish({
+        destination: `/pub/chat/${params.roomId}`,
+        body: JSON.stringify({
+          chatroomId: params.roomId,
+          senderId: 2,
+          message: msgContent,
+        }),
+      });
     }
   };
 

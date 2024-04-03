@@ -8,7 +8,7 @@ const Chatting = () => {
   const params = useParams();
   return (
     <S.ChattingContainer selected={!!params.userId}>
-      {params.userId ? <ChattingTab /> : <NotSelected />}
+      {params.roomId ? <ChattingTab /> : <NotSelected />}
     </S.ChattingContainer>
   );
 };

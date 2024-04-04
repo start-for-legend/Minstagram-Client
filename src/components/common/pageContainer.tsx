@@ -14,9 +14,8 @@ interface ReelsPropsType {
 
 const ReelsContainer = styled.div<ReelsPropsType>`
   width: calc(
-    100vw -
-      ${({ searchState, isStatic }) =>
-        searchState && !isStatic ? "22em" : "6    em"}
+    100vw-${({ searchState, isStatic }) =>
+        searchState && !isStatic ? "22em" : "6em"}
   );
   height: ${(props) => (props.heightVh ? `${props.heightVh}vh` : "100vh")};
   margin-left: ${({ searchState, isStatic }) =>

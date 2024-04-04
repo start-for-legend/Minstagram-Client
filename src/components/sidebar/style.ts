@@ -6,6 +6,7 @@ interface sideBarProps {
 }
 
 export const SideBarContainer = styled.div`
+  position: fixed;
   .box {
     float: left;
   }

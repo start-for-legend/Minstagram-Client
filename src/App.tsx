@@ -8,6 +8,7 @@ import GlobalStyle from "./styles/global";
 import Sidebar from "./components/sidebar";
 import Reels from "./pages/reels";
 import Message from "./pages/message";
+import Home from "./pages/home";
 
 function App() {
   const setSearchState = useSetRecoilState(searchStateAtom);
@@ -20,7 +21,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Promotion />} />
-          <Route path="/home" element={<Sidebar />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/explore" element={<Sidebar />} />
           <Route path="/reels" element={<Reels />} />
           <Route path="/message/:roomId?" element={<Message />} />

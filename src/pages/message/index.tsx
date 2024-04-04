@@ -6,6 +6,7 @@ import Chatting from "../../components/message/chatting";
 import MessageTab from "../../components/message/messageTab";
 import Sidebar from "../../components/sidebar";
 import * as S from "./style";
+import PageContainer from "../../components/common/pageContainer";
 
 const Message = () => {
   const setSearchState = useSetRecoilState(searchStateAtom);
@@ -17,10 +18,10 @@ const Message = () => {
   return (
     <>
       <Sidebar />
-      <S.MsgContainer>
-        <MessageTab />
+      <PageContainer>
+        <MessageTab profiles={profileExamples} />
         <Chatting />
-      </S.MsgContainer>
+      </PageContainer>
     </>
   );
 };

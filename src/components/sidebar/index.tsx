@@ -40,7 +40,6 @@ const Sidebar = () => {
           <SideBarItem icon={faBell} name="알림" itemType="alert" />
           <SideBarItem icon={faCirclePlus} name="만들기" itemType="create" />
           <SideBarItem icon={faHouse} name="프로필" pageType="profile" />
-          <div>현재 상태 : {searchState}</div>
           <SideBarItem icon={faBars} name="더 보기" itemType="further" />
         </S.SidebarBox>
         {searchState ? <SearchTab /> : ""}

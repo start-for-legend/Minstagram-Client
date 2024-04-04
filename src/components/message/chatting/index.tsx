@@ -8,7 +8,7 @@ import * as S from "./style";
 
 const Chatting = () => {
   const params = useParams();
-  const [userId, setUserId] = useState<number>();
+  const [userId, setUserId] = useState<number>(0);
 
   const getUserInfo = () => {
     API({

@@ -10,7 +10,7 @@ import { API } from "../../../API/API";
 import * as S from "./style";
 
 type msgProps = {
-  myUserId: number | undefined;
+  myUserId: number;
 };
 
 const ChattingTab = ({ myUserId }: msgProps) => {
@@ -104,7 +104,7 @@ const ChattingTab = ({ myUserId }: msgProps) => {
         {
           chatterType: "self",
           chat: msgContent,
-          userId: 2,
+          userId: myUserId,
           chatTime: new Date(),
         },
       ]);
@@ -137,7 +137,6 @@ const ChattingTab = ({ myUserId }: msgProps) => {
             </S.ChatMsg>
           );
         })}
-        <S.ChatMsg chatterType="self">ㄴㅁㄹㄴㅇㄹ</S.ChatMsg>
       </S.ChatContents>
       <S.ChatProfile>
         <S.TargetInfo>

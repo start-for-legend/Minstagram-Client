@@ -5,7 +5,6 @@ import { searchStateAtom } from "../../recoil/Atoms/atoms";
 import Chatting from "../../components/message/chatting";
 import MessageTab from "../../components/message/messageTab";
 import Sidebar from "../../components/sidebar";
-import * as S from "./style";
 import PageContainer from "../../components/common/pageContainer";
 
 const Message = () => {
@@ -19,7 +18,7 @@ const Message = () => {
     <>
       <Sidebar />
       <PageContainer>
-        <MessageTab profiles={profileExamples} />
+        <MessageTab />
         <Chatting />
       </PageContainer>
     </>

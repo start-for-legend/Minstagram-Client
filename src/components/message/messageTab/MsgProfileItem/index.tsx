@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
+import { profileTypes } from "../../../../types/msgType";
 import * as S from "./style";
 
-interface msgProfileItemProps {
-  userId: number;
-}
-
-const MsgProfileItem = ({ userId }: msgProfileItemProps) => {
-  const [msgPreview, setMsgPreview] = useState("asdfadsfadsf");
+const MsgProfileItem = ({
+  opponentId,
+  opponentNickName,
+  opponentProfileUrl,
+  chatRoomId,
+  lastMessage,
+  lastMessageTime,
+}: profileTypes) => {
+  const [msgPreview, setMsgPreview] = useState(lastMessage);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,9 +23,15 @@ const MsgProfileItem = ({ userId }: msgProfileItemProps) => {
   }, [msgPreview]);
 
   return (
-    <S.ProfileBox onClick={() => navigate(`/message/${userId}`)}>
+    <S.ProfileBox
+      onClick={() =>
+        navigate(`/message/${opponentId}`, {
+          state: { chatRoomId, opponentId },
+        })
+      }
+    >
       <S.Circle />
-      <S.TargetName>수용</S.TargetName>
+      <S.TargetName>{opponentNickName}</S.TargetName>
       <S.MsgPreview>{msgPreview}</S.MsgPreview>
     </S.ProfileBox>
   );

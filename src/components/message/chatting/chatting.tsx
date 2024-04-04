@@ -1,13 +1,86 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import * as StompJs from "@stomp/stompjs";
 
 import { msgTypes } from "../../../types/msgType";
+import { TokenManager } from "../../../API/tokenManager";
+import { API } from "../../../API/API";
 import * as S from "./style";
 
-const ChattingTab = () => {
+type msgProps = {
+  myUserId: number | undefined;
+};
+
+const ChattingTab = ({ myUserId }: msgProps) => {
+  const baseUrl = process.env.REACT_APP_BASE_URL;
+  const socketUrl = process.env.REACT_APP_SOCKET_URL;
   const [msgContent, setMsgContent] = useState("");
   const [msgContents, setMsgContents] = useState<msgTypes[]>([]);
+  const params = useParams();
+  const tokenManager = new TokenManager();
+  const client = useRef<any>();
+  const {
+    state: { chatRoomId, opponentId },
+  } = useLocation();
+
+  const getMsg = () => {
+    API({
+      method: "get",
+      url: `${baseUrl}/room/${chatRoomId}`,
+    })
+      .then((res: any) => {
+        console.log(res);
+        setMsgContents(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const connect = () => {
+    try {
+      client.current = new StompJs.Client({
+        brokerURL: socketUrl,
+        connectHeaders: {
+          Authorization: `Bearer ${tokenManager.accessToken}`,
+        },
+        disconnectHeaders: {
+          Authorization: `Bearer ${tokenManager.accessToken}`,
+        },
+        debug: (str) => {
+          console.log(str);
+        },
+        reconnectDelay: 5000, // 자동 재 연결
+        heartbeatIncoming: 4000,
+        heartbeatOutgoing: 4000,
+      });
+
+      client.current.onConnect = (res: any) => {
+        console.log(res);
+        client.current.subscribe(
+          `/sub/${chatRoomId}`,
+          () => console.log("connected"),
+          {
+            Authorization: `Bearer ${tokenManager.accessToken}`,
+          }
+        );
+      };
+
+      client.current.activate();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getMsg();
+    connect();
+
+    return () => client.current.deactivate();
+  }, []);
+  useEffect(() => {
+    console.log(msgContents);
+  }, [msgContents]);
 
   const onMsgSend = (event: any) => {
     if (
@@ -15,10 +88,25 @@ const ChattingTab = () => {
       event.code === "Enter" &&
       msgContent
     ) {
-      console.log(msgContent);
+      client.current.publish({
+        destination: `/pub/chat`,
+        headers: {
+          Authorization: `Bearer ${tokenManager.accessToken}`,
+        },
+        body: JSON.stringify({
+          chatRoomId,
+          senderId: 2,
+          message: msgContent,
+        }),
+      });
       setMsgContents([
-        { chatterType: "self", message: msgContent, msgId: 1 },
         ...msgContents,
+        {
+          chatterType: "self",
+          chat: msgContent,
+          userId: 2,
+          chatTime: new Date(),
+        },
       ]);
       setMsgContent("");
     }
@@ -38,14 +126,18 @@ const ChattingTab = () => {
         <FontAwesomeIcon icon={faPaperPlane} size="2xl" />
       </S.ChatWindow>
       <S.ChatContents>
-        {msgContents?.map(({ chatterType, message, msgId }) => {
+        {msgContents?.map(({ chat, userId, chatId }) => {
           return (
-            <S.ChatMsg chatterType={chatterType} key={msgId}>
-              {message}
+            <S.ChatMsg
+              chatterType={userId === myUserId ? "self" : "opponent"}
+              key={chatId}
+            >
+              {/* 여기 바꿔야함 ㅇㅇ */}
+              {chat}
             </S.ChatMsg>
           );
         })}
-        <S.ChatMsg chatterType="opponent">ㄴㅁㅇㄹ</S.ChatMsg>
+        <S.ChatMsg chatterType="self">ㄴㅁㄹㄴㅇㄹ</S.ChatMsg>
       </S.ChatContents>
       <S.ChatProfile>
         <S.TargetInfo>

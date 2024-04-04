@@ -1,18 +1,29 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useState } from "react";
 import {
   faChevronDown,
   faPenToSquare,
 } from "@fortawesome/free-solid-svg-icons";
 
+import { API } from "../../../API/API";
 import MsgProfileItem from "./MsgProfileItem";
 import { profileTypes } from "../../../types/msgType";
 import * as S from "./style";
 
-interface msgTabProps {
-  profiles: profileTypes[];
-}
+const MessageTab = () => {
+  const [rooms, setRooms] = useState<profileTypes[]>();
 
-const MessageTab = ({ profiles }: msgTabProps) => {
+  const getRooms = async () => {
+    await API({
+      method: "get",
+      url: "/room",
+    }).then((res) => setRooms(res.data));
+  };
+
+  useEffect(() => {
+    getRooms();
+  }, []);
+
   return (
     <S.msgTab>
       <S.myProfile>
@@ -22,8 +33,8 @@ const MessageTab = ({ profiles }: msgTabProps) => {
       </S.myProfile>
       <S.msgHelp>메세지</S.msgHelp>
       <S.msgProfile>
-        {profiles.map((props) => {
-          return <MsgProfileItem userId={props.userId} key={props.userId} />;
+        {rooms?.map((props: any) => {
+          return <MsgProfileItem {...props} key={props.chatRoomId} />;
         })}
       </S.msgProfile>
     </S.msgTab>

@@ -10,7 +10,9 @@ export type profileTypes = {
 };
 
 export interface msgTypes {
+  chatId?: number;
+  userId: number;
+  chat: string;
+  chatTime?: Date;
   chatterType: chatterType;
-  message: string;
-  msgId: number;
 }

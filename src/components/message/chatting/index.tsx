@@ -1,14 +1,29 @@
 import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
-import * as S from "./style";
+import { API } from "../../../API/API";
 import NotSelected from "./notSelected";
 import ChattingTab from "./chatting";
+import * as S from "./style";
 
 const Chatting = () => {
   const params = useParams();
+  const [userId, setUserId] = useState<number>();
+
+  const getUserInfo = () => {
+    API({
+      method: "get",
+      url: "/user",
+    }).then((res) => setUserId(res.data.userId));
+  };
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
   return (
     <S.ChattingContainer selected={!!params.userId}>
-      {params.roomId ? <ChattingTab /> : <NotSelected />}
+      {params.roomId ? <ChattingTab myUserId={userId} /> : <NotSelected />}
     </S.ChattingContainer>
   );
 };

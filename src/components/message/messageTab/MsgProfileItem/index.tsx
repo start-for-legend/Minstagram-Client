@@ -23,7 +23,13 @@ const MsgProfileItem = ({
   }, [msgPreview]);
 
   return (
-    <S.ProfileBox onClick={() => navigate(`/message/${chatRoomId}`)}>
+    <S.ProfileBox
+      onClick={() =>
+        navigate(`/message/${opponentId}`, {
+          state: { chatRoomId, opponentId },
+        })
+      }
+    >
       <S.Circle />
       <S.TargetName>{opponentNickName}</S.TargetName>
       <S.MsgPreview>{msgPreview}</S.MsgPreview>

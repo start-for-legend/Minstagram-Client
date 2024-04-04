@@ -1,16 +1,15 @@
 import PageContainer from "../../components/common/pageContainer";
-import ReelsVideo from "../../components/reelsVideo";
+import HomeTab from "../../components/home";
 import Sidebar from "../../components/sidebar";
 
-const Reels = () => {
+const Home = () => {
   return (
     <>
       <Sidebar />
-      <PageContainer isStatic>
-        <ReelsVideo />
+      <PageContainer paddingTopEm={3} heightVh={200} alignItem="start" isStatic>
+        <HomeTab />
       </PageContainer>
     </>
   );
 };
-
-export default Reels;
+export default Home;

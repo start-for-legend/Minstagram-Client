@@ -1,3 +1,4 @@
+/* eslint no-underscore-dangle: 0 */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
@@ -18,7 +19,6 @@ const ChattingTab = ({ myUserId }: msgProps) => {
   const socketUrl = process.env.REACT_APP_SOCKET_URL;
   const [msgContent, setMsgContent] = useState("");
   const [msgContents, setMsgContents] = useState<msgTypes[]>([]);
-  const params = useParams();
   const tokenManager = new TokenManager();
   const client = useRef<any>();
   const {
@@ -35,6 +35,22 @@ const ChattingTab = ({ myUserId }: msgProps) => {
         setMsgContents(res.data);
       })
       .catch((err) => console.log(err));
+  };
+
+  const chatRecieve = async (msg: any) => {
+    if (msg.body) {
+      const body = JSON.parse(msg._body);
+      setMsgContents((prevMsgContents) => [
+        ...prevMsgContents,
+        {
+          chatterType: myUserId === body.senderId ? "self" : "opponent",
+          chat: body.message,
+          userId: body.senderId,
+          chatTime: new Date(),
+        },
+      ]);
+      console.log(msgContents);
+    }
   };
 
   const connect = () => {
@@ -57,13 +73,9 @@ const ChattingTab = ({ myUserId }: msgProps) => {
 
       client.current.onConnect = (res: any) => {
         console.log(res);
-        client.current.subscribe(
-          `/sub/${chatRoomId}`,
-          () => console.log("connected"),
-          {
-            Authorization: `Bearer ${tokenManager.accessToken}`,
-          }
-        );
+        client.current.subscribe(`/sub/${chatRoomId}`, chatRecieve, {
+          Authorization: `Bearer ${tokenManager.accessToken}`,
+        });
       };
 
       client.current.activate();
@@ -78,9 +90,6 @@ const ChattingTab = ({ myUserId }: msgProps) => {
 
     return () => client.current.deactivate();
   }, []);
-  useEffect(() => {
-    console.log(msgContents);
-  }, [msgContents]);
 
   const onMsgSend = (event: any) => {
     if (
@@ -95,19 +104,10 @@ const ChattingTab = ({ myUserId }: msgProps) => {
         },
         body: JSON.stringify({
           chatRoomId,
-          senderId: 2,
+          senderId: myUserId,
           message: msgContent,
         }),
       });
-      setMsgContents([
-        ...msgContents,
-        {
-          chatterType: "self",
-          chat: msgContent,
-          userId: myUserId,
-          chatTime: new Date(),
-        },
-      ]);
       setMsgContent("");
     }
   };

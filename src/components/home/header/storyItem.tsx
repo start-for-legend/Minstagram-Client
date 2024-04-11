@@ -1,12 +1,14 @@
-import { storyType } from "../../../types/storyType";
+import { useState } from "react";
+
+import ProfileItem from "../items/profileItem";
 import * as S from "./style";
 
-const StoryItem = (props: storyType) => {
-  const { userName } = props;
+const StoryItem = () => {
+  const [watched, setWatched] = useState(false);
   return (
     <S.profile>
-      <S.profileImg {...props} />
-      <S.profileName>{userName}</S.profileName>
+      <ProfileItem width={4} watched={watched} />
+      <S.profileName>asdf</S.profileName>
     </S.profile>
   );
 };

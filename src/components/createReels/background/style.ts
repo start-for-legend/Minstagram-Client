@@ -5,7 +5,7 @@ interface modalState {
 }
 
 export const CreatePostContainer = styled.div<modalState>`
-  position: absolute;
+  position: fixed;
   width: 100vw;
   height: 100vh;
   display: flex;

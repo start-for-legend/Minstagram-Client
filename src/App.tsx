@@ -10,7 +10,7 @@ import Reels from "./pages/reels";
 import Message from "./pages/message";
 import Home from "./pages/home";
 
-function App() {
+const App = () => {
   const setSearchState = useSetRecoilState(searchStateAtom);
   useEffect(() => {
     setSearchState(false);
@@ -24,13 +24,13 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/explore" element={<Sidebar />} />
           <Route path="/reels" element={<Reels />} />
-          <Route path="/message/:roomId?" element={<Message />} />
+          <Route path="/message/:userId?" element={<Message />} />
           <Route path="/profile" element={<Sidebar />} />
           <Route path="/test" element={<Sidebar />} />
         </Routes>
       </BrowserRouter>
     </RecoilRoot>
   );
-}
+};
 
 export default App;

@@ -12,6 +12,8 @@ export const ProfileImg = styled.div<profileImgProps>`
   border-radius: 2em;
   margin-left: 1em;
   display: inline-block;
+  float: left;
+  margin-right: 0.5em;
 `;
 
 const ProfileItem = ({ watched, width }: profileImgProps) => {

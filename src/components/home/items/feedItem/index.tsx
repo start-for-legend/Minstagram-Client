@@ -7,14 +7,18 @@ import {
   faHeart,
   fas,
 } from "@fortawesome/free-solid-svg-icons";
+import { useRecoilState } from "recoil";
 import { Link } from "react-router-dom";
 
-import { SIUU } from "../../../../assets/files";
 import ProfileItem from "../profileItem";
+import FeedModal from "../feedModal";
+import { feedModalStateAtom } from "../../../../recoil/Atoms/atoms";
+import { SIUU } from "../../../../assets/files";
 import * as S from "./style";
 
 const FeedItem = () => {
   const [like, setLike] = useState(false);
+  const [feedModal, setFeedModal] = useRecoilState(feedModalStateAtom);
   const [doubleClicked, setDoubleClicked] = useState(false);
 
   const onDoubleClick = () => {
@@ -46,15 +50,22 @@ const FeedItem = () => {
           onClick={() => setLike(!like)}
           size="2x"
         />
-        <FontAwesomeIcon icon={fas.faComment} size="2x" />
+        <FontAwesomeIcon
+          onClick={() => setFeedModal(true)}
+          icon={fas.faComment}
+          size="2x"
+        />
         <FontAwesomeIcon icon={fas.faPaperPlane} size="2x" />
         <FontAwesomeIcon icon={fas.faBookmark} size="2x" className="bm" />
         <S.FeedTitle>좋아요 8.2만개</S.FeedTitle>
         <S.FeedTitle>
           <Link to="/profile">JotChelsea</Link> 안녕하세요
         </S.FeedTitle>
-        <S.Comment>댓글 100개 더 보기</S.Comment>
+        <S.Comment onClick={() => setFeedModal(true)}>
+          댓글 100개 더 보기
+        </S.Comment>
       </S.FeedFooter>
+      {feedModal ? <FeedModal /> : ""}
     </S.FeedItem>
   );
 };

@@ -9,3 +9,8 @@ export const reelsModalStateAtom = atom<boolean>({
   key: "reelsModalStateAtom",
   default: false,
 });
+
+export const feedModalStateAtom = atom<boolean>({
+  key: "feedModalStateAtom",
+  default: false,
+});

@@ -1,6 +1,7 @@
 import FeedItem from "./items/feedItem";
 import FeedHeader from "./header";
 import * as S from "./style";
+import RecommendUser from "./recommendUser";
 
 const HomeTab = () => {
   return (
@@ -8,8 +9,11 @@ const HomeTab = () => {
       <S.FeedContainer>
         <FeedHeader />
         <FeedItem />
+        <FeedItem />
+        <FeedItem />
+        <FeedItem />
       </S.FeedContainer>
-      <div />
+      <RecommendUser />
     </S.HomeContainer>
   );
 };

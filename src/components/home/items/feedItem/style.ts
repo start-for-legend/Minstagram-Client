@@ -4,6 +4,7 @@ export const FeedItem = styled.div`
   width: 35em;
   height: auto;
   margin-top: 1em;
+  margin-bottom: 1em;
   border-bottom: 1px solid #000;
 
   svg {

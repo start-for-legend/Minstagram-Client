@@ -7,7 +7,7 @@ const StoryItem = () => {
   const [watched, setWatched] = useState(false);
   return (
     <S.profile>
-      <ProfileItem width={4} watched={watched} />
+      <ProfileItem width={4} watched={watched} marginLeft={1} />
       <S.profileName>asdf</S.profileName>
     </S.profile>
   );

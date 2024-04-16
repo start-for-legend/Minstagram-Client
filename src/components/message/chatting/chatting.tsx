@@ -132,7 +132,6 @@ const ChattingTab = ({ myUserId }: msgProps) => {
               chatterType={userId === myUserId ? "self" : "opponent"}
               key={chatId}
             >
-              {/* 여기 바꿔야함 ㅇㅇ */}
               {chat}
             </S.ChatMsg>
           );

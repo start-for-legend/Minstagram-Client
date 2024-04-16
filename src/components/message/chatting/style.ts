@@ -52,11 +52,9 @@ export const ChatContents = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: calc(100vh - 14em);
   margin-bottom: 1em;
-  margin-top: 2em;
+  height: calc(100vh - 14em);
   overflow-y: scroll;
-  justify-content: end;
 `;
 
 export const ChatMsg = styled.div<chatMsgProps>`

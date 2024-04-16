@@ -23,7 +23,7 @@ const Chatting = () => {
 
   return (
     <S.ChattingContainer selected={!!params.userId}>
-      {params.roomId ? <ChattingTab myUserId={userId} /> : <NotSelected />}
+      {params.userId ? <ChattingTab myUserId={userId} /> : <NotSelected />}
     </S.ChattingContainer>
   );
 };

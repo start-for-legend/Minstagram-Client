@@ -1,14 +1,25 @@
-import PageContainer from "../../components/common/pageContainer";
+import styled from "styled-components";
+
 import HomeTab from "../../components/home";
 import Sidebar from "../../components/sidebar";
+
+const HomeContainer = styled.div`
+  padding-top: 3em;
+  height: 200vh;
+  width: calc(100vw - 22em);
+  margin-left: 22em;
+  display: flex;
+  align-items: start;
+  justify-content: center;
+`;
 
 const Home = () => {
   return (
     <>
       <Sidebar />
-      <PageContainer paddingTopEm={3} heightVh={200} alignItem="start" isStatic>
+      <HomeContainer>
         <HomeTab />
-      </PageContainer>
+      </HomeContainer>
     </>
   );
 };

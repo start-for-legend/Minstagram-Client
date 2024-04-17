@@ -22,14 +22,13 @@ const CommentItem = () => {
           들이는 순간 뇌가 블루스크린 상태가 되어 아무 것도 할 수 없으며, 이
           상태가 조금만 길게 이어져도 영구적인 뇌 손상으로 폐인이 되어 버림.
         </S.commentContent>
+        <S.commentInfo>수정됨 &apos; 2일</S.commentInfo>
         <FontAwesomeIcon
           onClick={() => setLiked(!liked)}
           color={liked ? "red" : "black"}
           icon={liked ? fas.faHeart : far.faHeart}
           size="2x"
         />
-        <br />
-        <S.commentInfo>수정됨 &apos; 2일</S.commentInfo>
       </S.commentTab>
     </S.commentItem>
   );

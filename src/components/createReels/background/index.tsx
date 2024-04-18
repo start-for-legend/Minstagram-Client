@@ -17,7 +17,7 @@ const CreateReelsContainer = ({ children, createOver }: containerProps) => {
     <S.CreatePostContainer
       ref={background}
       modalState={modalState}
-      onClick={(e) => (e.target === background.current ? createOver() : null)}
+      onClick={(e) => (e.target === background.current ? createOver() : "")}
     >
       {children}
     </S.CreatePostContainer>

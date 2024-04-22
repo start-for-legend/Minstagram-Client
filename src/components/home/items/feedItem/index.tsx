@@ -56,7 +56,6 @@ const FeedItem = () => {
           size="2x"
         />
         <FontAwesomeIcon icon={fas.faPaperPlane} size="2x" />
-        <FontAwesomeIcon icon={fas.faBookmark} size="2x" className="bm" />
         <S.FeedTitle>좋아요 8.2만개</S.FeedTitle>
         <S.FeedTitle>
           <Link to="/profile">JotChelsea</Link> 안녕하세요

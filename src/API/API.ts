@@ -19,9 +19,7 @@ const reissueToken = async () => {
     method: "patch",
     url: `${baseURL}/auth`,
     withCredentials: true,
-  })
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err));
+  });
 };
 
 API.interceptors.request.use((config) => {

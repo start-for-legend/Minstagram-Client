@@ -3,6 +3,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
+  noticeStateAtom,
   reelsModalStateAtom,
   searchStateAtom,
 } from "../../../recoil/Atoms/atoms";
@@ -18,6 +19,7 @@ interface propsType {
 
 const SideBarItem = ({ pageType, itemType, name, icon }: propsType) => {
   const [searchState, setSearchState] = useRecoilState(searchStateAtom);
+  const [noticeState, setNoticeState] = useRecoilState(noticeStateAtom);
   const setReelsModalState = useSetRecoilState(reelsModalStateAtom);
   const curTab = window.location.pathname.split("/");
   const navigate = useNavigate();
@@ -25,9 +27,13 @@ const SideBarItem = ({ pageType, itemType, name, icon }: propsType) => {
   const itemOnClick = () => {
     console.log(curTab);
     if (itemType === "search") {
-      setSearchState(!searchState);
+      setSearchState(true);
+      setNoticeState(false);
     } else if (itemType === "create") {
       setReelsModalState(true);
+    } else if (itemType === "notice") {
+      setSearchState(false);
+      setNoticeState(true);
     }
   };
 
@@ -44,7 +50,11 @@ const SideBarItem = ({ pageType, itemType, name, icon }: propsType) => {
   return (
     <S.SidebarItem onClick={pageType ? pageOnClick : itemOnClick}>
       <FontAwesomeIcon icon={icon} size="2x" />
-      {searchState || curTab[1] === "message" ? "" : <div>{name}</div>}
+      {noticeState || searchState || curTab[1] === "message" ? (
+        ""
+      ) : (
+        <div>{name}</div>
+      )}
     </S.SidebarItem>
   );
 };

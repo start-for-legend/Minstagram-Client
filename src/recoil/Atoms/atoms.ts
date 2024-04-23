@@ -26,3 +26,13 @@ export const noticeDataAtom = atom<noticeInterface[]>({
   key: "noticeDataAtom",
   default: [],
 });
+
+export const noticeDataIdsAtom = atom<number[]>({
+  key: "noticeDataIdsAtom",
+  default: [],
+});
+
+export const allNoticeReadAtom = atom<boolean>({
+  key: "noticeDataIdsAtom",
+  default: false,
+});

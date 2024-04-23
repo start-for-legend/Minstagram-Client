@@ -1,30 +1,36 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { RecoilRoot, useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { EventSourcePolyfill } from "event-source-polyfill";
-import { useQuery } from "react-query";
 
 import { API } from "./API/API";
 import { TokenManager } from "./API/tokenManager";
-import { noticeDataAtom, searchStateAtom } from "./recoil/Atoms/atoms";
+import {
+  noticeDataAtom,
+  noticeDataIdsAtom,
+  noticeStateAtom,
+  searchStateAtom,
+} from "./recoil/Atoms/atoms";
 import Promotion from "./pages/Promotion";
 import GlobalStyle from "./styles/global";
 import Sidebar from "./components/sidebar";
 import Reels from "./pages/reels";
 import Message from "./pages/message";
 import Home from "./pages/home";
-import { noticeInterface } from "./types/noticeType";
 
 const App = () => {
   const setSearchState = useSetRecoilState(searchStateAtom);
+  const setNoticeState = useSetRecoilState(noticeStateAtom);
   const [noticeData, setNoticeData] = useState<any>();
   const [parsedData, setParsedData] = useRecoilState(noticeDataAtom);
+  const setNoticeDataIds = useSetRecoilState(noticeDataIdsAtom);
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const tokenManager = new TokenManager();
 
   useEffect(() => {
     setSearchState(false);
-  }, [setSearchState]);
+    setNoticeState(false);
+  }, [setSearchState, setNoticeState]);
 
   useEffect(() => {
     console.log(parsedData);
@@ -33,11 +39,17 @@ const App = () => {
   useEffect(() => {
     if (noticeData != null) {
       noticeData.forEach((element: any) => {
-        const noticeContent = element.split("data:")[1];
-        if (noticeContent) {
-          const noticeContent1 = JSON.parse(noticeContent);
-          typeof noticeContent1 === "object"
-            ? setParsedData((data) => [...data, noticeContent1])
+        const content = element.split("data:")[1];
+        if (content) {
+          const noticeContent = JSON.parse(content);
+          typeof noticeContent === "object" && noticeContent.read === false
+            ? setNoticeDataIds((prev) => [
+                ...(prev || []),
+                noticeContent.noticeId,
+              ])
+            : "";
+          typeof noticeContent === "object"
+            ? setParsedData((data) => [noticeContent, ...data])
             : "";
         }
       });
@@ -83,7 +95,7 @@ const App = () => {
   }, []);
 
   return (
-    <RecoilRoot>
+    <>
       <GlobalStyle />
       <BrowserRouter>
         <Routes>
@@ -96,7 +108,7 @@ const App = () => {
           <Route path="/test" element={<Sidebar />} />
         </Routes>
       </BrowserRouter>
-    </RecoilRoot>
+    </>
   );
 };
 

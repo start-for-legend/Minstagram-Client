@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
+  noticeDataAtom,
   noticeStateAtom,
   reelsModalStateAtom,
   searchStateAtom,
@@ -20,6 +21,7 @@ interface propsType {
 const SideBarItem = ({ pageType, itemType, name, icon }: propsType) => {
   const [searchState, setSearchState] = useRecoilState(searchStateAtom);
   const [noticeState, setNoticeState] = useRecoilState(noticeStateAtom);
+  const noticeData = useRecoilValue(noticeDataAtom);
   const setReelsModalState = useSetRecoilState(reelsModalStateAtom);
   const curTab = window.location.pathname.split("/");
   const navigate = useNavigate();
@@ -34,6 +36,7 @@ const SideBarItem = ({ pageType, itemType, name, icon }: propsType) => {
     } else if (itemType === "notice") {
       setSearchState(false);
       setNoticeState(true);
+      console.log(noticeData);
     }
   };
 
@@ -44,6 +47,7 @@ const SideBarItem = ({ pageType, itemType, name, icon }: propsType) => {
       navigate(`../${pageType}`);
     } else {
       setSearchState(false);
+      setNoticeState(false);
     }
   };
 

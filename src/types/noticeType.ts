@@ -1,5 +1,5 @@
 export interface noticeInterface {
-  createAt: Date;
+  createAt: string;
   noticeId: number;
   noticeType: noticeType;
   data: any;

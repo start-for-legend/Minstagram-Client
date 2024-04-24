@@ -2,21 +2,11 @@ import styled, { keyframes } from "styled-components";
 
 export const reelsVideoContainer = styled.div`
   width: inherit;
-  height: inherit;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-left: 15em;
-
-  img {
-    transform: translate(-50%, 0);
-    margin-left: 50%;
-    max-width: 35em;
-    max-height: 60em;
-    min-width: 25em;
-    min-height: 55em;
-    border-radius: 1em;
-  }
 `;
 
 export const appearHeart = keyframes`
@@ -39,6 +29,8 @@ export const appearHeart = keyframes`
 `;
 
 export const reelsVideo = styled.div`
+  height: 100vh;
+  width: 35em;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -51,10 +43,24 @@ export const reelsVideo = styled.div`
   }
 `;
 
+export const videoBox = styled.div`
+  width: 30em;
+  height: 55em;
+  border-radius: 1em;
+  background-color: #000;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: inherit;
+  }
+`;
+
 export const reelsOptions = styled.div`
   margin-top: auto;
   text-align: center;
-  margin-left: 1em;
   margin-bottom: 3em;
   svg {
     margin-left: 0.25em;

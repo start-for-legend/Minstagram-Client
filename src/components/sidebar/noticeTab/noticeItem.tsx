@@ -27,7 +27,7 @@ const NoticeItem = ({
   const [dayDiff, setDayDiff] = useState<dayDiffType>();
   const [curRead, setCurRead] = useState<boolean>(read);
   const allNoticeRead = useRecoilValue(allNoticeReadAtom);
-  const { follower, following, name, nickname, userId, profileUrl } =
+  const { follower, following, name, nickName, userId, profileUrl } =
     userResponse;
   const timeDiff = new Date().getTime() - Date.parse(createAt);
   const aDay = 24 * 60 * 60 * 1000;

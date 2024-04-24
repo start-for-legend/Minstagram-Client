@@ -1,21 +1,14 @@
+import { userType } from "./userType";
+
 export interface noticeInterface {
   createAt: string;
   noticeId: number;
   noticeType: noticeType;
   data: any;
-  userResponse: userResponse;
+  userResponse: userType;
   read: boolean;
   url?: string;
   valid: boolean;
-}
-
-export interface userResponse {
-  follower: number;
-  following: number;
-  name: string;
-  nickname: string;
-  profileUrl?: string;
-  userId: number;
 }
 
 export type noticeType =

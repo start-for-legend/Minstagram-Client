@@ -29,10 +29,12 @@ const ReelsVideo = ({
   const [reelsCmt, setReelsCmt] = useState<reelsCmtInterface[]>();
 
   useEffect(() => {
-    API({
-      method: "get",
-      url: `/leels-comment/${leelsId}`,
-    }).then((res) => setReelsCmt(res.data));
+    if (leelsId) {
+      API({
+        method: "get",
+        url: `/leels-comment/${leelsId}`,
+      }).then((res) => setReelsCmt(res.data));
+    }
   }, [leelsUrl]);
 
   const reelsLikeFunc = () => {

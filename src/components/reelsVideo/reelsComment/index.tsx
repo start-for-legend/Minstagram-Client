@@ -1,15 +1,18 @@
 import * as S from "./style";
 import CommentItem from "./commentItem";
+import { reelsCmtInterface } from "../../../types/reelsType";
 
-const ReelsComment = () => {
+interface reelsCommentProps {
+  reelsCmt: reelsCmtInterface[];
+}
+
+const ReelsComment = ({ reelsCmt }: reelsCommentProps) => {
   return (
     <S.reelsCommentContainer>
       <S.commentTab>
-        <CommentItem />
-        <CommentItem />
-        <CommentItem />
-        <CommentItem />
-        <CommentItem />
+        {reelsCmt.map((data) => {
+          return <CommentItem key={data.leelsCommentId} {...data} />;
+        })}
       </S.commentTab>
     </S.reelsCommentContainer>
   );

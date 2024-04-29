@@ -5,4 +5,4 @@ export type sideBarPageType =
   | "explore"
   | "profile";
 
-export type sideBarItemType = "search" | "alert" | "create" | "further";
+export type sideBarItemType = "search" | "notice" | "create" | "further";

@@ -2,21 +2,11 @@ import styled, { keyframes } from "styled-components";
 
 export const reelsVideoContainer = styled.div`
   width: inherit;
-  height: inherit;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-left: 15em;
-
-  img {
-    transform: translate(-50%, 0);
-    margin-left: 50%;
-    max-width: 35em;
-    max-height: 60em;
-    min-width: 25em;
-    min-height: 55em;
-    border-radius: 1em;
-  }
 `;
 
 export const appearHeart = keyframes`
@@ -39,6 +29,8 @@ export const appearHeart = keyframes`
 `;
 
 export const reelsVideo = styled.div`
+  height: 100vh;
+  width: 35em;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -51,10 +43,24 @@ export const reelsVideo = styled.div`
   }
 `;
 
+export const videoBox = styled.div`
+  width: 30em;
+  height: 55em;
+  border-radius: 1em;
+  background-color: #000;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: inherit;
+  }
+`;
+
 export const reelsOptions = styled.div`
   margin-top: auto;
   text-align: center;
-  margin-left: 1em;
   margin-bottom: 3em;
   svg {
     margin-left: 0.25em;
@@ -76,67 +82,4 @@ export const reelsOptionValue = styled.div`
   margin-bottom: 0.5em;
   font-weight: 900;
   font-size: 1.5em;
-`;
-
-export const reelsCommentContainer = styled.div`
-  position: absolute;
-  width: 34em;
-  height: 100vh;
-  margin-left: 85em;
-  z-index: 2;
-`;
-
-export const commentTab = styled.div`
-  padding: 1em 1em 1em 1em;
-  width: 20em;
-  height: 40em;
-  background-color: white;
-  margin-left: 50%;
-  margin-top: 100%;
-  transform: translate(-50%, -60%);
-  border: 2px solid #c5c5c5;
-  border-radius: 1em;
-`;
-
-export const commentItem = styled.div`
-  width: 38em;
-  padding-left: 1em;
-  margin-top: 1em;
-  margin-bottom: 1em;
-  svg:hover {
-    transform: scale(1.25);
-    transition-duration: 0.25s;
-  }
-`;
-
-/* export const commentTab = styled.div`
-  margin-left: 1em;
-
-  span {
-    font-family: 900;
-    padding-right: 1em;
-    float: left;
-  }
-`; */
-
-export const feedContent = styled.div`
-  width: 17em;
-  word-wrap: break-word;
-  height: auto;
-  float: left;
-  div {
-    width: 30em;
-  }
-  margin-bottom: 2em;
-`;
-
-export const commentContent = styled.div`
-  width: 20em;
-  float: left;
-`;
-
-export const commentInfo = styled.div`
-  color: #c5c5c5;
-  width: 30em;
-  margin-left: 3em;
 `;

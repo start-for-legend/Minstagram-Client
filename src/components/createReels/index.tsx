@@ -1,53 +1,55 @@
 // eslint-disable-next-line no-alert
 /* eslint no-underscore-dangle: 0 */
 
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { faArrowLeft, faPhotoFilm } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ReactPlayer from "react-player";
 
-import { API } from "../../API/API";
 import { reelsModalStateAtom } from "../../recoil/Atoms/atoms";
 import CreateReelsContainer from "./background";
 import * as S from "./style";
+import UploadFiles from "./uploadFiles";
+import { API } from "../../API/API";
 
 const CreatePost = () => {
   const [modalState, setModalState] = useRecoilState(reelsModalStateAtom);
-  const [imgFile, setImgFile] = useState<File | null>();
+  const [posting, setPosting] = useState<boolean>(false);
+  const [content, setContent] = useState<string>("");
+  const [hashtag, setHashtag] = useState<string>("");
+  const [hashtags, setHashtags] = useState<string[]>([]);
   const [imgFileString, setImgFileString] = useState<any>();
-  const [videoFile, setVideoFile] = useState<File | null>();
   const [videoFileString, setVideoFileString] = useState<any>();
-  const imgRef = useRef<any>(null);
+  const [uploadedFile, setUploadedFile] = useState<string>("");
+
   const isFile = imgFileString || videoFileString;
 
-  const formData = new FormData();
-
   useEffect(() => {
-    if (imgFile instanceof File) {
-      formData.set("file", imgFile);
-    }
-    if (videoFile instanceof File) {
-      formData.set("file", videoFile);
-    }
-  }, [imgFile, videoFile]);
+    console.log(hashtags);
+  }, [hashtags]);
 
-  const saveReelsFile = async (e: ChangeEvent<HTMLInputElement>) => {
-    const _file = e.currentTarget.files?.item(0);
-    const _fileType = _file?.type.split("/")[0];
+  const addHashtags = () => {
+    const hash = hashtag.replace("\n", "");
+    if (!hashtags.includes(hash)) {
+      setHashtags((prevArray) => [...prevArray, hash]);
+      setHashtag("");
+    } else {
+      alert("이미 있는 태그입니다!");
+      setHashtag("");
+    }
+  };
 
-    if (_file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(_file);
-      reader.onload = () => {
-        if (_fileType === "video" && reader.result !== null) {
-          setVideoFileString(reader.result);
-          setImgFileString(null);
-        } else if (_fileType === "image") {
-          setImgFileString(reader.result);
-          setVideoFileString(null);
-        }
-      };
+  const onRemoveHashTag = (ht: string) => {
+    setHashtags(hashtags.filter((tag) => tag !== ht));
+  };
+
+  const onKeyPress = (e: any) => {
+    if (
+      e.nativeEvent.isComposing === false &&
+      e.code === "Enter" &&
+      e.target.value !== ""
+    ) {
+      addHashtags();
     }
   };
 
@@ -64,88 +66,82 @@ const CreatePost = () => {
     }
   };
 
-  const uploadPost = () => {
-    if (formData.get("file") !== null) {
-      console.log(formData.get("file"));
-      API({
+  const postApi = async () => {
+    if (content !== "" && hashtags.length !== 0 && isFile) {
+      await API({
         method: "post",
-        url: "/file",
-        headers: {
-          "Content-Type": "multipart/form-data",
+        url: "/feed",
+        data: {
+          content,
+          hashtags,
+          url: [uploadedFile],
         },
-        data: formData,
       })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
-    } else if (imgFile instanceof File) {
-      formData.append("file", imgFile);
-      uploadPost();
-    } else {
-      console.log("fuck you");
+        .then((res) =>
+          res.status === 201 ? setModalState(false) : console.log("not Posted")
+        )
+        .then((err) => console.log(err));
     }
   };
 
   return (
     <CreateReelsContainer createOver={createOver}>
-      <S.CreateReels>
-        <S.Header>
-          <S.BackSpace onClick={createOver}>
+      <S.CreateReels posting={posting}>
+        <S.Header posting={posting}>
+          <S.BackSpace onClick={posting ? () => setPosting(false) : createOver}>
             <FontAwesomeIcon icon={faArrowLeft} size="1x" />
           </S.BackSpace>
           새 게시물 만들기
+          <S.NextBtn
+            isFile={isFile}
+            onClick={() => (posting ? postApi() : setPosting(true))}
+          >
+            {posting ? "게시하기" : "다음"}
+          </S.NextBtn>
         </S.Header>
-        {isFile ? (
-          <>
-            {imgFileString !== null ? (
-              <img src={imgFileString || ""} />
-            ) : (
-              "Loading..."
-            )}
-            {videoFileString !== null ? (
-              <ReactPlayer
-                controls
-                width="auto"
-                height="20em"
-                url={videoFileString}
+        {posting ? (
+          <S.uploadPost>
+            <S.file>
+              <img src={imgFileString} />
+            </S.file>
+            <S.inputInfo>
+              <h2>본문</h2>
+              <textarea
+                placeholder="asdf"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
               />
-            ) : (
-              "Loading..."
-            )}
-            <label htmlFor="fileBtn">
-              <S.FileBtn>다른 파일 선택</S.FileBtn>
-            </label>
-            <input
-              ref={imgRef}
-              type="file"
-              id="fileBtn"
-              onChange={(e) => {
-                saveReelsFile(e);
-                setImgFile(e.currentTarget.files?.item(0));
-                setVideoFile(e.currentTarget.files?.item(0));
-              }}
-              accept=".png,.gif"
-            />
-            <S.FileBtn onClick={uploadPost}>보내기</S.FileBtn>
-          </>
+              <h2>태그</h2>
+              <textarea
+                placeholder="태그를 입력하고 엔터키를 입력하세요"
+                value={hashtag}
+                onChange={(e) => setHashtag(e.target.value)}
+                onKeyUp={(e) => onKeyPress(e)}
+              />
+              {hashtags.map((element) => {
+                return (
+                  <S.hashtagItem key={element}>
+                    {element}
+                    <FontAwesomeIcon
+                      onClick={() => onRemoveHashTag(element)}
+                      icon={faCircleXmark}
+                      color="#fff"
+                    />
+                  </S.hashtagItem>
+                );
+              })}
+            </S.inputInfo>
+          </S.uploadPost>
         ) : (
-          <>
-            <FontAwesomeIcon className="filmSvg" icon={faPhotoFilm} size="5x" />
-            <S.ReelsTitle>사진 혹은 동영상을 올리세요</S.ReelsTitle>
-            <label htmlFor="fileBtn">
-              <S.FileBtn>컴퓨터에서 선택</S.FileBtn>
-            </label>
-            <input
-              ref={imgRef}
-              type="file"
-              id="fileBtn"
-              onChange={(e) => {
-                saveReelsFile(e);
-                setImgFile(e.currentTarget.files?.item(0));
-                setVideoFile(e.currentTarget.files?.item(0));
-              }}
-              accept=".png,.gif"
-            />
-          </>
+          <UploadFiles
+            imgFileString={imgFileString}
+            videoFileString={videoFileString}
+            setImgFileString={setImgFileString}
+            setVideoFileString={setVideoFileString}
+            isFile={isFile}
+            uploadedFile={uploadedFile}
+            setUploadedFile={setUploadedFile}
+          />
         )}
       </S.CreateReels>
     </CreateReelsContainer>

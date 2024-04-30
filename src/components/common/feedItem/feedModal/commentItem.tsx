@@ -3,7 +3,7 @@ import { far } from "@fortawesome/free-regular-svg-icons";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 
-import ProfileItem from "../profileItem";
+import ProfileItem from "../../../home/items/profileItem";
 import * as S from "./style";
 
 const CommentItem = () => {

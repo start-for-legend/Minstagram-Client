@@ -11,7 +11,7 @@ export const ProfileImg = styled.div<profileImgProps>`
   width: ${(props) => props.width || 4}em;
   height: ${(props) => props.width || 4}em;
   background-color: lightblue;
-  border-radius: 2em;
+  border-radius: ${(props) => props.width || -1}em;
   margin-left: ${(props) => props.marginLeft || 0}em;
   margin-top: ${(props) => props.marginTop || 0}em;
   display: inline-block;

@@ -11,14 +11,14 @@ import { useRecoilState } from "recoil";
 import { Link } from "react-router-dom";
 
 import ProfileItem from "../profileItem";
-import FeedModal from "../feedModal";
+import FeedModal from "../../../common/feedItem/feedModal";
 import { feedModalStateAtom } from "../../../../recoil/Atoms/atoms";
 import { SIUU } from "../../../../assets/files";
 import * as S from "./style";
 
 const FeedItem = () => {
   const [like, setLike] = useState(false);
-  const [feedModal, setFeedModal] = useRecoilState(feedModalStateAtom);
+  const [feedModal, setFeedModal] = useState(false);
   const [doubleClicked, setDoubleClicked] = useState(false);
 
   const onDoubleClick = () => {
@@ -60,11 +60,15 @@ const FeedItem = () => {
         <S.FeedTitle>
           <Link to="/profile">JotChelsea</Link> 안녕하세요
         </S.FeedTitle>
-        <S.Comment onClick={() => setFeedModal(true)}>
+        <S.Comment onClick={() => setFeedModal(!feedModal)}>
           댓글 100개 더 보기
         </S.Comment>
       </S.FeedFooter>
-      {feedModal ? <FeedModal /> : ""}
+      {feedModal ? (
+        <FeedModal modalState={feedModal} setModalState={setFeedModal} />
+      ) : (
+        ""
+      )}
     </S.FeedItem>
   );
 };

@@ -1,17 +1,21 @@
 import ReactModal from "react-modal";
 import { useRecoilState } from "recoil";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsis, faHeart, fas } from "@fortawesome/free-solid-svg-icons";
-import { far } from "@fortawesome/free-regular-svg-icons";
+import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 
 import { feedModalStateAtom } from "../../../../recoil/Atoms/atoms";
 import { SIUU } from "../../../../assets/files";
-import ProfileItem from "../profileItem";
+import ProfileItem from "../../../home/items/profileItem";
 import * as S from "./style";
 import CommentItem from "./commentItem";
 
-const FeedModal = () => {
-  const [modalState, setModalState] = useRecoilState(feedModalStateAtom);
+const FeedModal = ({
+  modalState,
+  setModalState,
+}: {
+  modalState: boolean;
+  setModalState: Function;
+}) => {
   return (
     <ReactModal
       isOpen={modalState}

@@ -1,6 +1,7 @@
 import { atom } from "recoil";
 
 import { noticeInterface } from "../../types/noticeType";
+import { userType } from "../../types/userType";
 
 export const searchStateAtom = atom<boolean>({
   key: "searchStateAtom",
@@ -34,5 +35,15 @@ export const noticeDataIdsAtom = atom<number[]>({
 
 export const allNoticeReadAtom = atom<boolean>({
   key: "noticeDataIdsAtom",
+  default: false,
+});
+
+export const userResponseAtom = atom<userType>({
+  key: "userResponseAtom",
+  default: undefined,
+});
+
+export const myAccAtom = atom<boolean>({
+  key: "myAccAtom",
   default: false,
 });

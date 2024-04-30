@@ -17,6 +17,7 @@ import Sidebar from "./components/sidebar";
 import Reels from "./pages/reels";
 import Message from "./pages/message";
 import Home from "./pages/home";
+import Profile from "./pages/profile";
 
 const App = () => {
   const setSearchState = useSetRecoilState(searchStateAtom);
@@ -104,7 +105,7 @@ const App = () => {
           <Route path="/explore" element={<Sidebar />} />
           <Route path="/reels" element={<Reels />} />
           <Route path="/message/:userId?" element={<Message />} />
-          <Route path="/profile" element={<Sidebar />} />
+          <Route path="/profile/:userId?" element={<Profile />} />
           <Route path="/test" element={<Sidebar />} />
         </Routes>
       </BrowserRouter>

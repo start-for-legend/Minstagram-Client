@@ -1,21 +1,40 @@
 import ReactModal from "react-modal";
-import { useRecoilState } from "recoil";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useState } from "react";
 
-import { feedModalStateAtom } from "../../../../recoil/Atoms/atoms";
-import { SIUU } from "../../../../assets/files";
 import ProfileItem from "../../../home/items/profileItem";
 import * as S from "./style";
+import { feedType } from "../../../../types/feedType";
 import CommentItem from "./commentItem";
+import { API } from "../../../../API/API";
+import { commentType } from "../../../../types/commentType";
 
 const FeedModal = ({
+  element: { content, feedId, fileUrls, hashtags, userResponse },
   modalState,
   setModalState,
 }: {
+  element: feedType;
   modalState: boolean;
   setModalState: Function;
 }) => {
+  const [comments, setComments] = useState<commentType[]>();
+
+  useEffect(() => {
+    console.log({ content, feedId, fileUrls, hashtags, userResponse });
+  }, [content, feedId, fileUrls, hashtags, userResponse]);
+
+  useEffect(() => {
+    const getComment = async () => {
+      await API({
+        method: "get",
+        url: `/feed-comment/${feedId}`,
+      }).then((res) => setComments(res.data));
+    };
+    getComment();
+  }, []);
+
   return (
     <ReactModal
       isOpen={modalState}
@@ -23,36 +42,25 @@ const FeedModal = ({
       style={S.feedModalStyles}
     >
       <S.modalImg>
-        <SIUU />
+        <img src={fileUrls ? fileUrls[0] : ""} />
       </S.modalImg>
       <S.right>
         <S.modalHeader>
           <ProfileItem watched={false} width={3} />
-          <S.profileName>JotChelsea</S.profileName>
+          <S.profileName>{userResponse.nickName}</S.profileName>
           <S.followBtn>팔로우</S.followBtn>
           <FontAwesomeIcon icon={faEllipsis} size="2x" />
         </S.modalHeader>
         <S.commentContainer>
-          <S.commentItem>
-            <ProfileItem watched={false} width={2.5} />
-            <S.commentTab>
-              <span>
-                <b>JotChelsea</b>
-              </span>
-              <S.feedContent>
-                <div>
-                  이 캐릭터 하나면 니네가 빠는 캐릭터 몰살 가능함 ㅋㅋㅋㅋ
-                  「무량공처」 무하한의 안쪽인 이 영역은 고죠 사토루 본인을
-                  제외하고 모든 대상이 행하는 정신 활동을 무한한 반복작업으로
-                  만듬. 영역에 잠시라도 발을 들이는 순간 뇌가 블루스크린 상태가
-                  되어 아무 것도 할 수 없으며, 이 상태가 조금만 길게 이어져도
-                  영구적인 뇌 손상으로 폐인이 되어 버림.
-                </div>
-              </S.feedContent>
-              <S.commentInfo>수정됨 &apos; 2일</S.commentInfo>
-            </S.commentTab>
-          </S.commentItem>
-          <CommentItem />
+          <S.commentScrollContainer>
+            {comments && comments?.length !== 0 ? (
+              comments.map((element: commentType) => {
+                return <CommentItem key={element.feedCommentId} {...element} />;
+              })
+            ) : (
+              <div>아직 아무런 댓글이 달리지 않았어요!</div>
+            )}
+          </S.commentScrollContainer>
         </S.commentContainer>
       </S.right>
     </ReactModal>

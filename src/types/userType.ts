@@ -6,10 +6,10 @@ export interface userType {
   nickName: string;
   profileUrl?: string;
   userId: number;
-  feeds: Array<feedsType>;
-  leels: Array<feedsType>;
+  feeds: Array<userFeedsType>;
+  leels: Array<userFeedsType>;
 }
 
-export type feedsType = {
+export type userFeedsType = {
   awsUrl: string;
 };

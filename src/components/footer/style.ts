@@ -2,8 +2,9 @@ import styled from "styled-components";
 
 export const FooterBox = styled.div`
   margin: 0;
-  width: 100vw;
   text-align: center;
+  overflow-x: hidden;
+  margin-top: 2em;
 `;
 
 export const FooterItem = styled.span`

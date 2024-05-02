@@ -1,18 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { far } from "@fortawesome/free-regular-svg-icons";
-import {
-  faComment,
-  faEllipsis,
-  faHeart,
-  fas,
-} from "@fortawesome/free-solid-svg-icons";
-import { useRecoilState } from "recoil";
+import { faEllipsis, fas } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 import ProfileItem from "../profileItem";
-import FeedModal from "../../../common/feedItem/feedModal";
-import { feedModalStateAtom } from "../../../../recoil/Atoms/atoms";
 import { SIUU } from "../../../../assets/files";
 import * as S from "./style";
 
@@ -64,11 +56,10 @@ const FeedItem = () => {
           댓글 100개 더 보기
         </S.Comment>
       </S.FeedFooter>
-      {feedModal ? (
-        <FeedModal modalState={feedModal} setModalState={setFeedModal} />
-      ) : (
-        ""
-      )}
+      {feedModal
+        ? /*         <FeedModal modalState={feedModal} setModalState={setFeedModal} />
+          여기에 props element 넣어주기!!! */ ""
+        : ""}
     </S.FeedItem>
   );
 };

@@ -14,7 +14,6 @@ export const ProfileImg = styled.div<profileImgProps>`
   border-radius: ${(props) => props.width || -1}em;
   margin-left: ${(props) => props.marginLeft || 0}em;
   margin-top: ${(props) => props.marginTop || 0}em;
-  display: inline-block;
   float: left;
   margin-right: 0.5em;
 `;

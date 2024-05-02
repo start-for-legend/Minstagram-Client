@@ -32,13 +32,13 @@ const ProfileComponent = () => {
             </S.selectTabItem>
           </S.selectTab>
           <S.feedGrid>
+            {/* <FeedItem />
             <FeedItem />
             <FeedItem />
             <FeedItem />
             <FeedItem />
             <FeedItem />
-            <FeedItem />
-            <FeedItem />
+            <FeedItem /> */}
           </S.feedGrid>
         </>
       ) : (

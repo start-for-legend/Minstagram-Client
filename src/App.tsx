@@ -18,6 +18,7 @@ import Reels from "./pages/reels";
 import Message from "./pages/message";
 import Home from "./pages/home";
 import Profile from "./pages/profile";
+import Explore from "./pages/explore";
 
 const App = () => {
   const setSearchState = useSetRecoilState(searchStateAtom);
@@ -102,11 +103,10 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Promotion />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/explore" element={<Sidebar />} />
+          <Route path="/explore" element={<Explore />} />
           <Route path="/reels" element={<Reels />} />
           <Route path="/message/:userId?" element={<Message />} />
           <Route path="/profile/:userId?" element={<Profile />} />
-          <Route path="/test" element={<Sidebar />} />
         </Routes>
       </BrowserRouter>
     </>

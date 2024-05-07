@@ -1,4 +1,5 @@
 import ReactModal from "react-modal";
+import { far } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCirclePlus,
@@ -6,7 +7,6 @@ import {
   fas,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import { far } from "@fortawesome/free-regular-svg-icons";
 
 import ProfileItem from "../../../home/items/profileItem";
 import * as S from "./style";
@@ -15,34 +15,20 @@ import CommentItem from "./commentItem";
 import { API } from "../../../../API/API";
 import { commentType } from "../../../../types/commentType";
 
-const FeedModal = ({
-  element: { content, feedId, fileUrls, hashtags, userResponse },
+const FeedModalProfile = ({
   modalState,
   setModalState,
+  feedIdProfile,
 }: {
-  element: feedType;
   modalState: boolean;
   setModalState: Function;
+  feedIdProfile?: number;
 }) => {
+  const [feedData, setFeedData] = useState<feedType>();
   const [comments, setComments] = useState<commentType[]>([]);
   const [postCmt, setPostCmt] = useState<string>();
   const [cmtIdx, setCmtIdx] = useState<number | undefined>(0);
   const [feedLiked, setFeedLiked] = useState(false);
-
-  const onLikeClick = async () => {
-    if (!feedLiked) {
-      await API({
-        url: `/feed/${feedId}`,
-        method: "post",
-      }).catch((err) => console.log(err.response.status));
-    } else {
-      await API({
-        url: `/feed/${feedId}`,
-        method: "patch",
-      });
-    }
-    setFeedLiked(!feedLiked);
-  };
 
   useEffect(() => {
     setCmtIdx(comments?.length);
@@ -51,25 +37,33 @@ const FeedModal = ({
   const getComment = async () => {
     await API({
       method: "get",
-      url: `/feed-comment/${feedId}`,
+      url: `/feed-comment/${feedIdProfile}`,
     }).then((res) => setComments(res.data));
   };
 
   useEffect(() => {
+    const getFeed = async () => {
+      await API({
+        method: "get",
+        url: `/feed/${feedIdProfile}`,
+      }).then((res) => setFeedData(res.data));
+    };
     const getValid = async () => {
       await API({
-        url: `/feed/valid/${feedId}`,
+        url: `/feed/valid/${feedIdProfile}`,
         method: "get",
       }).then((res) => setFeedLiked(res.data.isTrue));
     };
+
     getValid();
     getComment();
+    getFeed();
   }, []);
 
   const cmtSend = async () => {
     await API({
       method: "post",
-      url: `/feed-comment/${feedId}`,
+      url: `/feed-comment/${feedIdProfile}`,
       data: {
         content: postCmt,
       },
@@ -84,7 +78,7 @@ const FeedModal = ({
     if (cmtIdx && comments) {
       await API({
         method: "get",
-        url: `/feed-comment/${feedId}?lastCommentId=${comments[cmtIdx - 1].feedCommentId}`,
+        url: `/feed-comment/${feedIdProfile}?lastCommentId=${comments[cmtIdx - 1].feedCommentId}`,
       }).then((res) => {
         if (res.data.length > 1) {
           setComments((prev) => [...prev, ...res.data]);
@@ -102,12 +96,12 @@ const FeedModal = ({
       style={S.feedModalStyles}
     >
       <S.modalImg>
-        <img src={fileUrls ? fileUrls[0] : ""} />
+        <img src={feedData ? feedData.fileUrls[0] : ""} />
       </S.modalImg>
       <S.right>
         <S.modalHeader>
           <ProfileItem watched={false} width={3} />
-          <S.profileName>{userResponse.nickName}</S.profileName>
+          <S.profileName>{feedData?.userResponse.nickName}</S.profileName>
           <S.followBtn>팔로우</S.followBtn>
           <FontAwesomeIcon icon={faEllipsis} size="2x" />
         </S.modalHeader>
@@ -129,12 +123,12 @@ const FeedModal = ({
           <S.commentFooter onSubmit={(e) => e.preventDefault()}>
             <FontAwesomeIcon
               icon={feedLiked ? fas.faHeart : far.faHeart}
-              onClick={onLikeClick}
+              onClick={() => setFeedLiked(!feedLiked)}
               color={feedLiked ? "red" : "black"}
               size="2x"
             />
             <FontAwesomeIcon icon={far.faPaperPlane} size="2x" />
-            <div>좋아요 {0}개</div>
+            <div>좋아요 0개</div>
             <S.commentSend>
               <ProfileItem watched={false} width={3} />
               <input
@@ -154,4 +148,4 @@ const FeedModal = ({
   );
 };
 
-export default FeedModal;
+export default FeedModalProfile;

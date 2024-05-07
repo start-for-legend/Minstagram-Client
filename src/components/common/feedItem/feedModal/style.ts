@@ -126,18 +126,55 @@ export const commentContainer = styled.div`
 
 export const right = styled.div`
   margin-top: 1em;
-  height: 48em;
+  height: 52em;
   overflow: hidden;
 `;
 
 export const commentScrollContainer = styled.div`
-  height: 40em;
+  height: 39em;
   width: 38.5em;
   overflow-y: auto;
   overflow-x: hidden;
   text-align: center;
+
+  svg {
+    cursor: pointer;
+  }
 `;
 
 export const heartCount = styled.div`
   text-align: center;
+`;
+
+export const commentFooter = styled.form`
+  width: 40em;
+  height: 21em;
+  margin-top: auto;
+  padding-left: 1em;
+  padding-top: 1em;
+  border-top: 1px solid #c5c5c5;
+
+  svg {
+    margin-right: 0.5em;
+  }
+`;
+
+export const commentSend = styled.div`
+  height: 3em;
+
+  input {
+    height: 3em;
+    border: none;
+    width: 30em;
+    outline: none;
+  }
+
+  button {
+    height: 3em;
+    border: none;
+    outline: none;
+    background: none;
+    cursor: pointer;
+    color: lightblue;
+  }
 `;

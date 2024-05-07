@@ -7,6 +7,7 @@ import ProfileHeader from "./header";
 import { searchStateAtom, userResponseAtom } from "../../recoil/Atoms/atoms";
 import * as S from "./style";
 import FeedItem from "../common/feedItem";
+import FeedItemProfile from "../common/feedItem/indexProfile";
 
 const ProfileComponent = () => {
   const userResponse = useRecoilValue(userResponseAtom);
@@ -14,7 +15,7 @@ const ProfileComponent = () => {
   const [curTab, setCurTab] = useState(false);
 
   useEffect(() => {
-    console.log("safd");
+    console.log(userResponse);
   }, []);
   return (
     <S.profileContainer searchState={searchState}>
@@ -32,13 +33,15 @@ const ProfileComponent = () => {
             </S.selectTabItem>
           </S.selectTab>
           <S.feedGrid>
-            {/* <FeedItem />
-            <FeedItem />
-            <FeedItem />
-            <FeedItem />
-            <FeedItem />
-            <FeedItem />
-            <FeedItem /> */}
+            {userResponse.feeds.map((element) => {
+              return (
+                <FeedItemProfile
+                  key={element.feedId}
+                  feedId={element.feedId}
+                  fileUrls={element.feedUrlOne || ""}
+                />
+              );
+            })}
           </S.feedGrid>
         </>
       ) : (

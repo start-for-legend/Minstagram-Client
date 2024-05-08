@@ -8,7 +8,7 @@ import ProfileItem from "../profileItem";
 import { SIUU } from "../../../../assets/files";
 import * as S from "./style";
 
-const FeedItem = () => {
+const HomeFeedItem = () => {
   const [like, setLike] = useState(false);
   const [feedModal, setFeedModal] = useState(false);
   const [doubleClicked, setDoubleClicked] = useState(false);
@@ -43,7 +43,7 @@ const FeedItem = () => {
           size="2x"
         />
         <FontAwesomeIcon
-          onClick={() => setFeedModal(true)}
+          onClick={() => setFeedModal(!feedModal)}
           icon={fas.faComment}
           size="2x"
         />
@@ -64,4 +64,4 @@ const FeedItem = () => {
   );
 };
 
-export default FeedItem;
+export default HomeFeedItem;

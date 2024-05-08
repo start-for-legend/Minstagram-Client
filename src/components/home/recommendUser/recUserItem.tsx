@@ -1,3 +1,4 @@
+import { API } from "../../../API/API";
 import ProfileItem from "../items/profileItem";
 import * as S from "./style";
 
@@ -9,6 +10,26 @@ interface recUserItemProps {
 }
 
 const RecUserItem = ({ myProfile, name, id, nickName }: recUserItemProps) => {
+  const followUser = async () => {
+    await API({
+      method: "post",
+      url: `/follow/${id}`,
+    }).catch((err) => console.log(err));
+  };
+
+  const onFollowClick = async () => {
+    await API({
+      method: "get",
+      url: `/follow/valid/${id}`,
+    }).then((res) => {
+      if (!res.data.isTrue) {
+        followUser();
+      } else {
+        alert("이미 친구입니다!");
+      }
+    });
+  };
+
   return (
     <S.ProfileItem>
       <a href={myProfile ? "./profile" : `./profile/${id}`}>
@@ -19,7 +40,7 @@ const RecUserItem = ({ myProfile, name, id, nickName }: recUserItemProps) => {
       {myProfile ? (
         <S.FollowBtn>변경</S.FollowBtn>
       ) : (
-        <S.FollowBtn>팔로우</S.FollowBtn>
+        <S.FollowBtn onClick={onFollowClick}>팔로우</S.FollowBtn>
       )}
     </S.ProfileItem>
   );

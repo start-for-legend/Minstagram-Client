@@ -7,8 +7,16 @@ import { Link } from "react-router-dom";
 import ProfileItem from "../profileItem";
 import { SIUU } from "../../../../assets/files";
 import * as S from "./style";
+import { feedType } from "../../../../types/feedType";
 
-const HomeFeedItem = () => {
+const HomeFeedItem = ({
+  content,
+  feedId,
+  fileUrls,
+  hashtags,
+  heartCount,
+  userResponse,
+}: feedType) => {
   const [like, setLike] = useState(false);
   const [feedModal, setFeedModal] = useState(false);
   const [doubleClicked, setDoubleClicked] = useState(false);
@@ -23,12 +31,12 @@ const HomeFeedItem = () => {
     <S.FeedItem>
       <S.FeedHeader>
         <ProfileItem watched={false} width={3} />
-        <S.ProfileName>JotChelsea</S.ProfileName>
-        <S.UploadTime>3시간</S.UploadTime>
+        <S.ProfileName>{userResponse.nickName}</S.ProfileName>
+        {/* <S.UploadTime>3시간</S.UploadTime> */}
         <FontAwesomeIcon icon={faEllipsis} size="2x" />
       </S.FeedHeader>
       <S.FeedImg onDoubleClick={onDoubleClick}>
-        <SIUU height="40em" />
+        <img src={fileUrls[0]} />
         {doubleClicked ? (
           <FontAwesomeIcon icon={fas.faHeart} color="red" size="5x" />
         ) : (
@@ -48,9 +56,12 @@ const HomeFeedItem = () => {
           size="2x"
         />
         <FontAwesomeIcon icon={fas.faPaperPlane} size="2x" />
-        <S.FeedTitle>좋아요 8.2만개</S.FeedTitle>
+        <S.FeedTitle>좋아요 {heartCount}개</S.FeedTitle>
         <S.FeedTitle>
-          <Link to="/profile">JotChelsea</Link> 안녕하세요
+          <Link to={`/profile/${userResponse.userId}`}>
+            {userResponse.nickName}
+          </Link>{" "}
+          안녕하세요
         </S.FeedTitle>
         <S.Comment onClick={() => setFeedModal(!feedModal)}>
           댓글 100개 더 보기

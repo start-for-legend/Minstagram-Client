@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { API } from "../../../API/API";
 import RecUserItem from "./recUserItem";
 import * as S from "./style";
+import { userType } from "../../../types/userType";
 
 interface recUserProps {
   userNickName?: string;
@@ -17,12 +18,14 @@ const RecommendUser = ({
   userNickName,
   userName,
 }: recUserProps) => {
+  const [recUsers, setRecUsers] = useState<userType[]>();
+
   useEffect(() => {
     const getRecUser = async () => {
       API({
         method: "get",
         url: `/follow`,
-      }).then((res) => console.log(res));
+      }).then((res) => setRecUsers(res.data));
     };
     getRecUser();
   }, []);
@@ -38,10 +41,16 @@ const RecommendUser = ({
       <div>
         <S.RecTitle>회원님을 위한 추천</S.RecTitle>
       </div>
-      <RecUserItem nickName="JotChelsea" name="좆첼연구소" />
-      <RecUserItem nickName="PyeDakPage" name="폐닭해체쇼" />
-      <RecUserItem nickName="Spin_.Kneel" name="빙글빙글 발목쇼" />
-      <RecUserItem nickName="Real_madrid" name="축구를 못해" />
+      {recUsers?.map((element) => {
+        return (
+          <RecUserItem
+            id={element.userId}
+            name={element.name}
+            nickName={element.nickName}
+            key={element.userId}
+          />
+        );
+      })}
     </S.RecUserContainer>
   );
 };

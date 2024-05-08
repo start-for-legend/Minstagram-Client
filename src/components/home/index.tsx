@@ -6,15 +6,23 @@ import FeedHeader from "./header";
 import * as S from "./style";
 import RecommendUser from "./recommendUser";
 import { userType } from "../../types/userType";
+import { feedType } from "../../types/feedType";
+
+interface mainResponseProps {
+  feedResponses: feedType[];
+  mainStoryResponses: object;
+}
 
 const HomeTab = () => {
   const [myProfile, setMyProfile] = useState<userType>();
+  const [mainData, setMainData] = useState<mainResponseProps>();
+
   useEffect(() => {
     const getMain = async () => {
       await API({
         method: "get",
         url: "/main",
-      }).then((res) => console.log(res.data));
+      }).then((res) => setMainData(res.data));
     };
 
     const getProfile = async () => {
@@ -32,9 +40,9 @@ const HomeTab = () => {
     <S.HomeContainer>
       <S.FeedContainer>
         <FeedHeader />
-        <HomeFeedItem />
-        <HomeFeedItem />
-        <HomeFeedItem />
+        {mainData?.feedResponses.map((element) => {
+          return <HomeFeedItem {...element} key={element.feedId} />;
+        })}
       </S.FeedContainer>
       <RecommendUser
         userNickName={myProfile?.nickName}

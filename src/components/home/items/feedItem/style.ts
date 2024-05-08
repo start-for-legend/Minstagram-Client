@@ -36,6 +36,9 @@ export const FeedImg = styled.div`
   background-color: black;
 
   img {
+    max-width: 35em;
+    height: 40em;
+    object-fit: contain;
     margin-left: 50%;
     transform: translate(-50%, 0);
   }

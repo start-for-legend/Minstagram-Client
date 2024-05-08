@@ -131,7 +131,7 @@ export const right = styled.div`
 `;
 
 export const commentScrollContainer = styled.div`
-  height: 39em;
+  height: 37em;
   width: 38.5em;
   overflow-y: auto;
   overflow-x: hidden;
@@ -176,5 +176,23 @@ export const commentSend = styled.div`
     background: none;
     cursor: pointer;
     color: lightblue;
+  }
+`;
+
+export const commentMore = styled.div`
+  cursor: pointer;
+`;
+
+export const replyTo = styled.div`
+  width: 40rem;
+  font-size: 1.25em;
+  height: 1.5rem;
+  border-top: 1px solid #c5c5c5;
+  padding-left: 1em;
+  svg {
+    width: 1rem;
+    height: 1rem;
+    margin-left: 20rem;
+    cursor: pointer;
   }
 `;

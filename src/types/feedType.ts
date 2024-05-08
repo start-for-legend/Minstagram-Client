@@ -6,4 +6,11 @@ export interface feedType {
   fileUrls: string[];
   hashtags: string[];
   userResponse: userType;
+  heartCount: number;
+}
+
+export interface cmtReply {
+  isReply: boolean;
+  replyUserId?: number;
+  replyUserName?: string;
 }

@@ -22,7 +22,7 @@ const FeedModalProfile = ({
 }: {
   modalState: boolean;
   setModalState: Function;
-  feedIdProfile?: number;
+  feedIdProfile: number;
 }) => {
   const [feedData, setFeedData] = useState<feedType>();
   const [comments, setComments] = useState<commentType[]>([]);
@@ -109,7 +109,13 @@ const FeedModalProfile = ({
           <S.commentScrollContainer>
             {comments && comments?.length !== 0 ? (
               comments.map((element: commentType) => {
-                return <CommentItem key={element.feedCommentId} {...element} />;
+                return (
+                  <CommentItem
+                    key={element.feedCommentId}
+                    feedId={feedIdProfile}
+                    cmtData={element}
+                  />
+                );
               })
             ) : (
               <div>아직 아무런 댓글이 달리지 않았어요!</div>
@@ -120,7 +126,7 @@ const FeedModalProfile = ({
               size="2x"
             />
           </S.commentScrollContainer>
-          <S.commentFooter onSubmit={(e) => e.preventDefault()}>
+          <S.commentFooter onSubmit={(event) => event.preventDefault()}>
             <FontAwesomeIcon
               icon={feedLiked ? fas.faHeart : far.faHeart}
               onClick={() => setFeedLiked(!feedLiked)}

@@ -11,6 +11,10 @@ export const ProfileItem = styled.div`
   width: 18em;
   margin-top: 1em;
   display: flex;
+  a {
+    text-decoration: none;
+    color: #000;
+  }
 `;
 
 export const UserName = styled.div`

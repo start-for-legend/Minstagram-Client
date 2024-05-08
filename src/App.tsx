@@ -75,7 +75,7 @@ const App = () => {
         "Content-Type": "text/event-stream",
         Authorization: `Bearer ${tokenManager.accessToken}`,
       },
-      heartbeatTimeout: 50000,
+      heartbeatTimeout: 86400000,
     });
 
     eventSource.onopen = (res) => {

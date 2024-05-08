@@ -30,7 +30,7 @@ const FeedItemProfile = ({
 
   return (
     <>
-      <FeedItemDiv onClick={() => setFeedModal(!feedModal)}>
+      <FeedItemDiv onClick={() => setFeedModal(!feedModal)}>  
         <img src={fileUrls} />
       </FeedItemDiv>
       {feedModal ? (

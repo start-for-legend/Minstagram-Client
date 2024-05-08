@@ -3,9 +3,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCirclePlus,
   faEllipsis,
+  faXmarkCircle,
   fas,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import { far } from "@fortawesome/free-regular-svg-icons";
 
 import ProfileItem from "../../../home/items/profileItem";
@@ -14,9 +16,10 @@ import { feedType } from "../../../../types/feedType";
 import CommentItem from "./commentItem";
 import { API } from "../../../../API/API";
 import { commentType } from "../../../../types/commentType";
+import { cmtReplyAtom } from "../../../../recoil/Atoms/atoms";
 
 const FeedModal = ({
-  element: { content, feedId, fileUrls, hashtags, userResponse },
+  element: { content, feedId, fileUrls, hashtags, userResponse, heartCount },
   modalState,
   setModalState,
 }: {
@@ -28,18 +31,22 @@ const FeedModal = ({
   const [postCmt, setPostCmt] = useState<string>();
   const [cmtIdx, setCmtIdx] = useState<number | undefined>(0);
   const [feedLiked, setFeedLiked] = useState(false);
+  const [curHeartCount, setCurHeartCount] = useState(heartCount);
+  const [cmtReply, setCmtReply] = useRecoilState(cmtReplyAtom);
 
   const onLikeClick = async () => {
     if (!feedLiked) {
       await API({
         url: `/feed/${feedId}`,
         method: "post",
-      }).catch((err) => console.log(err.response.status));
+      })
+        .then(() => setCurHeartCount(curHeartCount + 1))
+        .catch((err) => console.log(err.response.status));
     } else {
       await API({
         url: `/feed/${feedId}`,
         method: "patch",
-      });
+      }).then(() => setCurHeartCount(curHeartCount - 1));
     }
     setFeedLiked(!feedLiked);
   };
@@ -67,17 +74,27 @@ const FeedModal = ({
   }, []);
 
   const cmtSend = async () => {
-    await API({
-      method: "post",
-      url: `/feed-comment/${feedId}`,
-      data: {
-        content: postCmt,
-      },
-    }).then((res) => {
-      console.log(res);
-      setPostCmt("");
-      getComment();
-    });
+    if (cmtReply.isReply) {
+      await API({
+        method: "post",
+        url: `/feed-comment-reply/${feedId}/${cmtReply.replyUserId}`,
+        data: {
+          content: postCmt,
+        },
+      }).then((res) => console.log(res.data));
+    } else {
+      await API({
+        method: "post",
+        url: `/feed-comment/${feedId}`,
+        data: {
+          content: postCmt,
+        },
+      }).then((res) => {
+        console.log(res);
+        getComment();
+      });
+    }
+    setPostCmt("");
   };
 
   const getMoreComment = async () => {
@@ -115,7 +132,13 @@ const FeedModal = ({
           <S.commentScrollContainer>
             {comments && comments?.length !== 0 ? (
               comments.map((element: commentType) => {
-                return <CommentItem key={element.feedCommentId} {...element} />;
+                return (
+                  <CommentItem
+                    key={element.feedCommentId}
+                    feedId={feedId}
+                    cmtData={element}
+                  />
+                );
               })
             ) : (
               <div>아직 아무런 댓글이 달리지 않았어요!</div>
@@ -126,6 +149,24 @@ const FeedModal = ({
               size="2x"
             />
           </S.commentScrollContainer>
+          {cmtReply.isReply ? (
+            <S.replyTo>
+              {cmtReply.replyUserName}에게 답글 보내기...
+              <FontAwesomeIcon
+                icon={faXmarkCircle}
+                size="2xs"
+                onClick={() =>
+                  setCmtReply({
+                    isReply: false,
+                    replyUserId: undefined,
+                    replyUserName: undefined,
+                  })
+                }
+              />
+            </S.replyTo>
+          ) : (
+            ""
+          )}
           <S.commentFooter onSubmit={(e) => e.preventDefault()}>
             <FontAwesomeIcon
               icon={feedLiked ? fas.faHeart : far.faHeart}
@@ -134,7 +175,7 @@ const FeedModal = ({
               size="2x"
             />
             <FontAwesomeIcon icon={far.faPaperPlane} size="2x" />
-            <div>좋아요 {0}개</div>
+            <div>좋아요 {curHeartCount}개</div>
             <S.commentSend>
               <ProfileItem watched={false} width={3} />
               <input

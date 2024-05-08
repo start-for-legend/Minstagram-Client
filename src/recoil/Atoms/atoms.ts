@@ -2,6 +2,7 @@ import { atom } from "recoil";
 
 import { noticeInterface } from "../../types/noticeType";
 import { userType } from "../../types/userType";
+import { cmtReply } from "../../types/feedType";
 
 export const searchStateAtom = atom<boolean>({
   key: "searchStateAtom",
@@ -46,4 +47,11 @@ export const userResponseAtom = atom<userType>({
 export const myAccAtom = atom<boolean>({
   key: "myAccAtom",
   default: false,
+});
+
+export const cmtReplyAtom = atom<cmtReply>({
+  key: "cmtToAtom",
+  default: {
+    isReply: false,
+  },
 });

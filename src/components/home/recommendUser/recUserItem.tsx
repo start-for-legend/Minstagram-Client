@@ -3,18 +3,19 @@ import * as S from "./style";
 
 interface recUserItemProps {
   myProfile?: boolean;
-  name: string;
-  id: string;
+  name?: string;
+  nickName?: string;
+  id?: number;
 }
 
-const RecUserItem = ({ myProfile, name, id }: recUserItemProps) => {
+const RecUserItem = ({ myProfile, name, id, nickName }: recUserItemProps) => {
   return (
     <S.ProfileItem>
-      <div>
+      <a href={myProfile ? "./profile" : `./profile/${id}`}>
         <ProfileItem watched={false} width={3} />
-        <div>{id}</div>
+        <div>{nickName}</div>
         <S.UserName>{name}</S.UserName>
-      </div>
+      </a>
       {myProfile ? (
         <S.FollowBtn>변경</S.FollowBtn>
       ) : (

@@ -71,23 +71,23 @@ const CommentItem = ({ cmtData, feedId }: cmtItemProps) => {
         </S.commentMore>
       </S.commentTab>
       {replyShow &&
-        replyData?.map((element) => {
+        replyData?.map((element: commentType) => {
           return (
             <S.commentItem key={element.feedCommentId}>
               <ProfileItem
                 watched={false}
-                profileURL={cmtData.user.profileUrl}
+                profileURL={element.user.profileUrl}
                 width={2.5}
               />
               <S.commentTab>
                 <span>
-                  <b>{cmtData.user.nickName}</b>
+                  <b>{element.user.nickName}</b>
                 </span>
                 <S.commentInfo>
-                  {cmtData.modify ? "수정됨 &apos;" : ""}
+                  {element.modify ? "수정됨 &apos;" : ""}
                 </S.commentInfo>
                 <S.commentFlex>
-                  <S.commentContent>{cmtData.content}</S.commentContent>
+                  <S.commentContent>{element.content}</S.commentContent>
                   <div>
                     <FontAwesomeIcon
                       onClick={() => setLiked(!liked)}
@@ -95,7 +95,7 @@ const CommentItem = ({ cmtData, feedId }: cmtItemProps) => {
                       icon={liked ? fas.faHeart : far.faHeart}
                       size="2x"
                     />
-                    <S.heartCount>{cmtData.heartCount}</S.heartCount>
+                    <S.heartCount>{element.heartCount}</S.heartCount>
                   </div>
                 </S.commentFlex>
               </S.commentTab>

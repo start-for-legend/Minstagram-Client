@@ -180,6 +180,11 @@ const FeedModal = ({
             />
             <FontAwesomeIcon icon={far.faPaperPlane} size="2x" />
             <div>{content}</div>
+            <S.hashtags>
+              {hashtags.map((element) => {
+                return <span key={element}>#{element}</span>;
+              })}
+            </S.hashtags>
             <div>좋아요 {curHeartCount}개</div>
             <S.commentSend>
               <ProfileItem

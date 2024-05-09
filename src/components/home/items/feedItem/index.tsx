@@ -59,12 +59,12 @@ const HomeFeedItem = ({
         <S.FeedTitle>좋아요 {heartCount}개</S.FeedTitle>
         <S.FeedTitle>
           <Link to={`/profile/${userResponse.userId}`}>
-            {userResponse.nickName}
+            {userResponse.nickName} |
           </Link>{" "}
-          안녕하세요
+          {content}
         </S.FeedTitle>
         <S.Comment onClick={() => setFeedModal(!feedModal)}>
-          댓글 100개 더 보기
+          자세히 보기
         </S.Comment>
       </S.FeedFooter>
       {feedModal

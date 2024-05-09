@@ -1,14 +1,14 @@
 import styled from "styled-components";
 
 export const RecUserContainer = styled.div`
-  width: 20em;
+  width: 22em;
   height: 25em;
   margin-left: 2em;
   display: flex;
   flex-direction: column;
 `;
 export const ProfileItem = styled.div`
-  width: 18em;
+  width: 20em;
   margin-top: 1em;
   display: flex;
   a {
@@ -28,6 +28,7 @@ export const RecTitle = styled.div`
 `;
 
 export const FollowBtn = styled.div`
+  width: auto;
   margin-left: auto;
   margin-top: 0.5em;
   cursor: pointer;

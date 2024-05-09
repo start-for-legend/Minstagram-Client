@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import { API } from "../../../API/API";
 import ProfileItem from "../items/profileItem";
 import * as S from "./style";
@@ -10,6 +12,8 @@ interface recUserItemProps {
 }
 
 const RecUserItem = ({ myProfile, name, id, nickName }: recUserItemProps) => {
+  const navigate = useNavigate();
+
   const followUser = async () => {
     await API({
       method: "post",
@@ -30,6 +34,13 @@ const RecUserItem = ({ myProfile, name, id, nickName }: recUserItemProps) => {
     });
   };
 
+  const logOut = () => {
+    API({
+      method: "delete",
+      url: `/auth`,
+    }).then(() => navigate("./"));
+  };
+
   return (
     <S.ProfileItem>
       <a href={myProfile ? "./profile" : `./profile/${id}`}>
@@ -38,7 +49,7 @@ const RecUserItem = ({ myProfile, name, id, nickName }: recUserItemProps) => {
         <S.UserName>{name}</S.UserName>
       </a>
       {myProfile ? (
-        <S.FollowBtn>변경</S.FollowBtn>
+        <S.FollowBtn onClick={logOut}>로그아웃</S.FollowBtn>
       ) : (
         <S.FollowBtn onClick={onFollowClick}>팔로우</S.FollowBtn>
       )}

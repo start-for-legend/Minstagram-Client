@@ -41,7 +41,7 @@ const HomeTab = () => {
       <S.FeedContainer>
         <FeedHeader />
         {mainData?.feedResponses.map((element) => {
-          return <HomeFeedItem {...element} key={element.feedId} />;
+          return <HomeFeedItem element={element} key={element.feedId} />;
         })}
       </S.FeedContainer>
       <RecommendUser

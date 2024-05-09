@@ -131,8 +131,8 @@ export const right = styled.div`
 `;
 
 export const commentScrollContainer = styled.div`
-  height: 37em;
   width: 38.5em;
+  height: 35em;
   overflow-y: auto;
   overflow-x: hidden;
   text-align: center;
@@ -192,7 +192,11 @@ export const replyTo = styled.div`
   svg {
     width: 1rem;
     height: 1rem;
-    margin-left: 20rem;
+    margin-left: 18rem;
     cursor: pointer;
   }
+`;
+
+export const hashtags = styled.div`
+  color: lightblue;
 `;

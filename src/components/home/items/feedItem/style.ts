@@ -83,3 +83,7 @@ export const Comment = styled.div`
     color: #c5c5c5;
   }
 `;
+
+export const Hashtags = styled.div`
+  color: lightblue;
+`;

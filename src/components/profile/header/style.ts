@@ -1,3 +1,4 @@
+import ReactModal from "react-modal";
 import styled from "styled-components";
 
 export const profileHeader = styled.div`

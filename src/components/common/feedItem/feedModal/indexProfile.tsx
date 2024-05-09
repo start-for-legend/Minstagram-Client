@@ -100,7 +100,11 @@ const FeedModalProfile = ({
       </S.modalImg>
       <S.right>
         <S.modalHeader>
-          <ProfileItem watched={false} width={3} />
+          <ProfileItem
+            profileURL={feedData?.userResponse.profileUrl}
+            watched={false}
+            width={3}
+          />
           <S.profileName>{feedData?.userResponse.nickName}</S.profileName>
           <S.followBtn>팔로우</S.followBtn>
           <FontAwesomeIcon icon={faEllipsis} size="2x" />
@@ -134,9 +138,14 @@ const FeedModalProfile = ({
               size="2x"
             />
             <FontAwesomeIcon icon={far.faPaperPlane} size="2x" />
+            <div>{feedData?.content}</div>
             <div>좋아요 0개</div>
             <S.commentSend>
-              <ProfileItem watched={false} width={3} />
+              <ProfileItem
+                profileURL={feedData?.userResponse.profileUrl}
+                watched={false}
+                width={3}
+              />
               <input
                 type="text"
                 placeholder="댓글 달기"

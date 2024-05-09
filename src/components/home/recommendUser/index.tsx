@@ -36,6 +36,7 @@ const RecommendUser = ({
         id={userId}
         name={userName}
         nickName={userNickName}
+        profileUrl={profileUrl}
         myProfile
       />
       <div>
@@ -48,6 +49,7 @@ const RecommendUser = ({
             name={element.name}
             nickName={element.nickName}
             key={element.userId}
+            profileUrl={element.profileUrl}
           />
         );
       })}

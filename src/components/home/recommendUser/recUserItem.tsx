@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import { API } from "../../../API/API";
 import ProfileItem from "../items/profileItem";
@@ -9,9 +10,16 @@ interface recUserItemProps {
   name?: string;
   nickName?: string;
   id?: number;
+  profileUrl?: string;
 }
 
-const RecUserItem = ({ myProfile, name, id, nickName }: recUserItemProps) => {
+const RecUserItem = ({
+  myProfile,
+  name,
+  id,
+  nickName,
+  profileUrl,
+}: recUserItemProps) => {
   const navigate = useNavigate();
 
   const followUser = async () => {
@@ -35,7 +43,8 @@ const RecUserItem = ({ myProfile, name, id, nickName }: recUserItemProps) => {
   };
 
   const logOut = () => {
-    API({
+    axios({
+      withCredentials: true,
       method: "delete",
       url: `/auth`,
     }).then(() => navigate("./"));
@@ -44,7 +53,7 @@ const RecUserItem = ({ myProfile, name, id, nickName }: recUserItemProps) => {
   return (
     <S.ProfileItem>
       <a href={myProfile ? "./profile" : `./profile/${id}`}>
-        <ProfileItem watched={false} width={3} />
+        <ProfileItem profileURL={profileUrl} watched={false} width={3} />
         <div>{nickName}</div>
         <S.UserName>{name}</S.UserName>
       </a>

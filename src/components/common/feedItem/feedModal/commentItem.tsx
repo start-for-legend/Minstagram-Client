@@ -33,7 +33,11 @@ const CommentItem = ({ cmtData, feedId }: cmtItemProps) => {
 
   return (
     <S.commentItem>
-      <ProfileItem watched={false} width={2.5} />
+      <ProfileItem
+        profileURL={cmtData.user.profileUrl}
+        watched={false}
+        width={2.5}
+      />
       <S.commentTab>
         <span>
           <b>{cmtData.user.nickName}</b>
@@ -70,7 +74,11 @@ const CommentItem = ({ cmtData, feedId }: cmtItemProps) => {
         replyData?.map((element) => {
           return (
             <S.commentItem key={element.feedCommentId}>
-              <ProfileItem watched={false} width={2.5} />
+              <ProfileItem
+                watched={false}
+                profileURL={cmtData.user.profileUrl}
+                width={2.5}
+              />
               <S.commentTab>
                 <span>
                   <b>{cmtData.user.nickName}</b>

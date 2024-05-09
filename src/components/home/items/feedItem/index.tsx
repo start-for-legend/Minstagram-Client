@@ -30,7 +30,11 @@ const HomeFeedItem = ({
   return (
     <S.FeedItem>
       <S.FeedHeader>
-        <ProfileItem watched={false} width={3} />
+        <ProfileItem
+          profileURL={userResponse.profileUrl}
+          watched={false}
+          width={3}
+        />
         <S.ProfileName>{userResponse.nickName}</S.ProfileName>
         {/* <S.UploadTime>3시간</S.UploadTime> */}
         <FontAwesomeIcon icon={faEllipsis} size="2x" />

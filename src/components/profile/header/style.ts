@@ -1,4 +1,3 @@
-import ReactModal from "react-modal";
 import styled from "styled-components";
 
 export const profileHeader = styled.div`
@@ -49,5 +48,6 @@ export const userInfo = styled.div`
     font-weight: 600;
     font-size: 1.25em;
     margin-right: 2em;
+    cursor: pointer;
   }
 `;

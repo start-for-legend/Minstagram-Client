@@ -18,12 +18,18 @@ const Profile = () => {
         method: "get",
         url: myAcc ? "/user" : `/user/${params.userId}`,
       })
-        .then((res) => setUserResponse(res.data))
+        .then((res) => {
+          setUserResponse(res.data);
+          if (myAcc) {
+            window.localStorage.setItem("myUserId", res.data.userId);
+          }
+        })
         .catch((err) => console.log(err));
     };
 
     getAcc();
   }, []);
+
   return (
     <div>
       <Sidebar />

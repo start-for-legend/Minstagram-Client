@@ -1,29 +1,24 @@
 import { useParams } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import { useEffect, useState } from "react";
 
 import { API } from "../../../API/API";
 import NotSelected from "./notSelected";
 import ChattingTab from "./chatting";
 import * as S from "./style";
+import { userResponseAtom } from "../../../recoil/Atoms/atoms";
 
 const Chatting = () => {
   const params = useParams();
-  const [userId, setUserId] = useState<number>(0);
-
-  const getUserInfo = () => {
-    API({
-      method: "get",
-      url: "/user",
-    }).then((res) => setUserId(res.data.userId));
-  };
+  const userResponse = useRecoilValue(userResponseAtom);
 
   useEffect(() => {
-    getUserInfo();
-  }, []);
+    console.log(userResponse);
+  }, [userResponse]);
 
   return (
     <S.ChattingContainer selected={!!params.userId}>
-      {params.userId ? <ChattingTab myUserId={userId} /> : <NotSelected />}
+      {params.roomId ? <ChattingTab /> : <NotSelected />}
     </S.ChattingContainer>
   );
 };

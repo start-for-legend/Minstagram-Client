@@ -26,6 +26,7 @@ const App = () => {
   const [noticeData, setNoticeData] = useState<any>();
   const [parsedData, setParsedData] = useRecoilState(noticeDataAtom);
   const setNoticeDataIds = useSetRecoilState(noticeDataIdsAtom);
+  const isLogin = Boolean(window.localStorage.getItem("mst-accessToken"));
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const tokenManager = new TokenManager();
 
@@ -59,24 +60,29 @@ const App = () => {
   }, [noticeData]);
 
   useEffect(() => {
-    API({
-      url: "/notice",
-      method: "get",
-    })
-      .then((res) => {
-        setNoticeData(res.data.split("\n\n"));
+    if (isLogin) {
+      API({
+        url: "/notice",
+        method: "get",
       })
-      .catch((err) => console.log(err));
+        .then((res) => {
+          setNoticeData(res.data.split("\n\n"));
+        })
+        .catch((err) => console.log(err));
+    }
   }, []);
 
   useEffect(() => {
-    const eventSource = new EventSourcePolyfill(`${baseUrl}/notice`, {
-      headers: {
-        "Content-Type": "text/event-stream",
-        Authorization: `Bearer ${tokenManager.accessToken}`,
-      },
-      heartbeatTimeout: 86400000,
-    });
+    const eventSource = new EventSourcePolyfill(
+      isLogin ? `${baseUrl}/notice` : "",
+      {
+        headers: {
+          "Content-Type": "text/event-stream",
+          Authorization: `Bearer ${tokenManager.accessToken}`,
+        },
+        heartbeatTimeout: 86400000,
+      }
+    );
 
     eventSource.onopen = (res) => {
       console.log(res);
@@ -89,7 +95,6 @@ const App = () => {
     eventSource.onerror = (err) => {
       console.log(err);
     };
-    eventSource.OPEN;
 
     return () => {
       eventSource.close();
@@ -105,7 +110,7 @@ const App = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/reels" element={<Reels />} />
-          <Route path="/message/:userId?" element={<Message />} />
+          <Route path="/message/:roomId?" element={<Message />} />
           <Route path="/profile/:userId?" element={<Profile />} />
         </Routes>
       </BrowserRouter>

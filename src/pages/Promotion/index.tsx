@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Footer from "../../components/footer";
 import LoginForm from "./Login";
@@ -8,6 +8,14 @@ import * as S from "./style";
 
 const Promotion = () => {
   const [loginState, setLoginState] = useState(false);
+  const isLogIn = Boolean(window.localStorage.getItem("mst-accessToken"));
+
+  useEffect(() => {
+    if (isLogIn) {
+      console.log("it is Logined");
+    }
+  }, []);
+
   return (
     <S.PromotionContainer>
       <S.Minstagram>Minstagram</S.Minstagram>

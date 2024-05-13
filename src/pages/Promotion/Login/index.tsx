@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import * as S from "./style";
 
@@ -8,6 +9,7 @@ const LoginForm = () => {
 
   const [phone, setPhone] = useState<string>();
   const [password, setPassword] = useState<string>();
+  const navigate = useNavigate();
 
   const login = async () => {
     if (phone && password) {
@@ -22,7 +24,7 @@ const LoginForm = () => {
         .then((res) => {
           localStorage.setItem("mst-accessToken", res.data.accessToken);
           localStorage.setItem("mst-expiredAt", res.data.expiredAt);
-          window.location.href = "/home";
+          navigate("/profile");
         })
         .catch((e) => {
           if ((e.response.status === 403, 404)) {

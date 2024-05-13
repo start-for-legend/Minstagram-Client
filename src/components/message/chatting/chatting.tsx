@@ -9,26 +9,26 @@ import { msgTypes } from "../../../types/msgType";
 import { TokenManager } from "../../../API/tokenManager";
 import { API } from "../../../API/API";
 import * as S from "./style";
+import { userType } from "../../../types/userType";
 
-type msgProps = {
-  myUserId: number;
-};
-
-const ChattingTab = ({ myUserId }: msgProps) => {
+const ChattingTab = () => {
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const socketUrl = process.env.REACT_APP_SOCKET_URL;
+  const [userInfo, setUserInfo] = useState<userType>();
   const [msgContent, setMsgContent] = useState("");
   const [msgContents, setMsgContents] = useState<msgTypes[]>([]);
   const tokenManager = new TokenManager();
   const client = useRef<any>();
+  const params = useParams();
   const {
     state: { chatRoomId, opponentId },
   } = useLocation();
+  const myUserId = Number(window.localStorage.getItem("myUserId"));
 
   const getMsg = () => {
     API({
       method: "get",
-      url: `${baseUrl}/room/${chatRoomId}`,
+      url: `${baseUrl}/room/${params.roomId}`,
     })
       .then((res: any) => {
         console.log(res);
@@ -53,6 +53,13 @@ const ChattingTab = ({ myUserId }: msgProps) => {
     }
   };
 
+  const getUserInfo = async () => {
+    await API({
+      method: "get",
+      url: `/user/${opponentId}`,
+    }).then((res) => setUserInfo(res.data));
+  };
+
   const connect = () => {
     try {
       client.current = new StompJs.Client({
@@ -73,7 +80,7 @@ const ChattingTab = ({ myUserId }: msgProps) => {
 
       client.current.onConnect = (res: any) => {
         console.log(res);
-        client.current.subscribe(`/sub/${chatRoomId}`, chatRecieve, {
+        client.current.subscribe(`/sub/${params.roomId}`, chatRecieve, {
           Authorization: `Bearer ${tokenManager.accessToken}`,
         });
       };
@@ -85,11 +92,13 @@ const ChattingTab = ({ myUserId }: msgProps) => {
   };
 
   useEffect(() => {
-    getMsg();
-    connect();
-
+    if (params.roomId) {
+      getMsg();
+      connect();
+      getUserInfo();
+    }
     return () => client.current.deactivate();
-  }, []);
+  }, [params.roomId]);
 
   const onMsgSend = (event: any) => {
     if (
@@ -129,7 +138,9 @@ const ChattingTab = ({ myUserId }: msgProps) => {
         {msgContents?.map(({ chat, userId, chatId }) => {
           return (
             <S.ChatMsg
-              chatterType={userId === myUserId ? "self" : "opponent"}
+              chatterType={
+                myUserId && userId === myUserId ? "self" : "opponent"
+              }
               key={chatId}
             >
               {chat}
@@ -140,8 +151,8 @@ const ChattingTab = ({ myUserId }: msgProps) => {
       <S.ChatProfile>
         <S.TargetInfo>
           <S.ProfilePic />
-          <S.TargetName>이름</S.TargetName>
-          <S.Active>활동 중</S.Active>
+          <S.TargetName>{userInfo?.nickName}</S.TargetName>
+          <S.Active>{userInfo?.name}</S.Active>
         </S.TargetInfo>
       </S.ChatProfile>
     </S.ChattingTab>

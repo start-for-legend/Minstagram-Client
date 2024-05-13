@@ -25,7 +25,7 @@ const MsgProfileItem = ({
   return (
     <S.ProfileBox
       onClick={() =>
-        navigate(`/message/${opponentId}`, {
+        navigate(`/message/${chatRoomId}`, {
           state: { chatRoomId, opponentId },
         })
       }

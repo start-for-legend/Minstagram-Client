@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   faBars,
   faBell,
@@ -8,7 +9,7 @@ import {
   faMagnifyingGlass,
   faMessage,
 } from "@fortawesome/free-solid-svg-icons";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 import {
   noticeStateAtom,
@@ -23,10 +24,16 @@ import CreateReels from "../createReels";
 import NoticeTab from "./noticeTab";
 
 const Sidebar = () => {
-  const searchState = useRecoilValue(searchStateAtom);
-  const noticeState = useRecoilValue(noticeStateAtom);
+  const [searchState, setSearchState] = useRecoilState(searchStateAtom);
+  const [noticeState, setNoticeState] = useRecoilState(noticeStateAtom);
   const curLocation = window.location.pathname.split("/");
   const reelsModalState = useRecoilValue(reelsModalStateAtom);
+
+  useEffect(() => {
+    setSearchState(false);
+    setNoticeState(false);
+  }, []);
+
   return (
     <>
       <S.SideBarContainer>

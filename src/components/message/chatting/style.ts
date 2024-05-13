@@ -84,7 +84,7 @@ export const TargetName = styled.div`
   font-size: 2em;
   font-weight: 700;
   padding-top: 0.5em;
-  width: 5em;
+  width: 50em;
 `;
 
 export const TargetInfo = styled.div`

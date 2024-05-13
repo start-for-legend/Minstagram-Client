@@ -17,6 +17,8 @@ import Sidebar from "./components/sidebar";
 import Reels from "./pages/reels";
 import Message from "./pages/message";
 import Home from "./pages/home";
+import Profile from "./pages/profile";
+import Explore from "./pages/explore";
 
 const App = () => {
   const setSearchState = useSetRecoilState(searchStateAtom);
@@ -24,6 +26,7 @@ const App = () => {
   const [noticeData, setNoticeData] = useState<any>();
   const [parsedData, setParsedData] = useRecoilState(noticeDataAtom);
   const setNoticeDataIds = useSetRecoilState(noticeDataIdsAtom);
+  const isLogin = Boolean(window.localStorage.getItem("mst-accessToken"));
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const tokenManager = new TokenManager();
 
@@ -57,24 +60,29 @@ const App = () => {
   }, [noticeData]);
 
   useEffect(() => {
-    API({
-      url: "/notice",
-      method: "get",
-    })
-      .then((res) => {
-        setNoticeData(res.data.split("\n\n"));
+    if (isLogin) {
+      API({
+        url: "/notice",
+        method: "get",
       })
-      .catch((err) => console.log(err));
+        .then((res) => {
+          setNoticeData(res.data.split("\n\n"));
+        })
+        .catch((err) => console.log(err));
+    }
   }, []);
 
   useEffect(() => {
-    const eventSource = new EventSourcePolyfill(`${baseUrl}/notice`, {
-      headers: {
-        "Content-Type": "text/event-stream",
-        Authorization: `Bearer ${tokenManager.accessToken}`,
-      },
-      heartbeatTimeout: 50000,
-    });
+    const eventSource = new EventSourcePolyfill(
+      isLogin ? `${baseUrl}/notice` : "",
+      {
+        headers: {
+          "Content-Type": "text/event-stream",
+          Authorization: `Bearer ${tokenManager.accessToken}`,
+        },
+        heartbeatTimeout: 86400000,
+      }
+    );
 
     eventSource.onopen = (res) => {
       console.log(res);
@@ -87,7 +95,6 @@ const App = () => {
     eventSource.onerror = (err) => {
       console.log(err);
     };
-    eventSource.OPEN;
 
     return () => {
       eventSource.close();
@@ -101,11 +108,10 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Promotion />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/explore" element={<Sidebar />} />
+          <Route path="/explore" element={<Explore />} />
           <Route path="/reels" element={<Reels />} />
-          <Route path="/message/:userId?" element={<Message />} />
-          <Route path="/profile" element={<Sidebar />} />
-          <Route path="/test" element={<Sidebar />} />
+          <Route path="/message/:roomId?" element={<Message />} />
+          <Route path="/profile/:userId?" element={<Profile />} />
         </Routes>
       </BrowserRouter>
     </>

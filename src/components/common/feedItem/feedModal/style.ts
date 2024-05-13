@@ -6,15 +6,16 @@ export const feedModalStyles: ReactModal.Styles = {
     backgroundColor: " rgba(0, 0, 0, 0.4)",
     width: "100%",
     height: "100vh",
-    zIndex: "10",
+    zIndex: "0",
     position: "fixed",
     top: "0",
     left: "0",
     overflowY: "hidden",
   },
   content: {
-    width: "80em",
-    height: "48em",
+    padding: `0 0 0 0`,
+    width: "90em",
+    height: "52em",
     zIndex: "150",
     position: "absolute",
     top: "50%",
@@ -23,32 +24,36 @@ export const feedModalStyles: ReactModal.Styles = {
     borderRadius: "1em",
     boxShadow: "2px 2px 2px rgba(0, 0, 0, 0.25)",
     backgroundColor: "white",
-    justifyContent: "center",
-    overflow: "auto",
+    overflow: "hidden",
     display: "flex",
   },
 };
 
 export const modalImg = styled.div`
-  width: 42em;
-  height: 48em;
+  width: 52em;
+  height: 52em;
   word-wrap: break-word;
   background-color: #c5c5c5;
   float: left;
 
   img {
-    max-width: 42em;
-    height: 48em;
+    object-fit: contain;
+    max-width: 52em;
+    height: 52em;
     margin-left: 50%;
     transform: translate(-50%, 0);
   }
 `;
 
 export const modalHeader = styled.div`
-  width: 38em;
+  width: 36em;
   height: 3em;
   line-height: 3em;
   display: flex;
+  border-bottom: 1px solid #c5c5c5;
+  padding-left: 1em;
+  padding-bottom: 1em;
+
   svg {
     margin-left: auto;
     cursor: pointer;
@@ -69,9 +74,11 @@ export const followBtn = styled.div`
 
 export const commentItem = styled.div`
   width: 38em;
+  min-height: 1em;
   padding-left: 1em;
   margin-top: 1em;
   margin-bottom: 1em;
+  text-align: start;
   svg:hover {
     transform: scale(1.25);
     transition-duration: 0.25s;
@@ -84,39 +91,112 @@ export const commentTab = styled.div`
   span {
     font-family: 900;
     padding-right: 1em;
-    float: left;
   }
 `;
 
 export const feedContent = styled.div`
-  width: 34em;
+  width: 32em;
   height: auto;
-  float: left;
   div {
     width: 30em;
   }
   margin-bottom: 2em;
 `;
 
+export const commentFlex = styled.div`
+  display: flex;
+  width: 34em;
+`;
+
 export const commentContent = styled.div`
-  width: 30em;
-  float: left;
+  width: 28em;
 `;
 
 export const commentInfo = styled.div`
   color: #c5c5c5;
   width: 30em;
-  margin-left: 3em;
 `;
 
 export const commentContainer = styled.div`
   width: 40em;
   height: auto;
   overflow-x: hidden;
+  overflow-y: auto;
 `;
 
 export const right = styled.div`
-  height: 48em;
-  overflow-x: hidden;
+  margin-top: 1em;
+  height: 52em;
+  overflow: hidden;
+`;
+
+export const commentScrollContainer = styled.div`
+  width: 38.5em;
+  height: 35em;
   overflow-y: auto;
+  overflow-x: hidden;
+  text-align: center;
+
+  svg {
+    cursor: pointer;
+  }
+`;
+
+export const heartCount = styled.div`
+  text-align: center;
+`;
+
+export const commentFooter = styled.form`
+  width: 40em;
+  height: 21em;
+  margin-top: auto;
+  padding-left: 1em;
+  padding-top: 1em;
+  border-top: 1px solid #c5c5c5;
+
+  svg {
+    margin-right: 0.5em;
+  }
+`;
+
+export const commentSend = styled.div`
+  height: 3em;
+
+  input {
+    height: 3em;
+    border: none;
+    width: 30em;
+    outline: none;
+  }
+
+  button {
+    height: 3em;
+    border: none;
+    outline: none;
+    background: none;
+    cursor: pointer;
+    color: lightblue;
+  }
+`;
+
+export const commentMore = styled.div`
+  cursor: pointer;
+`;
+
+export const replyTo = styled.div`
+  width: 40rem;
+  font-size: 1.25em;
+  height: 1.5rem;
+  border-top: 1px solid #c5c5c5;
+  padding-left: 1em;
+  svg {
+    width: 1rem;
+    height: 1rem;
+    margin-left: 18rem;
+    cursor: pointer;
+  }
+`;
+
+export const hashtags = styled.div`
+  color: lightblue;
 `;

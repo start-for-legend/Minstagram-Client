@@ -1,17 +1,58 @@
+import { useEffect, useState } from "react";
+
+import { API } from "../../../API/API";
 import RecUserItem from "./recUserItem";
 import * as S from "./style";
+import { userType } from "../../../types/userType";
 
-const RecommendUser = () => {
+interface recUserProps {
+  userNickName?: string;
+  userName?: string;
+  profileUrl?: string;
+  userId?: number;
+}
+
+const RecommendUser = ({
+  profileUrl,
+  userId,
+  userNickName,
+  userName,
+}: recUserProps) => {
+  const [recUsers, setRecUsers] = useState<userType[]>();
+
+  useEffect(() => {
+    const getRecUser = async () => {
+      API({
+        method: "get",
+        url: `/follow`,
+      }).then((res) => setRecUsers(res.data));
+    };
+    getRecUser();
+  }, []);
+
   return (
     <S.RecUserContainer>
-      <RecUserItem id="John_Sana_704" name="김민재" myProfile />
+      <RecUserItem
+        id={userId}
+        name={userName}
+        nickName={userNickName}
+        profileUrl={profileUrl}
+        myProfile
+      />
       <div>
         <S.RecTitle>회원님을 위한 추천</S.RecTitle>
       </div>
-      <RecUserItem id="JotChelsea" name="좆첼연구소" />
-      <RecUserItem id="PyeDakPage" name="폐닭해체쇼" />
-      <RecUserItem id="Spin_.Kneel" name="빙글빙글 발목쇼" />
-      <RecUserItem id="Real_madrid" name="축구를 못해" />
+      {recUsers?.map((element) => {
+        return (
+          <RecUserItem
+            id={element.userId}
+            name={element.name}
+            nickName={element.nickName}
+            key={element.userId}
+            profileUrl={element.profileUrl}
+          />
+        );
+      })}
     </S.RecUserContainer>
   );
 };

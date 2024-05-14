@@ -13,7 +13,6 @@ import {
 } from "./recoil/Atoms/atoms";
 import Promotion from "./pages/Promotion";
 import GlobalStyle from "./styles/global";
-import Sidebar from "./components/sidebar";
 import Reels from "./pages/reels";
 import Message from "./pages/message";
 import Home from "./pages/home";

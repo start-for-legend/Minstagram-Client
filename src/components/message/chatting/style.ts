@@ -57,7 +57,23 @@ export const ChatContents = styled.div`
   overflow-y: scroll;
 `;
 
+export const ChatContainer = styled.div<chatMsgProps>`
+  display: flex;
+  margin-left: ${(props) => (props.chatterType === "self" ? "auto" : "1em")};
+  margin-right: ${(props) => (props.chatterType === "self" ? "1em" : "auto")};
+`;
+
+export const ChatOption = styled.div`
+  svg {
+    margin-top: 1em;
+    margin-right: 0.5em;
+    cursor: pointer;
+  }
+`;
+
 export const ChatMsg = styled.div<chatMsgProps>`
+  background-color: ${(props) =>
+    props.chatterType === "self" ? "#0095f6" : "#000"};
   width: fit-content;
   max-width: 20em;
   font-size: 1.5em;
@@ -66,11 +82,6 @@ export const ChatMsg = styled.div<chatMsgProps>`
   border-radius: 1em;
   margin-bottom: 0.25em;
   word-wrap: break-word;
-
-  margin-left: ${(props) => (props.chatterType === "self" ? "auto" : "1em")};
-  margin-right: ${(props) => (props.chatterType === "self" ? "1em" : "auto")};
-  background-color: ${(props) =>
-    props.chatterType === "self" ? "#0095f6" : "#000"};
 `;
 
 export const ChatProfile = styled.div`

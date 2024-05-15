@@ -26,7 +26,7 @@ const Promotion = () => {
           {loginState ? <SignUpForm /> : <LoginForm />}
           계정이 없나요?
           <S.Register onClick={() => setLoginState(!loginState)}>
-            가입하기
+            {loginState ? "로그인하기" : "가입하기"}
           </S.Register>
         </S.AccountBox>
       </S.PromotionBox>

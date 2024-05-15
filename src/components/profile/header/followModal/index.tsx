@@ -57,7 +57,6 @@ const FollowModal = ({
         if (err.response.status === 400) {
           alert("이미 채팅방이 존재합니다");
           navigate(`/message/${userId}`);
-          /* window.location.reload(); */
         }
       });
   };
@@ -66,7 +65,6 @@ const FollowModal = ({
     <ReactModal
       isOpen={followModal}
       onRequestClose={() => {
-        setFollows([]);
         setFollowModal(!followModal);
       }}
       style={S.followModalStyles}

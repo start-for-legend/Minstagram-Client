@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { profileTypes } from "../../../../types/msgType";
 import * as S from "./style";
+import ProfileItem from "../../../home/items/profileItem";
 
 const MsgProfileItem = ({
   opponentId,
@@ -30,7 +31,7 @@ const MsgProfileItem = ({
         })
       }
     >
-      <S.Circle />
+      <ProfileItem watched={false} width={4} profileURL={opponentProfileUrl} />
       <S.TargetName>{opponentNickName}</S.TargetName>
       <S.MsgPreview>{msgPreview}</S.MsgPreview>
     </S.ProfileBox>

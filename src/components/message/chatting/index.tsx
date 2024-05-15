@@ -10,11 +10,6 @@ import { userResponseAtom } from "../../../recoil/Atoms/atoms";
 
 const Chatting = () => {
   const params = useParams();
-  const userResponse = useRecoilValue(userResponseAtom);
-
-  useEffect(() => {
-    console.log(userResponse);
-  }, [userResponse]);
 
   return (
     <S.ChattingContainer selected={!!params.userId}>

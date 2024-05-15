@@ -1,6 +1,11 @@
 /* eslint no-underscore-dangle: 0 */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faImage, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEllipsisVertical,
+  faImage,
+  faPaperPlane,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import * as StompJs from "@stomp/stompjs";
@@ -10,6 +15,7 @@ import { TokenManager } from "../../../API/tokenManager";
 import { API } from "../../../API/API";
 import * as S from "./style";
 import { userType } from "../../../types/userType";
+import ProfileItem from "../../home/items/profileItem";
 
 const ChattingTab = () => {
   const baseUrl = process.env.REACT_APP_BASE_URL;
@@ -121,6 +127,26 @@ const ChattingTab = () => {
     }
   };
 
+  const chatDelete = (chatId?: number) => {
+    API({
+      method: "delete",
+      url: `/room/${chatRoomId}/${chatId}`,
+    }).then(
+      (res) =>
+        setMsgContents(msgContents.filter((cnt) => cnt.chatId !== chatId)) // 특정 채팅 삭제
+    );
+  };
+
+  /* useEffect(() => {
+    if (msgContents.length >= 1) {
+      const lastMsg = msgContents[msgContents.length - 1];
+      API({
+        method: "patch",
+        url: `/room/${chatRoomId}/${lastMsg.chatId}`,
+      }).then((res) => console.log(res.status));
+    }
+  }, [msgContents]); */
+
   return (
     <S.ChattingTab>
       <S.ChatWindow>
@@ -136,21 +162,40 @@ const ChattingTab = () => {
       </S.ChatWindow>
       <S.ChatContents>
         {msgContents?.map(({ chat, userId, chatId }) => {
+          const meValid = myUserId && userId === myUserId;
           return (
-            <S.ChatMsg
-              chatterType={
-                myUserId && userId === myUserId ? "self" : "opponent"
-              }
+            <S.ChatContainer
               key={chatId}
+              chatterType={meValid ? "self" : "opponent"}
             >
-              {chat}
-            </S.ChatMsg>
+              {meValid ? (
+                <S.ChatOption>
+                  <FontAwesomeIcon
+                    onClick={() => chatDelete(chatId)}
+                    icon={faTrashCan}
+                    size="1x"
+                  />
+                  <FontAwesomeIcon icon={faEllipsisVertical} size="1x" />
+                </S.ChatOption>
+              ) : (
+                ""
+              )}
+              <S.ChatMsg chatterType={meValid ? "self" : "opponent"}>
+                {chat}
+              </S.ChatMsg>
+            </S.ChatContainer>
           );
         })}
       </S.ChatContents>
       <S.ChatProfile>
         <S.TargetInfo>
-          <S.ProfilePic />
+          <ProfileItem
+            profileURL={userInfo?.profileUrl}
+            watched={false}
+            width={4}
+            marginLeft={1}
+            marginTop={1}
+          />
           <S.TargetName>{userInfo?.nickName}</S.TargetName>
           <S.Active>{userInfo?.name}</S.Active>
         </S.TargetInfo>

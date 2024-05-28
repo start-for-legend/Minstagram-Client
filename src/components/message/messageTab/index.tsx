@@ -1,5 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState, useRecoilValue } from "recoil";
 import {
   faChevronDown,
   faPenToSquare,
@@ -9,15 +11,21 @@ import { API } from "../../../API/API";
 import MsgProfileItem from "./MsgProfileItem";
 import { profileTypes } from "../../../types/msgType";
 import * as S from "./style";
+import { roomsAtom, userResponseAtom } from "../../../recoil/Atoms/atoms";
 
 const MessageTab = () => {
-  const [rooms, setRooms] = useState<profileTypes[]>();
+  const [rooms, setRooms] = useRecoilState(roomsAtom);
+  const navigate = useNavigate();
+  const userResponse = useRecoilValue(userResponseAtom);
 
   const getRooms = async () => {
     await API({
       method: "get",
       url: "/room",
-    }).then((res) => setRooms(res.data));
+    }).then((res) => {
+      setRooms(res.data);
+      console.log(res.data);
+    });
   };
 
   useEffect(() => {
@@ -27,9 +35,13 @@ const MessageTab = () => {
   return (
     <S.msgTab>
       <S.myProfile>
-        <span>John_Sana_06</span>
+        <span>{userResponse?.nickName || "undefined"}</span>
         <FontAwesomeIcon icon={faChevronDown} size="2x" />
-        <FontAwesomeIcon icon={faPenToSquare} size="2x" />
+        <FontAwesomeIcon
+          icon={faPenToSquare}
+          size="2x"
+          onClick={() => navigate("/message")}
+        />
       </S.myProfile>
       <S.msgHelp>메세지</S.msgHelp>
       <S.msgProfile>

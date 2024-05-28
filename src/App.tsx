@@ -36,6 +36,7 @@ const App = () => {
 
   useEffect(() => {
     console.log(parsedData);
+    console.log(baseUrl);
   }, [parsedData]);
 
   useEffect(() => {
@@ -59,46 +60,51 @@ const App = () => {
   }, [noticeData]);
 
   useEffect(() => {
-    if (isLogin) {
+    const getNotice = () =>
       API({
         url: "/notice",
         method: "get",
-      })
-        .then((res) => {
-          setNoticeData(res.data.split("\n\n"));
-        })
-        .catch((err) => console.log(err));
-    }
-  }, []);
-
-  useEffect(() => {
-    const eventSource = new EventSourcePolyfill(
-      isLogin ? `${baseUrl}/notice` : "",
-      {
         headers: {
           "Content-Type": "text/event-stream",
-          Authorization: `Bearer ${tokenManager.accessToken}`,
         },
-        heartbeatTimeout: 86400000,
-      }
-    );
+      })
+        .then((res) => {
+          console.log(res);
+          setNoticeData(res.data.split("\n\n"));
+        })
+        .catch((err) => {
+          console.log(err.eventStream);
+        });
+    getNotice();
+  }, [isLogin]);
 
-    eventSource.onopen = (res) => {
-      console.log(res);
+  useEffect(() => {
+    const eventSource = new EventSourcePolyfill(`${baseUrl}/notice`, {
+      headers: {
+        "Content-Type": "text/event-stream",
+        Authorization: `Bearer ${tokenManager.accessToken}`,
+      },
+      heartbeatTimeout: 5000,
+    });
+
+    eventSource.onopen = (event) => {
+      console.log("SSE 연결 성공:", event);
     };
 
-    eventSource.onmessage = (res) => {
-      console.log(res);
+    eventSource.onmessage = (event) => {
+      console.log("SSE 메시지 수신:", event);
+      // 여기서 적절한 작업을 수행하세요.
     };
 
-    eventSource.onerror = (err) => {
-      console.log(err);
+    eventSource.onerror = (error) => {
+      console.error("SSE 오류:", error);
+      // 오류 처리 코드를 여기에 추가하세요.
     };
 
     return () => {
       eventSource.close();
     };
-  }, []);
+  }, [isLogin, baseUrl, tokenManager.accessToken]);
 
   return (
     <>

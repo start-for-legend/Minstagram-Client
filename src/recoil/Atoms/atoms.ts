@@ -3,6 +3,7 @@ import { atom } from "recoil";
 import { noticeInterface } from "../../types/noticeType";
 import { userType } from "../../types/userType";
 import { cmtReply } from "../../types/feedType";
+import { profileTypes } from "../../types/msgType";
 
 export const searchStateAtom = atom<boolean>({
   key: "searchStateAtom",
@@ -54,4 +55,9 @@ export const cmtReplyAtom = atom<cmtReply>({
   default: {
     isReply: false,
   },
+});
+
+export const roomsAtom = atom<profileTypes[]>({
+  key: "roomsAtom",
+  default: [],
 });

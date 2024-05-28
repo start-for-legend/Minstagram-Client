@@ -6,4 +6,5 @@ export interface commentType {
   heartCount: number;
   modify: boolean;
   user: userType;
+  feedCommentReplyId?: number;
 }

@@ -81,7 +81,9 @@ const FeedModal = ({
         data: {
           content: postCmt,
         },
-      }).then((res) => console.log(res.data));
+      }).then(() =>
+        setCmtReply({ isReply: false, replyUserId: -1, replyUserName: "" })
+      );
     } else {
       await API({
         method: "post",
@@ -141,6 +143,7 @@ const FeedModal = ({
                     key={element.feedCommentId}
                     feedId={feedId}
                     cmtData={element}
+                    origin
                   />
                 );
               })

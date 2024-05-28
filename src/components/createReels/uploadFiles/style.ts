@@ -28,3 +28,10 @@ export const FileBtn = styled.div`
   margin-top: 0.5em;
   cursor: pointer;
 `;
+
+export const UploadFlex = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`;

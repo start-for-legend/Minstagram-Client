@@ -16,3 +16,9 @@ export interface msgTypes {
   chatTime?: Date;
   chatterType: chatterType;
 }
+
+export interface editMsgTypes {
+  editing: boolean;
+  chatId: number;
+  chat: string;
+}

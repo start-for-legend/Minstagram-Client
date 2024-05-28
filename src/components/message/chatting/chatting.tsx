@@ -1,15 +1,22 @@
 /* eslint no-underscore-dangle: 0 */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faImage, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEllipsisVertical,
+  faImage,
+  faPaperPlane,
+  faTrashCan,
+  faXmarkCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import * as StompJs from "@stomp/stompjs";
 
-import { msgTypes } from "../../../types/msgType";
+import { editMsgTypes, msgTypes } from "../../../types/msgType";
 import { TokenManager } from "../../../API/tokenManager";
 import { API } from "../../../API/API";
 import * as S from "./style";
 import { userType } from "../../../types/userType";
+import ProfileItem from "../../home/items/profileItem";
 
 const ChattingTab = () => {
   const baseUrl = process.env.REACT_APP_BASE_URL;
@@ -17,6 +24,8 @@ const ChattingTab = () => {
   const [userInfo, setUserInfo] = useState<userType>();
   const [msgContent, setMsgContent] = useState("");
   const [msgContents, setMsgContents] = useState<msgTypes[]>([]);
+  const [editing, setEditing] = useState<editMsgTypes>();
+  const [tempMsgContent, setTempMsgContent] = useState("");
   const tokenManager = new TokenManager();
   const client = useRef<any>();
   const params = useParams();
@@ -100,8 +109,34 @@ const ChattingTab = () => {
     return () => client.current.deactivate();
   }, [params.roomId]);
 
+  const changeMsg = () => {
+    const copiedArr = msgContents;
+    const idx = msgContents.findIndex(
+      (content) => content.chatId === editing?.chatId
+    );
+    copiedArr[idx].chat = msgContent;
+    setMsgContents(copiedArr);
+  };
+
   const onMsgSend = (event: any) => {
     if (
+      event.nativeEvent.isComposing === false && // 2번 입력되는 거 방지
+      event.code === "Enter" &&
+      msgContent &&
+      editing?.editing
+    ) {
+      API({
+        method: "patch",
+        url: `/room/${chatRoomId}/${editing.chatId}`,
+        data: {
+          content: msgContent,
+        },
+      }).then(() => {
+        changeMsg();
+        setEditing({ editing: false, chatId: -1, chat: "" });
+        setMsgContent("");
+      });
+    } else if (
       event.nativeEvent.isComposing === false && // 2번 입력되는 거 방지
       event.code === "Enter" &&
       msgContent
@@ -121,6 +156,24 @@ const ChattingTab = () => {
     }
   };
 
+  const chatDelete = (chatId?: number) => {
+    API({
+      method: "delete",
+      url: `/room/${chatRoomId}/${chatId}`,
+    }).then(
+      (res) =>
+        setMsgContents(msgContents.filter((cnt) => cnt.chatId !== chatId)) // 특정 채팅 삭제
+    );
+  };
+
+  const editMsg = ({ chat, chatId }: { chat: string; chatId?: number }) => {
+    if (chatId && chat) {
+      setEditing({ editing: true, chatId, chat });
+      setTempMsgContent(msgContent);
+      setMsgContent(chat);
+    }
+  };
+
   return (
     <S.ChattingTab>
       <S.ChatWindow>
@@ -131,26 +184,64 @@ const ChattingTab = () => {
           placeholder="메세지 입력..."
           onKeyUp={(e) => onMsgSend(e)} // onKeyPress 지양하기
         />
-        <FontAwesomeIcon icon={faImage} size="2xl" />
+        {/* <FontAwesomeIcon icon={faImage} size="2xl" /> */}
         <FontAwesomeIcon icon={faPaperPlane} size="2xl" />
       </S.ChatWindow>
+      {editing?.editing ? (
+        <S.Editing>
+          메세지 수정 중...
+          <FontAwesomeIcon
+            icon={faXmarkCircle}
+            size="1x"
+            onClick={() => {
+              setEditing({ editing: false, chatId: -1, chat: "" });
+              setMsgContent(tempMsgContent);
+            }}
+          />
+        </S.Editing>
+      ) : (
+        ""
+      )}
       <S.ChatContents>
         {msgContents?.map(({ chat, userId, chatId }) => {
+          const meValid = myUserId && userId === myUserId;
           return (
-            <S.ChatMsg
-              chatterType={
-                myUserId && userId === myUserId ? "self" : "opponent"
-              }
+            <S.ChatContainer
               key={chatId}
+              chatterType={meValid ? "self" : "opponent"}
             >
-              {chat}
-            </S.ChatMsg>
+              {meValid ? (
+                <S.ChatOption>
+                  <FontAwesomeIcon
+                    onClick={() => chatDelete(chatId)}
+                    icon={faTrashCan}
+                    size="1x"
+                  />
+                  <FontAwesomeIcon
+                    icon={faEllipsisVertical}
+                    size="1x"
+                    onClick={() => editMsg({ chat, chatId })}
+                  />
+                </S.ChatOption>
+              ) : (
+                ""
+              )}
+              <S.ChatMsg chatterType={meValid ? "self" : "opponent"}>
+                {chat}
+              </S.ChatMsg>
+            </S.ChatContainer>
           );
         })}
       </S.ChatContents>
       <S.ChatProfile>
         <S.TargetInfo>
-          <S.ProfilePic />
+          <ProfileItem
+            profileURL={userInfo?.profileUrl}
+            watched={false}
+            width={4}
+            marginLeft={1}
+            marginTop={1}
+          />
           <S.TargetName>{userInfo?.nickName}</S.TargetName>
           <S.Active>{userInfo?.name}</S.Active>
         </S.TargetInfo>

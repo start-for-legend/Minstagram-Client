@@ -8,11 +8,11 @@ const SignUpForm = () => {
 
   const [phoneVerified, setPhoneVerified] = useState(false);
   const [phoneNum, setPhoneNum] = useState<number | undefined>();
-  const [verifyCode, setVerifyCode] = useState<string>();
-  const [name, setName] = useState<string>();
-  const [nickName, setNickName] = useState<string>();
-  const [pw, setPw] = useState<string>();
-  const [rePw, setRePw] = useState<string>();
+  const [verifyCode, setVerifyCode] = useState<number | null>();
+  const [name, setName] = useState<string>("");
+  const [nickName, setNickName] = useState<string>("");
+  const [pw, setPw] = useState<string>("");
+  const [rePw, setRePw] = useState<string>("");
   const [samePwState, setSamePwState] = useState(false);
 
   useEffect(() => {
@@ -40,9 +40,8 @@ const SignUpForm = () => {
       url: `${baseUrl}/user/auth`,
       data: { phone: phoneNum },
     })
-      .then((e) => {
-        console.log(e);
-        setVerifyCode(undefined);
+      .then(() => {
+        alert("문자가 발송되었습니다.");
       })
       .catch((e) => console.log(e));
   };
@@ -51,9 +50,12 @@ const SignUpForm = () => {
     await axios({
       method: "post",
       url: `${baseUrl}/user/check`,
-      data: { phone: phoneNum, code: verifyCode },
+      data: { phone: phoneNum, key: verifyCode },
     })
-      .then((e) => console.log(e))
+      .then((e) => {
+        setVerifyCode(null);
+        setPhoneVerified(true);
+      })
       .catch((e) => console.log(e));
   };
 
@@ -69,16 +71,25 @@ const SignUpForm = () => {
           phone: phoneNum,
         },
       }).then(() => {
-        window.location.href = "/home";
+        alert("가입되었습니다!");
+        window.location.reload();
       });
     }
   };
+
+  useEffect(() => {
+    if (!phoneVerified) {
+      setName("");
+      setVerifyCode(undefined);
+    }
+  }, [phoneVerified]);
 
   return (
     <>
       {phoneVerified ? (
         <>
           <S.IdInput type="number" value={phoneNum} readOnly />
+          <S.hiddenInput type="text" />
           <S.IdInput
             onChange={(e) => setName(e.target.value)}
             type="text"
@@ -125,7 +136,10 @@ const SignUpForm = () => {
           </div>
           <S.IdInput
             type="number"
-            onChange={(e) => setVerifyCode(e.target.value)}
+            value={verifyCode || undefined}
+            onChange={(e) => {
+              setVerifyCode(Number(e.target.value));
+            }}
             placeholder="인증 번호"
           />
           <S.RegisterBtn onClick={verifyPhone}>핸드폰 인증하기</S.RegisterBtn>
@@ -136,10 +150,6 @@ const SignUpForm = () => {
         <span>또는</span>
         <hr />
       </S.OtherTool>
-      <button type="button" onClick={() => setPhoneVerified(!phoneVerified)}>
-        임시 버튼
-      </button>{" "}
-      {/* 여기 나중에 API 완성하면 지우기 */}
     </>
   );
 };

@@ -83,3 +83,7 @@ export const RegisterBtn = styled.div`
   line-height: 2em;
   cursor: pointer;
 `;
+
+export const hiddenInput = styled.input`
+  display: none;
+`;

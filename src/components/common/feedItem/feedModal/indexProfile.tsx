@@ -4,8 +4,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCirclePlus,
   faEllipsis,
+  faXmarkCircle,
   fas,
 } from "@fortawesome/free-solid-svg-icons";
+import { useRecoilState } from "recoil";
 import { useEffect, useState } from "react";
 
 import ProfileItem from "../../../home/items/profileItem";
@@ -14,6 +16,7 @@ import { feedType } from "../../../../types/feedType";
 import CommentItem from "./commentItem";
 import { API } from "../../../../API/API";
 import { commentType } from "../../../../types/commentType";
+import { cmtReplyAtom } from "../../../../recoil/Atoms/atoms";
 
 const FeedModalProfile = ({
   modalState,
@@ -29,6 +32,7 @@ const FeedModalProfile = ({
   const [postCmt, setPostCmt] = useState<string>();
   const [cmtIdx, setCmtIdx] = useState<number | undefined>(0);
   const [feedLiked, setFeedLiked] = useState(false);
+  const [cmtReply, setCmtReply] = useRecoilState(cmtReplyAtom);
 
   useEffect(() => {
     setCmtIdx(comments?.length);
@@ -61,17 +65,29 @@ const FeedModalProfile = ({
   }, []);
 
   const cmtSend = async () => {
-    await API({
-      method: "post",
-      url: `/feed-comment/${feedIdProfile}`,
-      data: {
-        content: postCmt,
-      },
-    }).then((res) => {
-      console.log(res);
-      setPostCmt("");
-      getComment();
-    });
+    if (cmtReply.isReply) {
+      await API({
+        method: "post",
+        url: `/feed-comment-reply/${feedIdProfile}/${cmtReply.replyUserId}`,
+        data: {
+          content: postCmt,
+        },
+      }).then(() =>
+        setCmtReply({ isReply: false, replyUserId: -1, replyUserName: "" })
+      );
+    } else {
+      await API({
+        method: "post",
+        url: `/feed-comment/${feedIdProfile}`,
+        data: {
+          content: postCmt,
+        },
+      }).then((res) => {
+        console.log(res);
+        getComment();
+      });
+    }
+    setPostCmt("");
   };
 
   const getMoreComment = async () => {
@@ -92,7 +108,10 @@ const FeedModalProfile = ({
   return (
     <ReactModal
       isOpen={modalState}
-      onRequestClose={() => setModalState(false)}
+      onRequestClose={() => {
+        setModalState(false);
+        setCmtReply({ isReply: false, replyUserId: -1, replyUserName: "" });
+      }}
       style={S.feedModalStyles}
     >
       <S.modalImg>
@@ -118,6 +137,7 @@ const FeedModalProfile = ({
                     key={element.feedCommentId}
                     feedId={feedIdProfile}
                     cmtData={element}
+                    origin
                   />
                 );
               })
@@ -130,6 +150,24 @@ const FeedModalProfile = ({
               size="2x"
             />
           </S.commentScrollContainer>
+          {cmtReply.isReply ? (
+            <S.replyTo>
+              {cmtReply.replyUserName}에게 답글 보내기...
+              <FontAwesomeIcon
+                icon={faXmarkCircle}
+                size="2xs"
+                onClick={() =>
+                  setCmtReply({
+                    isReply: false,
+                    replyUserId: undefined,
+                    replyUserName: undefined,
+                  })
+                }
+              />
+            </S.replyTo>
+          ) : (
+            ""
+          )}
           <S.commentFooter onSubmit={(event) => event.preventDefault()}>
             <FontAwesomeIcon
               icon={feedLiked ? fas.faHeart : far.faHeart}

@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  useLocation,
+  useParams,
+} from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { EventSourcePolyfill } from "event-source-polyfill";
 
@@ -28,11 +34,19 @@ const App = () => {
   const isLogin = Boolean(window.localStorage.getItem("mst-accessToken"));
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const tokenManager = new TokenManager();
+  const isPathName = Boolean(window.location.pathname.split("/")[1]);
 
   useEffect(() => {
     setSearchState(false);
     setNoticeState(false);
   }, [setSearchState, setNoticeState]);
+
+  useEffect(() => {
+    if (isPathName && !isLogin) {
+      alert("로그인이 필요합니다.");
+      window.location.replace("/");
+    }
+  }, [isPathName]);
 
   useEffect(() => {
     console.log(parsedData);
@@ -75,17 +89,21 @@ const App = () => {
         .catch((err) => {
           console.log(err.eventStream);
         });
-    getNotice();
+
+    if (isLogin) getNotice();
   }, [isLogin]);
 
   useEffect(() => {
-    const eventSource = new EventSourcePolyfill(`${baseUrl}/notice`, {
-      headers: {
-        "Content-Type": "text/event-stream",
-        Authorization: `Bearer ${tokenManager.accessToken}`,
-      },
-      heartbeatTimeout: 5000,
-    });
+    const eventSource = new EventSourcePolyfill(
+      isLogin ? `${baseUrl}/notice` : "",
+      {
+        headers: {
+          "Content-Type": "text/event-stream",
+          Authorization: `Bearer ${tokenManager.accessToken}`,
+        },
+        heartbeatTimeout: 5000,
+      }
+    );
 
     eventSource.onopen = (event) => {
       console.log("SSE 연결 성공:", event);

@@ -8,6 +8,7 @@ import { searchStateAtom, userResponseAtom } from "../../recoil/Atoms/atoms";
 import * as S from "./style";
 import FeedItemProfile from "../common/feedItem/indexProfile";
 import { API } from "../../API/API";
+import { myUserId } from "../../lib/tokens";
 
 const ProfileComponent = () => {
   const userResponse = useRecoilValue(userResponseAtom);
@@ -15,7 +16,7 @@ const ProfileComponent = () => {
   const [curTab, setCurTab] = useState(false);
   const [myProfile, setMyProfile] = useState(false);
   const [followValid, setFollowValid] = useState(false);
-  const myUserId = Number(window.localStorage.getItem("myUserId"));
+  const myLocalUserId = Number(window.localStorage.getItem(myUserId));
 
   useEffect(() => {
     if (userResponse) {
@@ -26,7 +27,7 @@ const ProfileComponent = () => {
         }).then((res) => setFollowValid(res.data.isTrue));
       };
 
-      if (myUserId === userResponse.userId) {
+      if (myLocalUserId === userResponse.userId) {
         setMyProfile(true);
       }
 

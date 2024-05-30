@@ -4,6 +4,7 @@ import axios from "axios";
 import { API } from "../../../API/API";
 import ProfileItem from "../items/profileItem";
 import * as S from "./style";
+import { accessExp, accessToken } from "../../../lib/tokens";
 
 interface recUserItemProps {
   myProfile?: boolean;
@@ -43,11 +44,13 @@ const RecUserItem = ({
   };
 
   const logOut = () => {
-    axios({
+    /* axios({
       withCredentials: true,
       method: "delete",
       url: `/auth`,
-    }).then(() => navigate("./"));
+    }).then(() => navigate("./")); */
+    window.localStorage.clear();
+    window.location.replace("/");
   };
 
   return (

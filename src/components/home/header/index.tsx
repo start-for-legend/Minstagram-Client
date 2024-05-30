@@ -5,14 +5,6 @@ const FeedHeader = () => {
   return (
     <S.feedHeader>
       <StoryItem />
-      <StoryItem />
-      <StoryItem />
-      <StoryItem />
-      <StoryItem />
-      <StoryItem />
-      <StoryItem />
-      <StoryItem />
-      <StoryItem />
     </S.feedHeader>
   );
 };

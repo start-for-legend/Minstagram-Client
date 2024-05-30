@@ -6,6 +6,7 @@ import { userResponseAtom } from "../../recoil/Atoms/atoms";
 import Sidebar from "../../components/sidebar";
 import { API } from "../../API/API";
 import ProfileComponent from "../../components/profile";
+import { myUserId } from "../../lib/tokens";
 
 const Profile = () => {
   const setUserResponse = useSetRecoilState(userResponseAtom);
@@ -21,7 +22,7 @@ const Profile = () => {
         .then((res) => {
           setUserResponse(res.data);
           if (myAcc) {
-            window.localStorage.setItem("myUserId", res.data.userId);
+            window.localStorage.setItem(myUserId, res.data.userId);
           }
         })
         .catch((err) => console.log(err));

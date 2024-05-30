@@ -27,25 +27,33 @@ const ReelsVideo = ({
   const [commentOpened, setCommentOpened] = useState(false);
   const [heartSum, setHeartSum] = useState<number>(heartCount || 0);
   const [reelsCmt, setReelsCmt] = useState<reelsCmtInterface[]>();
+  const isLike = reelsLike ? 1 : 0;
 
   useEffect(() => {
-    if (leelsId) {
+    if (leelsId && heartCount) {
       API({
         method: "get",
         url: `/leels-comment/${leelsId}`,
       }).then((res) => setReelsCmt(res.data));
+
+      API({
+        method: "get",
+        url: `/leels/valid/${leelsId}`,
+      }).then((res) => {
+        setHeartSum(heartCount - 1);
+        setReelsLike(res.data.isTrue);
+        console.log(`heartSum = ${heartSum}`);
+      });
     }
-  }, [leelsUrl]);
+  }, [leelsUrl, heartCount]);
 
   const reelsLikeFunc = () => {
     if (!reelsLike) {
-      setHeartSum(heartSum + 1);
       API({
         url: `/leels/${leelsId}/like`,
         method: "post",
       });
     } else {
-      setHeartSum(heartSum - 1);
       API({
         url: `/leels/${leelsId}/like`,
         method: "patch",
@@ -70,12 +78,15 @@ const ReelsVideo = ({
           onDoubleClick={onDoubleClick}
         >
           <S.videoBox>
-            <img src={leelsUrl} />
+            <ReactPlayer
+              loop
+              onReady={() => setIsPlaying(true)}
+              controls={false}
+              url={leelsUrl}
+              playing={isPlaying}
+            />
           </S.videoBox>
 
-          {/* 
-          <ReactPlayer url={leelsUrl} playing={isPlaying} />
-           */}
           {doubleClicked ? (
             <FontAwesomeIcon icon={fas.faHeart} color="red" size="5x" />
           ) : (
@@ -93,7 +104,7 @@ const ReelsVideo = ({
               setReelsLike(!reelsLike);
             }}
           />
-          <S.reelsOptionValue>{heartSum}</S.reelsOptionValue>
+          <S.reelsOptionValue>{heartSum + isLike}</S.reelsOptionValue>
           <FontAwesomeIcon
             cursor="pointer"
             onClick={() => setCommentOpened(!commentOpened)}
@@ -106,7 +117,9 @@ const ReelsVideo = ({
           <FontAwesomeIcon icon={faPaperPlane} size="2x" />
         </S.reelsOptions>
       </S.reelsVideoContainer>
-      {commentOpened && reelsCmt ? <ReelsComment reelsCmt={reelsCmt} /> : null}
+      {commentOpened && reelsCmt ? (
+        <ReelsComment reelsCmt={reelsCmt} reelsId={leelsId} />
+      ) : null}
     </>
   );
 };

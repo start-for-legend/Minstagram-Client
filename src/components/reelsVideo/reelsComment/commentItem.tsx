@@ -5,30 +5,57 @@ import { far } from "@fortawesome/free-regular-svg-icons";
 
 import ProfileItem from "../../home/items/profileItem";
 import * as S from "./style";
-import { reelsCmtInterface } from "../../../types/reelsType";
+import { reelsCmtItemTypes } from "../../../types/reelsType";
+import { API } from "../../../API/API";
 
 const CommentItem = ({
-  author,
-  comment,
-  heartCount,
-  leelsCommentId,
-  modify,
-}: reelsCmtInterface) => {
+  data: { author, comment, heartCount, leelsCommentId, modify },
+  reelsId,
+}: reelsCmtItemTypes) => {
   const [liked, setLiked] = useState(false);
+  const [countHeart, setCountHeart] = useState(heartCount || 0);
+  const isLike = liked ? 1 : 0;
+
+  const onLikeClick = async () => {
+    API({
+      method: liked ? "put" : "post",
+      url: `/leels-comment/${reelsId}/${leelsCommentId}`,
+    }).then(() => setLiked(!liked));
+  };
+
+  const getValid = async () => {
+    await API({
+      method: "get",
+      url: `leels-comment/${reelsId}/valid/${leelsCommentId}`,
+    }).then((res) => {
+      setLiked(res.data.isTrue);
+      if (res.data.isTrue && countHeart) setCountHeart(countHeart - 1);
+    });
+  };
+
   useEffect(() => {
-    console.log("ㅁㄴㅇㄹ");
-    console.log(author);
-  }, [author]);
+    if (leelsCommentId) getValid();
+  }, [leelsCommentId]);
 
   return (
-    <div>
-      <ProfileItem watched={false} width={2.5} />
-      <span>
-        <b>{author?.nickName}</b>
-      </span>
-      <S.commentContent>{comment}</S.commentContent>
-      <S.commentInfo>수정됨 &apos; 2일</S.commentInfo>
-    </div>
+    <S.commentItemBox>
+      <div>
+        <ProfileItem marginLeft={1} watched={false} width={2.5} />
+        <span>
+          <b>{author?.nickName}</b>
+        </span>
+        <S.commentContent>{comment}</S.commentContent>
+      </div>
+      <S.cmtLike>
+        <FontAwesomeIcon
+          icon={liked ? fas.faHeart : far.faHeart}
+          color={liked ? "red" : "black"}
+          onClick={onLikeClick}
+          size="xl"
+        />
+        <div>{countHeart + isLike}</div>
+      </S.cmtLike>
+    </S.commentItemBox>
   );
 };
 

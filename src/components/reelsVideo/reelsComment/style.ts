@@ -9,9 +9,8 @@ export const reelsCommentContainer = styled.div`
 `;
 
 export const commentTab = styled.div`
-  padding: 1.5em 2.5em 1.5em 1.5em;
-  width: 20em;
-  height: 40em;
+  width: 26em;
+  height: 47em;
   background-color: white;
   margin-left: 50%;
   margin-top: 100%;
@@ -22,15 +21,20 @@ export const commentTab = styled.div`
   overflow-x: hidden;
 `;
 
-/* export const commentTab = styled.div`
-  margin-left: 1em;
+export const commentBox = styled.div`
+  margin-top: 1em;
+  width: 25rem;
+  height: 40em;
+  overflow-x: hidden;
+  overflow-y: auto;
 
-  span {
-    font-family: 900;
-    padding-right: 1em;
-    float: left;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  svg {
+    cursor: pointer;
   }
-`; */
+`;
 
 export const feedContent = styled.div`
   width: 17em;
@@ -43,14 +47,51 @@ export const feedContent = styled.div`
   margin-bottom: 2em;
 `;
 
+export const commentForm = styled.form`
+  width: 22em;
+  margin-top: 2em;
+  margin-left: 2em;
+
+  #cmtSubmit {
+    display: none;
+  }
+
+  svg {
+    cursor: pointer;
+  }
+`;
+
+export const commentInput = styled.input`
+  border: none;
+  outline: none;
+  font-size: 1em;
+  width: 16rem;
+  height: 2.25em;
+`;
+
 export const commentContent = styled.div`
-  width: 20em;
+  width: 15em;
   float: left;
   margin-bottom: 2em;
+  word-wrap: break-word;
 `;
 
 export const commentInfo = styled.div`
   color: #c5c5c5;
-  width: 30em;
   margin-left: 3em;
+`;
+
+export const commentItemBox = styled.div`
+  width: 22em;
+  margin-bottom: 1em;
+  display: flex;
+  justify-content: center;
+`;
+
+export const cmtLike = styled.div`
+  text-align: center;
+
+  svg {
+    cursor: pointer;
+  }
 `;

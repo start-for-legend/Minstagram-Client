@@ -9,6 +9,11 @@ export interface reelsInterface {
   heartCount?: number;
 }
 
+export interface reelsCmtItemTypes {
+  data: reelsCmtInterface;
+  reelsId?: number;
+}
+
 export interface reelsCmtInterface {
   author?: userType;
   comment?: string;

@@ -30,7 +30,6 @@ const Reels = () => {
       <Sidebar />
       <S.ReelsContainer searchState={searchState}>
         <ReelsVideo {...logData} />
-        <ReelsVideo {...logData} />
       </S.ReelsContainer>
     </>
   );

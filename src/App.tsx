@@ -24,6 +24,7 @@ import Message from "./pages/message";
 import Home from "./pages/home";
 import Profile from "./pages/profile";
 import Explore from "./pages/explore";
+import Exception from "./pages/exception";
 
 const App = () => {
   const setSearchState = useSetRecoilState(searchStateAtom);
@@ -135,6 +136,8 @@ const App = () => {
           <Route path="/reels" element={<Reels />} />
           <Route path="/message/:roomId?" element={<Message />} />
           <Route path="/profile/:userId?" element={<Profile />} />
+          <Route path="/story/:storyId?" element={<Exception />} />
+          <Route path="/*" element={<Exception />} />
         </Routes>
       </BrowserRouter>
     </>

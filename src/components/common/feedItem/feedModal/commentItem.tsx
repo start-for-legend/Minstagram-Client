@@ -13,23 +13,82 @@ import * as S from "./style";
 interface cmtItemProps {
   cmtData: commentType;
   feedId: number;
+  origin?: boolean;
+  replyCmtId?: number;
+  heartCount?: number;
+  prevCmtId?: number;
 }
 
-const CommentItem = ({ cmtData, feedId }: cmtItemProps) => {
+const CommentItem = ({
+  cmtData,
+  feedId,
+  origin,
+  replyCmtId,
+  heartCount,
+  prevCmtId,
+}: cmtItemProps) => {
   const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(heartCount);
   const [replyShow, setReplyShow] = useState(false);
   const [replyData, setReplyData] = useState<commentType[]>();
   const setCmtReply = useSetRecoilState(cmtReplyAtom);
 
   useEffect(() => {
-    API({
-      method: "get",
-      url: `/feed-comment-reply/${feedId}/${cmtData.feedCommentId}`,
-    }).then((res) => {
-      console.log(res.data);
-      setReplyData(res.data);
-    });
+    if (origin) {
+      API({
+        method: "get",
+        url: `/feed-comment-reply/${feedId}/${cmtData.feedCommentId}`,
+      }).then((res) => {
+        console.log(res.data);
+        setReplyData(res.data);
+      });
+      API({
+        method: "get",
+        url: `/feed-comment/${feedId}/valid/${cmtData.feedCommentId}`,
+      }).then((res) => {
+        setLiked(res.data.isTrue);
+      });
+    } else {
+      API({
+        method: "get",
+        url: `/feed-comment-reply/${feedId}/${prevCmtId}/valid/${replyCmtId}`,
+      }).then((res) => {
+        setLiked(res.data.isTrue);
+      });
+    }
+
+    if (heartCount) {
+      console.log(heartCount);
+    }
   }, []);
+
+  const likeCmt = () => {
+    if (liked) {
+      API({
+        method: "delete",
+        url: origin
+          ? `feed-comment/${feedId}/${cmtData.feedCommentId}/like`
+          : `/feed-comment-reply/${feedId}/${prevCmtId}/${replyCmtId}/like`,
+      }).then(() => {
+        setLiked(!liked);
+      });
+    } else {
+      API({
+        method: "post",
+        url: origin
+          ? `feed-comment/${feedId}/${cmtData.feedCommentId}`
+          : `/feed-comment-reply/${feedId}/${prevCmtId}/${replyCmtId}`,
+      }).then(() => setLiked(!liked));
+    }
+  };
+
+  useEffect(() => {
+    if (liked && heartCount) {
+      setLikeCount(heartCount + 1);
+    } else {
+      setLikeCount(heartCount);
+    }
+  }, [liked, heartCount]);
 
   return (
     <S.commentItem>
@@ -47,59 +106,48 @@ const CommentItem = ({ cmtData, feedId }: cmtItemProps) => {
           <S.commentContent>{cmtData.content}</S.commentContent>
           <div>
             <FontAwesomeIcon
-              onClick={() => setLiked(!liked)}
+              onClick={likeCmt}
               color={liked ? "red" : "black"}
               icon={liked ? fas.faHeart : far.faHeart}
               size="2x"
             />
-            <S.heartCount>{cmtData.heartCount}</S.heartCount>
+            <S.heartCount>{likeCount || 0}</S.heartCount>
           </div>
         </S.commentFlex>
-        <S.commentMore onClick={() => setReplyShow(!replyShow)}>
-          답글 보기 ({replyData?.length})
-        </S.commentMore>
-        <S.commentMore
-          onClick={() =>
-            setCmtReply({
-              isReply: true,
-              replyUserId: cmtData.feedCommentId,
-              replyUserName: cmtData.user.nickName,
-            })
-          }
-        >
-          답글 쓰기
-        </S.commentMore>
+        {origin ? (
+          <>
+            <S.commentMore onClick={() => setReplyShow(!replyShow)}>
+              답글 보기 ({replyData?.length})
+            </S.commentMore>
+            <S.commentMore
+              onClick={() =>
+                setCmtReply({
+                  isReply: true,
+                  replyUserId: cmtData.feedCommentId,
+                  replyUserName: cmtData.user.nickName,
+                })
+              }
+            >
+              답글 쓰기
+            </S.commentMore>
+          </>
+        ) : (
+          ""
+        )}
       </S.commentTab>
-      {replyShow &&
+      {origin &&
+        replyShow &&
         replyData?.map((element: commentType) => {
+          console.log(element);
           return (
-            <S.commentItem key={element.feedCommentId}>
-              <ProfileItem
-                watched={false}
-                profileURL={element.user.profileUrl}
-                width={2.5}
-              />
-              <S.commentTab>
-                <span>
-                  <b>{element.user.nickName}</b>
-                </span>
-                <S.commentInfo>
-                  {element.modify ? "수정됨 &apos;" : ""}
-                </S.commentInfo>
-                <S.commentFlex>
-                  <S.commentContent>{element.content}</S.commentContent>
-                  <div>
-                    <FontAwesomeIcon
-                      onClick={() => setLiked(!liked)}
-                      color={liked ? "red" : "black"}
-                      icon={liked ? fas.faHeart : far.faHeart}
-                      size="2x"
-                    />
-                    <S.heartCount>{element.heartCount}</S.heartCount>
-                  </div>
-                </S.commentFlex>
-              </S.commentTab>
-            </S.commentItem>
+            <CommentItem
+              cmtData={element}
+              feedId={feedId}
+              prevCmtId={cmtData.feedCommentId}
+              replyCmtId={element.feedCommentReplyId}
+              heartCount={element.heartCount}
+              key={element.feedCommentId}
+            />
           );
         })}
     </S.commentItem>

@@ -4,8 +4,8 @@ const Footer = () => {
   return (
     <S.FooterBox>
       <div>
-        <S.FooterItem>Minstagram</S.FooterItem>
-        <S.FooterItem>Minstagram</S.FooterItem>
+        <S.FooterItem>Sanadevel</S.FooterItem>
+        <S.FooterItem>BLoHny</S.FooterItem>
         <S.FooterItem>Minstagram</S.FooterItem>
         <S.FooterItem>Minstagram</S.FooterItem>
         <S.FooterItem>Minstagram</S.FooterItem>

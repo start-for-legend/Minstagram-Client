@@ -7,7 +7,7 @@ export interface userType {
   profileUrl?: string;
   userId?: number;
   feeds: Array<feedType>;
-  leels?: Array<userFeedsType>;
+  leels: Array<leelsType>;
 }
 
 type feedType = {
@@ -15,6 +15,7 @@ type feedType = {
   feedUrlOne?: string;
 };
 
-export type userFeedsType = {
-  awsUrl: string;
+export type leelsType = {
+  leelsId: number;
+  leelsUrl: string;
 };

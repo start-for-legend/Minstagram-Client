@@ -4,6 +4,7 @@ import axios from "axios";
 import { API } from "../../../API/API";
 import ProfileItem from "../items/profileItem";
 import * as S from "./style";
+import { accessExp, accessToken } from "../../../lib/tokens";
 
 interface recUserItemProps {
   myProfile?: boolean;
@@ -20,7 +21,7 @@ const RecUserItem = ({
   nickName,
   profileUrl,
 }: recUserItemProps) => {
-  const navigate = useNavigate();
+  const baseUrl = process.env.REACT_APP_BASE_URL;
 
   const followUser = async () => {
     await API({
@@ -42,12 +43,17 @@ const RecUserItem = ({
     });
   };
 
-  const logOut = () => {
-    axios({
+  const logOut = async () => {
+    /* await API({
       withCredentials: true,
       method: "delete",
       url: `/auth`,
-    }).then(() => navigate("./"));
+    }).then(() => {
+      window.localStorage.clear();
+      window.location.replace("/");
+    }); */
+    window.localStorage.clear();
+    window.location.replace("/");
   };
 
   return (

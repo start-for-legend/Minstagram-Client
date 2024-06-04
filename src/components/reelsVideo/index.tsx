@@ -4,7 +4,7 @@ import {
   faPaperPlane,
   fas,
 } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { far } from "@fortawesome/free-regular-svg-icons";
 
@@ -27,25 +27,35 @@ const ReelsVideo = ({
   const [commentOpened, setCommentOpened] = useState(false);
   const [heartSum, setHeartSum] = useState<number>(heartCount || 0);
   const [reelsCmt, setReelsCmt] = useState<reelsCmtInterface[]>();
+  const [volume, setVoulume] = useState(0.5);
+  const isLike = reelsLike ? 1 : 0;
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (leelsId) {
+    if (leelsId && heartCount) {
       API({
         method: "get",
         url: `/leels-comment/${leelsId}`,
       }).then((res) => setReelsCmt(res.data));
+
+      API({
+        method: "get",
+        url: `/leels/valid/${leelsId}`,
+      }).then((res) => {
+        setHeartSum(heartCount - 1);
+        setReelsLike(res.data.isTrue);
+        console.log(`heartSum = ${heartSum}`);
+      });
     }
-  }, [leelsUrl]);
+  }, [leelsUrl, heartCount]);
 
   const reelsLikeFunc = () => {
     if (!reelsLike) {
-      setHeartSum(heartSum + 1);
       API({
         url: `/leels/${leelsId}/like`,
         method: "post",
       });
     } else {
-      setHeartSum(heartSum - 1);
       API({
         url: `/leels/${leelsId}/like`,
         method: "patch",
@@ -62,20 +72,28 @@ const ReelsVideo = ({
     setTimeout(() => setDoubleClicked(false), 1996);
   };
 
+  const onScroll = () => {
+    console.log("scrolled");
+  };
+
   return (
     <>
-      <S.reelsVideoContainer>
+      <S.reelsVideoContainer onScroll={onScroll}>
         <S.reelsVideo
           onClick={() => setIsPlaying(!isPlaying)}
           onDoubleClick={onDoubleClick}
         >
-          <S.videoBox>
-            <img src={leelsUrl} />
+          <S.videoBox ref={ref}>
+            <ReactPlayer
+              loop
+              onReady={() => setIsPlaying(true)}
+              controls={false}
+              url={leelsUrl}
+              playing={isPlaying}
+              volume={volume}
+            />
           </S.videoBox>
 
-          {/* 
-          <ReactPlayer url={leelsUrl} playing={isPlaying} />
-           */}
           {doubleClicked ? (
             <FontAwesomeIcon icon={fas.faHeart} color="red" size="5x" />
           ) : (
@@ -83,6 +101,10 @@ const ReelsVideo = ({
           )}
         </S.reelsVideo>
         <S.reelsOptions>
+          <S.volumeRange
+            type="range"
+            onChange={(e: any) => setVoulume(e.target.value / 100)}
+          />
           <FontAwesomeIcon
             cursor="pointer"
             icon={reelsLike ? fas.faHeart : far.faHeart}
@@ -93,7 +115,7 @@ const ReelsVideo = ({
               setReelsLike(!reelsLike);
             }}
           />
-          <S.reelsOptionValue>{heartSum}</S.reelsOptionValue>
+          <S.reelsOptionValue>{heartSum + isLike}</S.reelsOptionValue>
           <FontAwesomeIcon
             cursor="pointer"
             onClick={() => setCommentOpened(!commentOpened)}
@@ -106,7 +128,9 @@ const ReelsVideo = ({
           <FontAwesomeIcon icon={faPaperPlane} size="2x" />
         </S.reelsOptions>
       </S.reelsVideoContainer>
-      {commentOpened && reelsCmt ? <ReelsComment reelsCmt={reelsCmt} /> : null}
+      {commentOpened && reelsCmt ? (
+        <ReelsComment reelsCmt={reelsCmt} reelsId={leelsId} />
+      ) : null}
     </>
   );
 };

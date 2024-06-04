@@ -10,16 +10,27 @@ import { reelsInterface } from "../../types/reelsType";
 
 const Reels = () => {
   const searchState = useRecoilValue(searchStateAtom);
-  const [logData, setLogData] = useState<reelsInterface>();
+  const [logData, setLogData] = useState<reelsInterface[]>([]);
+  const [dataIdx, setDataIdx] = useState(0);
 
   useEffect(() => {
     API({
       method: "get",
       url: "/leels",
     })
-      .then((res) => setLogData(res.data[0]))
+      .then((res) => setLogData(res.data))
       .catch((err) => console.log(err));
   }, []);
+
+  const onIdxClick = (state: string) => {
+    if (logData[dataIdx + 1] && state === "next") {
+      setDataIdx(dataIdx + 1);
+    } else if (logData[dataIdx - 1] && state === "prev") {
+      setDataIdx(dataIdx - 1);
+    } else {
+      alert("릴스가 더 없어요!");
+    }
+  };
 
   useEffect(() => {
     console.log(logData);
@@ -29,8 +40,20 @@ const Reels = () => {
     <>
       <Sidebar />
       <S.ReelsContainer searchState={searchState}>
-        <ReelsVideo {...logData} />
-        <ReelsVideo {...logData} />
+        <S.ReelsBtnContainer>
+          <button type="button" onClick={() => onIdxClick("prev")}>
+            이전 릴스
+          </button>
+        </S.ReelsBtnContainer>
+        {/* {logData?.map((element: reelsInterface) => {
+          return <ReelsVideo key={element.leelsId} {...element} />;
+        })} */}
+        <ReelsVideo {...logData[dataIdx]} />
+        <S.ReelsBtnContainer>
+          <button type="button" onClick={() => onIdxClick("next")}>
+            다음 릴스
+          </button>
+        </S.ReelsBtnContainer>
       </S.ReelsContainer>
     </>
   );

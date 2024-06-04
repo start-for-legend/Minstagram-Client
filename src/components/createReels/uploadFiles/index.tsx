@@ -29,6 +29,7 @@ const UploadFiles = ({
   uploadedFile,
 }: uploadFilesTypes) => {
   const [imgFile, setImgFile] = useState<File | null>();
+  const [isImg, setIsImg] = useState<boolean>();
   const imgRef = useRef<any>(null);
 
   const formData = new FormData();
@@ -45,8 +46,13 @@ const UploadFiles = ({
             },
             data: formData,
           })
-            .then((res) => setUploadedFile(res.data.awsUrl))
-            .catch((err) => console.log(err));
+            .then((res) => {
+              const url = res.data.awsUrl;
+              setUploadedFile(url);
+              if (url.slice(-3) === "mp4") setIsImg(false);
+              else setIsImg(true);
+            })
+            .catch((err) => alert("파일 크기가 너무 커요!"));
         } else if (imgFile instanceof File) {
           formData.append("file", imgFile);
           uploadPost();
@@ -90,8 +96,8 @@ const UploadFiles = ({
             {videoFileString !== null ? (
               <ReactPlayer
                 controls
-                width="auto"
-                height="20em"
+                width="35em"
+                height="40em"
                 url={videoFileString}
               />
             ) : (
@@ -109,11 +115,11 @@ const UploadFiles = ({
               saveReelsFile(e);
               setImgFile(e.currentTarget.files?.item(0));
             }}
-            accept=".jpg,.jpeg,.png,.gif,.avi,.mov,.mp4"
+            accept=".jpg,.jpeg,.png,.gif,.mp4"
           />
         </>
       ) : (
-        <>
+        <S.UploadFlex>
           <FontAwesomeIcon className="filmSvg" icon={faPhotoFilm} size="5x" />
           <S.ReelsTitle>사진 혹은 동영상을 올리세요</S.ReelsTitle>
           <label htmlFor="fileBtn">
@@ -127,9 +133,9 @@ const UploadFiles = ({
               saveReelsFile(e);
               setImgFile(e.currentTarget.files?.item(0));
             }}
-            accept=".jpg,.jpeg,.png,.gif,.avi,.mov,.mp4"
+            accept=".jpg,.jpeg,.png,.gif,.mp4"
           />
-        </>
+        </S.UploadFlex>
       )}
     </div>
   );

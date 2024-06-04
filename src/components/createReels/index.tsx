@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { faArrowLeft, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ReactPlayer from "react-player";
 
 import { reelsModalStateAtom } from "../../recoil/Atoms/atoms";
 import CreateReelsContainer from "./background";
@@ -68,19 +69,31 @@ const CreatePost = () => {
 
   const postApi = async () => {
     if (content !== "" && hashtags.length !== 0 && isFile) {
-      await API({
-        method: "post",
-        url: "/feed",
-        data: {
-          content,
-          hashtags,
-          url: [uploadedFile],
-        },
-      })
-        .then((res) =>
+      if (imgFileString) {
+        await API({
+          method: "post",
+          url: "/feed",
+          data: {
+            content,
+            hashtags,
+            url: [uploadedFile],
+          },
+        }).then((res) =>
           res.status === 201 ? setModalState(false) : console.log("not Posted")
-        )
-        .then((err) => console.log(err));
+        );
+      } else if (videoFileString) {
+        await API({
+          method: "post",
+          url: "/leels",
+          data: {
+            content,
+            hashtags,
+            url: uploadedFile,
+          },
+        }).then((res) =>
+          res.status === 201 ? setModalState(false) : console.log("not Posted")
+        );
+      }
     }
   };
 
@@ -102,7 +115,16 @@ const CreatePost = () => {
         {posting ? (
           <S.uploadPost>
             <S.file>
-              <img src={imgFileString} />
+              {imgFileString ? (
+                <img src={imgFileString} />
+              ) : (
+                <ReactPlayer
+                  controls
+                  width="35em"
+                  height="40em"
+                  url={videoFileString}
+                />
+              )}
             </S.file>
             <S.inputInfo>
               <h2>본문</h2>

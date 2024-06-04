@@ -17,11 +17,13 @@ const MsgProfileItem = ({
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (msgPreview.length > 20) {
-      console.log(msgPreview.length);
-      setMsgPreview(`${msgPreview.substring(0, 19)}...`);
+    if (lastMessage && lastMessage.length > 20) {
+      console.log(lastMessage.length);
+      setMsgPreview(`${lastMessage.substring(0, 19)}...`);
+    } else if (!msgPreview) {
+      setMsgPreview("새로운 대화를 나눠보세요!");
     }
-  }, [msgPreview]);
+  }, [lastMessage]);
 
   return (
     <S.ProfileBox

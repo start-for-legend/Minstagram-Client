@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ReactModal from "react-modal";
+import { useRecoilValue } from "recoil";
 import { Link, useNavigate } from "react-router-dom";
 
 import ProfileItem from "../../../home/items/profileItem";
@@ -7,6 +8,7 @@ import { API } from "../../../../API/API";
 import * as S from "./style";
 import { followType } from "../../../../types/profileType";
 import { userType } from "../../../../types/userType";
+import { roomsAtom } from "../../../../recoil/Atoms/atoms";
 
 const FollowModal = ({
   followModal,
@@ -20,6 +22,7 @@ const FollowModal = ({
   id?: number;
 }) => {
   const [follows, setFollows] = useState<userType[]>([]);
+  const rooms = useRecoilValue(roomsAtom);
   const navigate = useNavigate();
 
   const getFollower = async () => {
@@ -50,13 +53,18 @@ const FollowModal = ({
     })
       .then((res) => {
         if (res.status === 201) {
-          navigate(`/message/${userId}`);
+          window.location.reload();
         }
       })
       .catch((err) => {
         if (err.response.status === 400) {
+          const idx = rooms.findIndex((room) => room.opponentId === userId);
+          const targetRoom = rooms[idx];
+          const { chatRoomId, opponentId } = targetRoom;
           alert("이미 채팅방이 존재합니다");
-          navigate(`/message/${userId}`);
+          navigate(`/message/${chatRoomId}`, {
+            state: { chatRoomId, opponentId },
+          });
         }
       });
   };

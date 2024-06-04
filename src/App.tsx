@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  useLocation,
+  useParams,
+} from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { EventSourcePolyfill } from "event-source-polyfill";
 
@@ -18,6 +24,7 @@ import Message from "./pages/message";
 import Home from "./pages/home";
 import Profile from "./pages/profile";
 import Explore from "./pages/explore";
+import Exception from "./pages/exception";
 
 const App = () => {
   const setSearchState = useSetRecoilState(searchStateAtom);
@@ -28,6 +35,7 @@ const App = () => {
   const isLogin = Boolean(window.localStorage.getItem("mst-accessToken"));
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const tokenManager = new TokenManager();
+  const isPathName = Boolean(window.location.pathname.split("/")[1]);
 
   useEffect(() => {
     setSearchState(false);
@@ -35,7 +43,15 @@ const App = () => {
   }, [setSearchState, setNoticeState]);
 
   useEffect(() => {
+    if (isPathName && !isLogin) {
+      alert("로그인이 필요합니다.");
+      window.location.replace("/");
+    }
+  }, [isPathName]);
+
+  useEffect(() => {
     console.log(parsedData);
+    console.log(baseUrl);
   }, [parsedData]);
 
   useEffect(() => {
@@ -59,17 +75,24 @@ const App = () => {
   }, [noticeData]);
 
   useEffect(() => {
-    if (isLogin) {
+    const getNotice = () =>
       API({
         url: "/notice",
         method: "get",
+        headers: {
+          "Content-Type": "text/event-stream",
+        },
       })
         .then((res) => {
+          console.log(res);
           setNoticeData(res.data.split("\n\n"));
         })
-        .catch((err) => console.log(err));
-    }
-  }, []);
+        .catch((err) => {
+          console.log(err.eventStream);
+        });
+
+    if (isLogin) getNotice();
+  }, [isLogin]);
 
   useEffect(() => {
     const eventSource = new EventSourcePolyfill(
@@ -79,26 +102,28 @@ const App = () => {
           "Content-Type": "text/event-stream",
           Authorization: `Bearer ${tokenManager.accessToken}`,
         },
-        heartbeatTimeout: 86400000,
+        heartbeatTimeout: 5000,
       }
     );
 
-    eventSource.onopen = (res) => {
-      console.log(res);
+    eventSource.onopen = (event) => {
+      console.log("SSE 연결 성공:", event);
     };
 
-    eventSource.onmessage = (res) => {
-      console.log(res);
+    eventSource.onmessage = (event) => {
+      console.log("SSE 메시지 수신:", event);
+      // 여기서 적절한 작업을 수행하세요.
     };
 
-    eventSource.onerror = (err) => {
-      console.log(err);
+    eventSource.onerror = (error) => {
+      console.error("SSE 오류:", error);
+      // 오류 처리 코드를 여기에 추가하세요.
     };
 
     return () => {
       eventSource.close();
     };
-  }, []);
+  }, [isLogin, baseUrl, tokenManager.accessToken]);
 
   return (
     <>
@@ -111,6 +136,8 @@ const App = () => {
           <Route path="/reels" element={<Reels />} />
           <Route path="/message/:roomId?" element={<Message />} />
           <Route path="/profile/:userId?" element={<Profile />} />
+          <Route path="/story/:storyId?" element={<Exception />} />
+          <Route path="/*" element={<Exception />} />
         </Routes>
       </BrowserRouter>
     </>

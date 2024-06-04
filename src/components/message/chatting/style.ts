@@ -39,6 +39,19 @@ export const ChatWindow = styled.div`
   }
 `;
 
+export const Editing = styled.div`
+  width: calc(100% - 4em);
+  height: 1em;
+  padding-left: 2.75em;
+  margin-bottom: 0.25em;
+  font-size: 1.25em;
+
+  svg {
+    cursor: pointer;
+    margin-left: 1em;
+  }
+`;
+
 export const ChatInput = styled.input`
   width: calc(100% - 10em);
   border: none;

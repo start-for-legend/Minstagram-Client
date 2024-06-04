@@ -4,11 +4,12 @@ import { storyType } from "../../../types/storyType";
 
 export const feedHeader = styled.div`
   width: 45em;
-  height: 7em;
+  height: 6.5em;
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
   display: flex;
+  border-bottom: 1px solid #c5c5c5;
 `;
 
 export const profile = styled.div`
@@ -16,6 +17,7 @@ export const profile = styled.div`
   height: 5em;
   display: inline-block;
   white-space: normal;
+  cursor: pointer;
 `;
 
 export const profileName = styled.div`

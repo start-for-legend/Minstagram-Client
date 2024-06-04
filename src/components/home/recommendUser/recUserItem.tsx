@@ -21,7 +21,7 @@ const RecUserItem = ({
   nickName,
   profileUrl,
 }: recUserItemProps) => {
-  const navigate = useNavigate();
+  const baseUrl = process.env.REACT_APP_BASE_URL;
 
   const followUser = async () => {
     await API({
@@ -43,12 +43,15 @@ const RecUserItem = ({
     });
   };
 
-  const logOut = () => {
-    /* axios({
+  const logOut = async () => {
+    /* await API({
       withCredentials: true,
       method: "delete",
       url: `/auth`,
-    }).then(() => navigate("./")); */
+    }).then(() => {
+      window.localStorage.clear();
+      window.location.replace("/");
+    }); */
     window.localStorage.clear();
     window.location.replace("/");
   };

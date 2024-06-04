@@ -61,6 +61,19 @@ const ProfileComponent = () => {
                   key={element.feedId}
                   feedId={element.feedId}
                   fileUrls={element.feedUrlOne || ""}
+                  postType="feed"
+                />
+              );
+            })}
+          </S.feedGrid>
+          <S.feedGrid>
+            {userResponse.leels.map((element) => {
+              return (
+                <FeedItemProfile
+                  key={element.leelsId}
+                  feedId={element.leelsId}
+                  fileUrls={element.leelsUrl || ""}
+                  postType="reels"
                 />
               );
             })}

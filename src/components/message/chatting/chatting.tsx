@@ -17,6 +17,7 @@ import { API } from "../../../API/API";
 import * as S from "./style";
 import { userType } from "../../../types/userType";
 import ProfileItem from "../../home/items/profileItem";
+import { myUserId } from "../../../lib/tokens";
 
 const ChattingTab = () => {
   const baseUrl = process.env.REACT_APP_BASE_URL;
@@ -32,7 +33,7 @@ const ChattingTab = () => {
   const {
     state: { chatRoomId, opponentId },
   } = useLocation();
-  const myUserId = Number(window.localStorage.getItem("myUserId"));
+  const myClientId = Number(window.localStorage.getItem(myUserId));
 
   const getMsg = () => {
     API({
@@ -52,7 +53,7 @@ const ChattingTab = () => {
       setMsgContents((prevMsgContents) => [
         ...prevMsgContents,
         {
-          chatterType: myUserId === body.senderId ? "self" : "opponent",
+          chatterType: myClientId === body.senderId ? "self" : "opponent",
           chat: body.message,
           userId: body.senderId,
           chatTime: new Date(),
@@ -148,7 +149,7 @@ const ChattingTab = () => {
         },
         body: JSON.stringify({
           chatRoomId,
-          senderId: myUserId,
+          senderId: myClientId,
           message: msgContent,
         }),
       });
@@ -204,7 +205,7 @@ const ChattingTab = () => {
       )}
       <S.ChatContents>
         {msgContents?.map(({ chat, userId, chatId }) => {
-          const meValid = myUserId && userId === myUserId;
+          const meValid = myClientId && userId === myClientId;
           return (
             <S.ChatContainer
               key={chatId}

@@ -16,6 +16,7 @@ interface cmtItemProps {
   origin?: boolean;
   replyCmtId?: number;
   heartCount?: number;
+  prevCmtId?: number;
 }
 
 const CommentItem = ({
@@ -24,12 +25,13 @@ const CommentItem = ({
   origin,
   replyCmtId,
   heartCount,
+  prevCmtId,
 }: cmtItemProps) => {
   const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(heartCount);
   const [replyShow, setReplyShow] = useState(false);
   const [replyData, setReplyData] = useState<commentType[]>();
   const setCmtReply = useSetRecoilState(cmtReplyAtom);
-  const likeCount = origin ? cmtData.heartCount : heartCount || 0;
 
   useEffect(() => {
     if (origin) {
@@ -43,12 +45,16 @@ const CommentItem = ({
       API({
         method: "get",
         url: `/feed-comment/${feedId}/valid/${cmtData.feedCommentId}`,
-      }).then((res) => setLiked(res.data.isTrue));
+      }).then((res) => {
+        setLiked(res.data.isTrue);
+      });
     } else {
       API({
         method: "get",
-        url: `/feed-comment-reply/${feedId}/${cmtData.feedCommentId}/valid/${replyCmtId}`,
-      }).then((res) => setLiked(res.data.isTrue));
+        url: `/feed-comment-reply/${feedId}/${prevCmtId}/valid/${replyCmtId}`,
+      }).then((res) => {
+        setLiked(res.data.isTrue);
+      });
     }
 
     if (heartCount) {
@@ -62,7 +68,7 @@ const CommentItem = ({
         method: "delete",
         url: origin
           ? `feed-comment/${feedId}/${cmtData.feedCommentId}/like`
-          : `/feed-comment-reply/${feedId}/${cmtData.feedCommentId}/${replyCmtId}/like`,
+          : `/feed-comment-reply/${feedId}/${prevCmtId}/${replyCmtId}/like`,
       }).then(() => {
         setLiked(!liked);
       });
@@ -71,10 +77,18 @@ const CommentItem = ({
         method: "post",
         url: origin
           ? `feed-comment/${feedId}/${cmtData.feedCommentId}`
-          : `/feed-comment-reply/${feedId}/${cmtData.feedCommentId}/${replyCmtId}`,
+          : `/feed-comment-reply/${feedId}/${prevCmtId}/${replyCmtId}`,
       }).then(() => setLiked(!liked));
     }
   };
+
+  useEffect(() => {
+    if (liked && heartCount) {
+      setLikeCount(heartCount + 1);
+    } else {
+      setLikeCount(heartCount);
+    }
+  }, [liked, heartCount]);
 
   return (
     <S.commentItem>
@@ -97,7 +111,7 @@ const CommentItem = ({
               icon={liked ? fas.faHeart : far.faHeart}
               size="2x"
             />
-            <S.heartCount>{liked ? likeCount + 1 : likeCount}</S.heartCount>
+            <S.heartCount>{likeCount || 0}</S.heartCount>
           </div>
         </S.commentFlex>
         {origin ? (
@@ -127,8 +141,9 @@ const CommentItem = ({
           console.log(element);
           return (
             <CommentItem
-              cmtData={cmtData}
+              cmtData={element}
               feedId={feedId}
+              prevCmtId={cmtData.feedCommentId}
               replyCmtId={element.feedCommentReplyId}
               heartCount={element.heartCount}
               key={element.feedCommentId}

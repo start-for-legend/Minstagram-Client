@@ -10,5 +10,16 @@ export const ReelsContainer = styled.div<reelsPropsType>`
   display: flex;
   align-items: center;
   flex-direction: column;
-  overflow-y: hidden;
+`;
+
+export const ReelsBtnContainer = styled.div`
+  height: 2.5vh;
+
+  button {
+    width: 5em;
+    margin-left: 5em;
+    border: none;
+    cursor: pointer;
+    z-index: 2;
+  }
 `;

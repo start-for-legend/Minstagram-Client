@@ -143,6 +143,7 @@ const FeedModal = ({
                     key={element.feedCommentId}
                     feedId={feedId}
                     cmtData={element}
+                    heartCount={element.heartCount}
                     origin
                   />
                 );

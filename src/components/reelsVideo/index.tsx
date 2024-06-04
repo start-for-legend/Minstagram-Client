@@ -4,7 +4,7 @@ import {
   faPaperPlane,
   fas,
 } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { far } from "@fortawesome/free-regular-svg-icons";
 
@@ -27,7 +27,9 @@ const ReelsVideo = ({
   const [commentOpened, setCommentOpened] = useState(false);
   const [heartSum, setHeartSum] = useState<number>(heartCount || 0);
   const [reelsCmt, setReelsCmt] = useState<reelsCmtInterface[]>();
+  const [volume, setVoulume] = useState(0.5);
   const isLike = reelsLike ? 1 : 0;
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (leelsId && heartCount) {
@@ -70,20 +72,25 @@ const ReelsVideo = ({
     setTimeout(() => setDoubleClicked(false), 1996);
   };
 
+  const onScroll = () => {
+    console.log("scrolled");
+  };
+
   return (
     <>
-      <S.reelsVideoContainer>
+      <S.reelsVideoContainer onScroll={onScroll}>
         <S.reelsVideo
           onClick={() => setIsPlaying(!isPlaying)}
           onDoubleClick={onDoubleClick}
         >
-          <S.videoBox>
+          <S.videoBox ref={ref}>
             <ReactPlayer
               loop
               onReady={() => setIsPlaying(true)}
               controls={false}
               url={leelsUrl}
               playing={isPlaying}
+              volume={volume}
             />
           </S.videoBox>
 
@@ -94,6 +101,10 @@ const ReelsVideo = ({
           )}
         </S.reelsVideo>
         <S.reelsOptions>
+          <S.volumeRange
+            type="range"
+            onChange={(e: any) => setVoulume(e.target.value / 100)}
+          />
           <FontAwesomeIcon
             cursor="pointer"
             icon={reelsLike ? fas.faHeart : far.faHeart}

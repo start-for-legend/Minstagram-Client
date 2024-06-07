@@ -9,14 +9,16 @@ import { API } from "../../../../API/API";
 import ProfileItem from "../../../home/items/profileItem";
 import { commentType } from "../../../../types/commentType";
 import * as S from "./style";
+import { curTabType } from "../../../../types/profileType";
 
 interface cmtItemProps {
   cmtData: commentType;
   feedId: number;
   origin?: boolean;
   replyCmtId?: number;
-  heartCount?: number;
+  heartCount: number;
   prevCmtId?: number;
+  postType?: curTabType;
 }
 
 const CommentItem = ({
@@ -26,32 +28,35 @@ const CommentItem = ({
   replyCmtId,
   heartCount,
   prevCmtId,
+  postType,
 }: cmtItemProps) => {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(heartCount);
   const [replyShow, setReplyShow] = useState(false);
   const [replyData, setReplyData] = useState<commentType[]>();
   const setCmtReply = useSetRecoilState(cmtReplyAtom);
+  const isLike = liked ? 1 : 0;
 
   useEffect(() => {
     if (origin) {
       API({
         method: "get",
-        url: `/feed-comment-reply/${feedId}/${cmtData.feedCommentId}`,
+        url: `/${postType}-comment-reply/${feedId}/${cmtData.feedCommentId || cmtData.leelsCommentId}`,
       }).then((res) => {
         console.log(res.data);
         setReplyData(res.data);
       });
       API({
         method: "get",
-        url: `/feed-comment/${feedId}/valid/${cmtData.feedCommentId}`,
+        url: `/${postType}-comment/${feedId}/valid/${cmtData.feedCommentId || cmtData.leelsCommentId}`,
       }).then((res) => {
         setLiked(res.data.isTrue);
+        if (res.data.isTrue) setLikeCount(likeCount - 1);
       });
     } else {
       API({
         method: "get",
-        url: `/feed-comment-reply/${feedId}/${prevCmtId}/valid/${replyCmtId}`,
+        url: `/${postType}-comment-reply/${feedId}/${prevCmtId}/valid/${replyCmtId}`,
       }).then((res) => {
         setLiked(res.data.isTrue);
       });
@@ -65,10 +70,10 @@ const CommentItem = ({
   const likeCmt = () => {
     if (liked) {
       API({
-        method: "delete",
+        method: postType === "feed" ? "delete" : "put",
         url: origin
-          ? `feed-comment/${feedId}/${cmtData.feedCommentId}/like`
-          : `/feed-comment-reply/${feedId}/${prevCmtId}/${replyCmtId}/like`,
+          ? `${postType}-comment/${feedId}/${postType === "feed" ? `${cmtData.feedCommentId}/like` : cmtData.leelsCommentId}`
+          : `/${postType}-comment-reply/${feedId}/${prevCmtId}/${replyCmtId}/like`,
       }).then(() => {
         setLiked(!liked);
       });
@@ -76,34 +81,28 @@ const CommentItem = ({
       API({
         method: "post",
         url: origin
-          ? `feed-comment/${feedId}/${cmtData.feedCommentId}`
-          : `/feed-comment-reply/${feedId}/${prevCmtId}/${replyCmtId}`,
+          ? `${postType}-comment/${feedId}/${postType === "feed" ? cmtData.feedCommentId : cmtData.leelsCommentId}`
+          : `/${postType}-comment-reply/${feedId}/${prevCmtId}/${replyCmtId}`,
       }).then(() => setLiked(!liked));
     }
   };
 
-  useEffect(() => {
-    if (liked && heartCount) {
-      setLikeCount(heartCount + 1);
-    } else {
-      setLikeCount(heartCount);
-    }
-  }, [liked, heartCount]);
-
   return (
     <S.commentItem>
       <ProfileItem
-        profileURL={cmtData.user.profileUrl}
+        profileURL={cmtData.user?.profileUrl || cmtData.author?.profileUrl}
         watched={false}
         width={2.5}
       />
       <S.commentTab>
         <span>
-          <b>{cmtData.user.nickName}</b>
+          <b>{cmtData.user?.nickName || cmtData.author?.nickName}</b>
         </span>
         <S.commentInfo>{cmtData.modify ? "수정됨 &apos;" : ""}</S.commentInfo>
         <S.commentFlex>
-          <S.commentContent>{cmtData.content}</S.commentContent>
+          <S.commentContent>
+            {cmtData.content || cmtData.comment}
+          </S.commentContent>
           <div>
             <FontAwesomeIcon
               onClick={likeCmt}
@@ -111,7 +110,7 @@ const CommentItem = ({
               icon={liked ? fas.faHeart : far.faHeart}
               size="2x"
             />
-            <S.heartCount>{likeCount || 0}</S.heartCount>
+            <S.heartCount>{likeCount + isLike}</S.heartCount>
           </div>
         </S.commentFlex>
         {origin ? (
@@ -123,8 +122,9 @@ const CommentItem = ({
               onClick={() =>
                 setCmtReply({
                   isReply: true,
-                  replyUserId: cmtData.feedCommentId,
-                  replyUserName: cmtData.user.nickName,
+                  replyUserId: cmtData.feedCommentId || cmtData.leelsCommentId,
+                  replyUserName:
+                    cmtData.user?.nickName || cmtData.author?.nickName,
                 })
               }
             >
@@ -141,10 +141,13 @@ const CommentItem = ({
           console.log(element);
           return (
             <CommentItem
+              postType={postType}
               cmtData={element}
               feedId={feedId}
-              prevCmtId={cmtData.feedCommentId}
-              replyCmtId={element.feedCommentReplyId}
+              prevCmtId={cmtData.feedCommentId || cmtData.leelsCommentId}
+              replyCmtId={
+                element.feedCommentReplyId || element.leelsCommentReplyId
+              }
               heartCount={element.heartCount}
               key={element.feedCommentId}
             />

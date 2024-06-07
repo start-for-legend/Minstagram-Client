@@ -9,11 +9,12 @@ import * as S from "./style";
 import FeedItemProfile from "../common/feedItem/indexProfile";
 import { API } from "../../API/API";
 import { myUserId } from "../../lib/tokens";
+import { curTabType } from "../../types/profileType";
 
 const ProfileComponent = () => {
   const userResponse = useRecoilValue(userResponseAtom);
   const searchState = useRecoilValue(searchStateAtom);
-  const [curTab, setCurTab] = useState(false);
+  const [curTab, setCurTab] = useState<curTabType>("feed");
   const [myProfile, setMyProfile] = useState(false);
   const [followValid, setFollowValid] = useState(false);
   const myLocalUserId = Number(window.localStorage.getItem(myUserId));
@@ -45,16 +46,16 @@ const ProfileComponent = () => {
             setFollowValid={setFollowValid}
           />
           <S.selectTab>
-            <S.selectTabItem onClick={() => setCurTab(false)} curTab={curTab}>
+            <S.selectTabItem onClick={() => setCurTab("feed")}>
               <FontAwesomeIcon icon={faList} size="1x" />
               피드
             </S.selectTabItem>
-            <S.selectTabItem onClick={() => setCurTab(true)} curTab={curTab}>
+            <S.selectTabItem onClick={() => setCurTab("leels")}>
               <FontAwesomeIcon icon={faVideo} size="1x" />
               릴스
             </S.selectTabItem>
           </S.selectTab>
-          <S.feedGrid>
+          <S.feedGrid curTab={Boolean(curTab === "feed")}>
             {userResponse.feeds.map((element) => {
               return (
                 <FeedItemProfile
@@ -66,14 +67,14 @@ const ProfileComponent = () => {
               );
             })}
           </S.feedGrid>
-          <S.feedGrid>
+          <S.feedGrid curTab={Boolean(curTab === "leels")}>
             {userResponse.leels.map((element) => {
               return (
                 <FeedItemProfile
                   key={element.leelsId}
                   feedId={element.leelsId}
                   fileUrls={element.leelsUrl || ""}
-                  postType="reels"
+                  postType="leels"
                 />
               );
             })}

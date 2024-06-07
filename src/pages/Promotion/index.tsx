@@ -21,7 +21,7 @@ const Promotion = () => {
 
   useEffect(() => {
     if (localStorage.getItem(accessToken) && localStorage.getItem(accessExp)) {
-      navigate("/home");
+      navigate("/profile");
     }
   }, []);
 

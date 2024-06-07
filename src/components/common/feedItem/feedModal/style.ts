@@ -110,11 +110,12 @@ export const commentFlex = styled.div`
 
 export const commentContent = styled.div`
   width: 28em;
+  word-wrap: break-word;
 `;
 
 export const commentInfo = styled.div`
   color: #c5c5c5;
-  width: 30em;
+  width: 28em;
 `;
 
 export const commentContainer = styled.div`

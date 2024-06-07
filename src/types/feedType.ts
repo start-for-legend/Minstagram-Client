@@ -9,6 +9,15 @@ export interface feedType {
   heartCount: number;
 }
 
+export interface reelsType {
+  content: string;
+  feedId: number;
+  fileUrls: string[];
+  hashtags: string[];
+  author: userType;
+  heartCount: number;
+}
+
 export interface cmtReply {
   isReply: boolean;
   replyUserId?: number;

@@ -4,15 +4,17 @@ interface profilePropsType {
   searchState: boolean;
 }
 
-interface curTabType {
+interface feedGridType {
   curTab: boolean;
 }
 
-export const feedGrid = styled.div`
+export const feedGrid = styled.div<feedGridType>`
   display: grid;
   justify-items: center;
   align-items: center;
   width: 55em;
+
+  display: ${(props) => (props.curTab ? "" : "none")};
 
   grid-template-columns: repeat(3, 1fr);
 `;
@@ -30,7 +32,7 @@ export const selectTab = styled.div`
   width: 16em;
 `;
 
-export const selectTabItem = styled.div<curTabType>`
+export const selectTabItem = styled.div`
   width: 6em;
   height: 2em;
   line-height: 2em;
@@ -38,8 +40,6 @@ export const selectTabItem = styled.div<curTabType>`
   cursor: pointer;
   font-size: 1.25em;
   float: left;
-  border-top: ${(props) => (props.curTab ? "1px solid #fff" : "none")};
-
   svg {
     padding-right: 0.5em;
   }

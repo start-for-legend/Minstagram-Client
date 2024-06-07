@@ -3,6 +3,7 @@ import { useState } from "react";
 import ReactPlayer from "react-player";
 
 import FeedModalProfile from "./feedModal/indexProfile";
+import { curTabType } from "../../../types/profileType";
 
 interface feedItemType {}
 
@@ -28,7 +29,7 @@ const FeedItemProfile = ({
 }: {
   fileUrls: string;
   feedId: number;
-  postType: "feed" | "reels";
+  postType: curTabType;
 }) => {
   const [feedModal, setFeedModal] = useState(false);
 
@@ -43,8 +44,10 @@ const FeedItemProfile = ({
       </FeedItemDiv>
       {feedModal ? (
         <FeedModalProfile
+          postType={postType}
           feedIdProfile={feedId}
           modalState={feedModal}
+          leelsUrl={fileUrls}
           setModalState={setFeedModal}
         />
       ) : (

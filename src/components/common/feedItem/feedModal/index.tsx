@@ -1,4 +1,5 @@
 import ReactModal from "react-modal";
+import { far } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCirclePlus,
@@ -6,50 +7,42 @@ import {
   faXmarkCircle,
   fas,
 } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { far } from "@fortawesome/free-regular-svg-icons";
+import { useEffect, useState } from "react";
+import ReactPlayer from "react-player";
 
 import ProfileItem from "../../../home/items/profileItem";
 import * as S from "./style";
-import { feedType } from "../../../../types/feedType";
+import { feedType, reelsType } from "../../../../types/feedType";
 import CommentItem from "./commentItem";
 import { API } from "../../../../API/API";
 import { commentType } from "../../../../types/commentType";
 import { cmtReplyAtom } from "../../../../recoil/Atoms/atoms";
+import { curTabType } from "../../../../types/profileType";
 
 const FeedModal = ({
-  element: { content, feedId, fileUrls, hashtags, userResponse, heartCount },
   modalState,
   setModalState,
+  feedIdProfile,
+  postType,
+  leelsUrl,
 }: {
-  element: feedType;
   modalState: boolean;
   setModalState: Function;
+  feedIdProfile: number;
+  postType: curTabType;
+  leelsUrl: string;
 }) => {
+  const [feedData, setFeedData] = useState<feedType>();
+  const [reelsData, setReelsData] = useState<reelsType>();
   const [comments, setComments] = useState<commentType[]>([]);
   const [postCmt, setPostCmt] = useState<string>();
   const [cmtIdx, setCmtIdx] = useState<number | undefined>(0);
   const [feedLiked, setFeedLiked] = useState(false);
-  const [curHeartCount, setCurHeartCount] = useState(heartCount);
   const [cmtReply, setCmtReply] = useRecoilState(cmtReplyAtom);
-
-  const onLikeClick = async () => {
-    if (!feedLiked) {
-      await API({
-        url: `/feed/${feedId}`,
-        method: "post",
-      })
-        .then(() => setCurHeartCount(curHeartCount + 1))
-        .catch((err) => console.log(err.response.status));
-    } else {
-      await API({
-        url: `/feed/${feedId}`,
-        method: "patch",
-      }).then(() => setCurHeartCount(curHeartCount - 1));
-    }
-    setFeedLiked(!feedLiked);
-  };
+  const [reelsPlaying, setReelsPlaying] = useState(true);
+  const [heartCounts, setHeartCounts] = useState(0);
+  const isLike = feedLiked ? 1 : 0;
 
   useEffect(() => {
     setCmtIdx(comments?.length);
@@ -58,39 +51,61 @@ const FeedModal = ({
   const getComment = async () => {
     await API({
       method: "get",
-      url: `/feed-comment/${feedId}`,
+      url: `/${postType}-comment/${feedIdProfile}`,
     }).then((res) => setComments(res.data));
   };
-
   useEffect(() => {
+    const getFeed = async () => {
+      await API({
+        method: "get",
+        url: `/${postType}/${feedIdProfile}`,
+      }).then((res) => {
+        postType === "feed" ? setFeedData(res.data) : setReelsData(res.data);
+      });
+    };
     const getValid = async () => {
       await API({
-        url: `/feed/valid/${feedId}`,
+        url: `/${postType}/valid/${feedIdProfile}`,
         method: "get",
-      }).then((res) => setFeedLiked(res.data.isTrue));
+      }).then((res) => {
+        setFeedLiked(res.data.isTrue);
+        if (res.data.isTrue) setHeartCounts(heartCounts - 1);
+      });
     };
+
     getValid();
     getComment();
+    getFeed();
   }, []);
 
   const cmtSend = async () => {
     if (cmtReply.isReply) {
       await API({
         method: "post",
-        url: `/feed-comment-reply/${feedId}/${cmtReply.replyUserId}`,
-        data: {
-          content: postCmt,
-        },
+        url: `/${postType}-comment-reply/${feedIdProfile}/${cmtReply.replyUserId}`,
+        data:
+          postType === "feed"
+            ? {
+                content: postCmt,
+              }
+            : {
+                comment: postCmt,
+              },
       }).then(() =>
         setCmtReply({ isReply: false, replyUserId: -1, replyUserName: "" })
       );
     } else {
       await API({
         method: "post",
-        url: `/feed-comment/${feedId}`,
-        data: {
-          content: postCmt,
-        },
+        url: `/${postType}-comment/${feedIdProfile}`,
+        data:
+          postType === "feed"
+            ? {
+                content: postCmt,
+              }
+            : {
+                comment: postCmt,
+              },
       }).then((res) => {
         console.log(res);
         getComment();
@@ -103,34 +118,68 @@ const FeedModal = ({
     if (cmtIdx && comments) {
       await API({
         method: "get",
-        url: `/feed-comment/${feedId}?lastCommentId=${comments[cmtIdx - 1].feedCommentId}`,
+        url: `/${postType}-comment/${feedIdProfile}?lastCommentId=${comments[cmtIdx - 1].feedCommentId || comments[cmtIdx - 1].leelsCommentId}`,
       }).then((res) => {
         if (res.data.length > 1) {
           setComments((prev) => [...prev, ...res.data]);
         } else {
-          alert("no more bullets");
+          alert("마지막 댓글입니다.");
         }
       });
     }
   };
 
+  useEffect(() => {
+    if (typeof feedData?.heartCount === "number")
+      setHeartCounts(heartCounts + (feedData?.heartCount || 0));
+    else if (typeof reelsData?.heartCount === "number")
+      setHeartCounts(heartCounts + (reelsData?.heartCount || 0));
+  }, [feedData, reelsData]);
+
   return (
     <ReactModal
       isOpen={modalState}
-      onRequestClose={() => setModalState(false)}
+      onRequestClose={() => {
+        setModalState(false);
+        setCmtReply({ isReply: false, replyUserId: -1, replyUserName: "" });
+      }}
       style={S.feedModalStyles}
     >
-      <S.modalImg>
-        <img src={fileUrls ? fileUrls[0] : ""} />
+      <S.modalImg onClick={() => setReelsPlaying(!reelsPlaying)}>
+        {postType === "feed" ? (
+          <img src={feedData ? feedData.fileUrls[0] : ""} />
+        ) : (
+          <ReactPlayer
+            url={leelsUrl}
+            width="52em"
+            height="52em"
+            loop
+            controls
+            playing={reelsPlaying}
+          />
+        )}
       </S.modalImg>
       <S.right>
         <S.modalHeader>
-          <ProfileItem
-            profileURL={userResponse.profileUrl}
-            watched={false}
-            width={3}
-          />
-          <S.profileName>{userResponse.nickName}</S.profileName>
+          {postType === "feed" ? (
+            <>
+              <ProfileItem
+                profileURL={feedData?.userResponse.profileUrl}
+                watched={false}
+                width={3}
+              />
+              <S.profileName>{feedData?.userResponse.nickName}</S.profileName>
+            </>
+          ) : (
+            <>
+              <ProfileItem
+                profileURL={reelsData?.author.profileUrl}
+                watched={false}
+                width={3}
+              />
+              <S.profileName>{reelsData?.author.nickName}</S.profileName>
+            </>
+          )}
           <S.followBtn>팔로우</S.followBtn>
           <FontAwesomeIcon icon={faEllipsis} size="2x" />
         </S.modalHeader>
@@ -141,8 +190,9 @@ const FeedModal = ({
                 return (
                   <CommentItem
                     key={element.feedCommentId}
-                    feedId={feedId}
+                    feedId={feedIdProfile}
                     cmtData={element}
+                    postType={postType}
                     heartCount={element.heartCount}
                     origin
                   />
@@ -175,24 +225,21 @@ const FeedModal = ({
           ) : (
             ""
           )}
-          <S.commentFooter onSubmit={(e) => e.preventDefault()}>
+          <S.commentFooter onSubmit={(event) => event.preventDefault()}>
             <FontAwesomeIcon
               icon={feedLiked ? fas.faHeart : far.faHeart}
-              onClick={onLikeClick}
+              onClick={() => setFeedLiked(!feedLiked)}
               color={feedLiked ? "red" : "black"}
               size="2x"
             />
             <FontAwesomeIcon icon={far.faPaperPlane} size="2x" />
-            <div>{content}</div>
-            <S.hashtags>
-              {hashtags.map((element) => {
-                return <span key={element}>#{element}</span>;
-              })}
-            </S.hashtags>
-            <div>좋아요 {curHeartCount}개</div>
+            <div>
+              {postType === "feed" ? feedData?.content : reelsData?.content}
+            </div>
+            <div>좋아요 {heartCounts + isLike}개</div>
             <S.commentSend>
               <ProfileItem
-                profileURL={userResponse.profileUrl}
+                profileURL={feedData?.userResponse.profileUrl}
                 watched={false}
                 width={3}
               />

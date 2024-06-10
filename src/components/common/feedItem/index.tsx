@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useState } from "react";
 
 import { feedType } from "../../../types/feedType";
-import FeedModalProfile from "./feedModal/indexProfile";
+import FeedModalProfile from "./feedModal";
 import { curTabType } from "../../../types/profileType";
 
 interface feedItemType {

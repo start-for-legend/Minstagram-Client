@@ -5,7 +5,6 @@ import { faEllipsis, fas } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 import ProfileItem from "../profileItem";
-import { SIUU } from "../../../../assets/files";
 import * as S from "./style";
 import { feedType } from "../../../../types/feedType";
 import { API } from "../../../../API/API";
@@ -111,9 +110,11 @@ const HomeFeedItem = ({
       </S.FeedFooter>
       {feedModal ? (
         <FeedModal
-          element={feedElement}
           modalState={feedModal}
           setModalState={setFeedModal}
+          postType="feed"
+          feedIdProfile={feedId}
+          leelsUrl=""
         />
       ) : (
         ""

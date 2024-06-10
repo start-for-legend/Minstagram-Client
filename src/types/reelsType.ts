@@ -4,8 +4,8 @@ export interface reelsInterface {
   author?: userType;
   content?: string;
   hashtags?: string[];
-  leelsId?: number;
-  leelsUrl?: string;
+  leelsId: number;
+  leelsUrl: string;
   heartCount?: number;
 }
 

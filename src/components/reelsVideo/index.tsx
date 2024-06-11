@@ -1,7 +1,11 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  IconDefinition,
   faComment,
   faPaperPlane,
+  faVolumeHigh,
+  faVolumeLow,
+  faVolumeXmark,
   fas,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
@@ -28,8 +32,10 @@ const ReelsVideo = ({
   const [heartSum, setHeartSum] = useState<number>(heartCount || 0);
   const [reelsCmt, setReelsCmt] = useState<reelsCmtInterface[]>();
   const [volume, setVoulume] = useState(0.5);
+  const [prevVolume, setPrevVolume] = useState(0);
   const isLike = reelsLike ? 1 : 0;
   const ref = useRef<HTMLDivElement>(null);
+  const [speakerIcon, setSpeakerIcon] = useState<IconDefinition>(faVolumeHigh);
 
   useEffect(() => {
     if (leelsId && heartCount) {
@@ -76,6 +82,16 @@ const ReelsVideo = ({
     console.log("scrolled");
   };
 
+  useEffect(() => {
+    if (volume === 0) {
+      setSpeakerIcon(faVolumeXmark);
+    } else if (volume > 0.45) {
+      setSpeakerIcon(faVolumeHigh);
+    } else {
+      setSpeakerIcon(faVolumeLow);
+    }
+  }, [volume]);
+
   return (
     <>
       <S.reelsVideoContainer onScroll={onScroll}>
@@ -91,6 +107,8 @@ const ReelsVideo = ({
               url={leelsUrl}
               playing={isPlaying}
               volume={volume}
+              width="35em"
+              height="55em"
             />
           </S.videoBox>
 
@@ -103,7 +121,21 @@ const ReelsVideo = ({
         <S.reelsOptions>
           <S.volumeRange
             type="range"
+            value={volume * 100}
             onChange={(e: any) => setVoulume(e.target.value / 100)}
+          />
+          <FontAwesomeIcon
+            className="speakerIcon"
+            icon={speakerIcon}
+            size="xl"
+            onClick={() => {
+              if (volume !== 0) {
+                setPrevVolume(volume);
+                setVoulume(0);
+              } else {
+                setVoulume(prevVolume);
+              }
+            }}
           />
           <FontAwesomeIcon
             cursor="pointer"

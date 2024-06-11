@@ -2,11 +2,11 @@ import styled, { keyframes } from "styled-components";
 
 export const reelsVideoContainer = styled.div`
   width: inherit;
-  height: 97.5vh;
+  height: 95vh;
   display: flex;
   justify-content: center;
   margin-left: 15em;
-  margin-top: -2em;
+  overflow: hidden;
 `;
 
 export const appearHeart = keyframes`
@@ -31,7 +31,7 @@ export const appearHeart = keyframes`
 export const volumeRange = styled.input`
   background: none;
   rotate: 270deg;
-  margin-bottom: 20em;
+  margin-bottom: 10em;
   width: 20em;
   accent-color: #000;
 `;
@@ -41,7 +41,6 @@ export const reelsVideo = styled.div`
   width: 35em;
   display: flex;
   justify-content: center;
-  align-items: center;
   svg {
     position: absolute;
     z-index: 2;
@@ -86,6 +85,10 @@ export const reelsOptions = styled.div`
   :not(:hover) {
     transform: scale(1);
     transition: transform 0.1s ease-in;
+  }
+
+  .speakerIcon {
+    margin-bottom: 5em;
   }
 `;
 

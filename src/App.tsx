@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  BrowserRouter,
-  Route,
-  Routes,
-  useLocation,
-  useParams,
-} from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { EventSourcePolyfill } from "event-source-polyfill";
 

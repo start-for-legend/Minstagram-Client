@@ -1,6 +1,10 @@
 import ReactModal from "react-modal";
 import styled from "styled-components";
 
+interface followBtnProps {
+  backgroundColor?: string;
+}
+
 export const followModalStyles: ReactModal.Styles = {
   overlay: {
     backgroundColor: " rgba(0, 0, 0, 0.4)",
@@ -59,11 +63,11 @@ export const followItem = styled.div`
   }
 `;
 
-export const followBtn = styled.button`
+export const followBtn = styled.button<followBtnProps>`
   width: 3.25em;
   height: 2em;
   font-size: 1.25em;
-  background-color: #0095f6;
+  background-color: ${(props) => props.backgroundColor || "#0095f6"};
   color: #fff;
   border: none;
   margin-left: auto;

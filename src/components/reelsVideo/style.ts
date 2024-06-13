@@ -30,15 +30,16 @@ export const appearHeart = keyframes`
 
 export const volumeRange = styled.input`
   background: none;
-  rotate: 270deg;
-  margin-bottom: 10em;
-  width: 20em;
   accent-color: #000;
+  writing-mode: vertical-lr;
+  direction: rtl;
+  vertical-align: bottom;
+  height: 20em;
 `;
 
 export const reelsVideo = styled.div`
   height: 100vh;
-  width: 35em;
+  width: 30em;
   display: flex;
   justify-content: center;
   svg {
@@ -56,24 +57,43 @@ export const videoBox = styled.div`
   border-radius: 1em;
   background-color: #000;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  img {
-    width: inherit;
+  video {
+    float: left;
   }
 `;
 
+export const reelsInfo = styled.div`
+  z-index: 1;
+`;
+
+export const reelsTitle = styled.div`
+  width: 30em;
+  text-align: left;
+  color: #fff;
+
+  a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 1.5em;
+  }
+`;
+
+export const reelsHash = styled.div`
+  width: 27em;
+  text-align: left;
+  color: #fff;
+  margin-top: 1em;
+  margin-left: 2em;
+`;
+
 export const reelsOptions = styled.div`
+  margin-left: 1em;
   margin-top: auto;
   text-align: center;
   margin-bottom: 3em;
   display: flex;
   flex-direction: column;
-  margin-left: -10em;
   svg {
-    margin-left: 0.25em;
     display: block;
   }
 
@@ -82,7 +102,7 @@ export const reelsOptions = styled.div`
     transition: transform 0.2s ease-in-out;
   }
 
-  :not(:hover) {
+  svg:not(:hover) {
     transform: scale(1);
     transition: transform 0.1s ease-in;
   }

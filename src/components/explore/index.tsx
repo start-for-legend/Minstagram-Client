@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 
-import { exploreType } from "../../types/exploreType";
 import FeedItem from "../common/feedItem";
 import { feedType, reelsType } from "../../types/feedType";
 import { API } from "../../API/API";

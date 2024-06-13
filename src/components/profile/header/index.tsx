@@ -56,7 +56,9 @@ const ProfileHeader = ({
 
   return (
     <S.profileHeader>
-      <S.profileDiv onClick={() => setProfileModal(!profileModal)}>
+      <S.profileDiv
+        onClick={() => (myProfile ? setProfileModal(!profileModal) : "")}
+      >
         <ProfileItem
           watched={false}
           width={10}
@@ -71,14 +73,12 @@ const ProfileHeader = ({
               ? alert(`나 자신은 팔로우 할 수 없습니다!`)
               : followOnClick()
           }
+          backgroundColor={followValid ? "#6d6d6d" : "#0095f6"}
         >
           {followValid ? "팔로잉" : " 팔로우"}
         </S.followBtn>
         <S.followBtn>메세지 보내기</S.followBtn>
-        <S.followBtn>
-          <FontAwesomeIcon icon={faUserFriends} />
-        </S.followBtn>
-        <FontAwesomeIcon icon={faEllipsis} size="2x" />
+        {/*  <FontAwesomeIcon icon={faEllipsis} size="2x" /> */}
         <S.userInfo>
           <span>게시물 {userResponse?.feeds.length}</span>
           <span

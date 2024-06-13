@@ -17,7 +17,7 @@ export const ReelsBtnContainer = styled.div`
 
   button {
     width: 5em;
-    margin-left: 5em;
+    margin-left: 12.5em;
     border: none;
     cursor: pointer;
     z-index: 2;

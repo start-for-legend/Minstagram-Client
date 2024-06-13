@@ -8,14 +8,16 @@ import {
   faVolumeXmark,
   fas,
 } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import { far } from "@fortawesome/free-regular-svg-icons";
+import { Link } from "react-router-dom";
 
 import * as S from "./style";
 import ReelsComment from "./reelsComment";
 import { reelsCmtInterface, reelsInterface } from "../../types/reelsType";
 import { API } from "../../API/API";
+import ProfileItem from "../home/items/profileItem";
 
 const ReelsVideo = ({
   author,
@@ -34,11 +36,11 @@ const ReelsVideo = ({
   const [volume, setVoulume] = useState(0.5);
   const [prevVolume, setPrevVolume] = useState(0);
   const isLike = reelsLike ? 1 : 0;
-  const ref = useRef<HTMLDivElement>(null);
   const [speakerIcon, setSpeakerIcon] = useState<IconDefinition>(faVolumeHigh);
 
   useEffect(() => {
-    if (leelsId && heartCount) {
+    setCommentOpened(false);
+    if (leelsId !== undefined && heartCount !== undefined) {
       API({
         method: "get",
         url: `/leels-comment/${leelsId}`,
@@ -48,12 +50,16 @@ const ReelsVideo = ({
         method: "get",
         url: `/leels/valid/${leelsId}`,
       }).then((res) => {
-        setHeartSum(heartCount - 1);
-        setReelsLike(res.data.isTrue);
-        console.log(`heartSum = ${heartSum}`);
+        const valid = res.data.isTrue;
+        if (valid) setHeartSum(heartCount - 1);
+        setReelsLike(valid);
       });
     }
-  }, [leelsUrl, heartCount]);
+  }, [leelsId, heartCount]);
+
+  useEffect(() => {
+    console.log(leelsUrl);
+  }, [leelsUrl]);
 
   const reelsLikeFunc = () => {
     if (!reelsLike) {
@@ -99,7 +105,7 @@ const ReelsVideo = ({
           onClick={() => setIsPlaying(!isPlaying)}
           onDoubleClick={onDoubleClick}
         >
-          <S.videoBox ref={ref}>
+          <S.videoBox>
             <ReactPlayer
               loop
               onReady={() => setIsPlaying(true)}
@@ -107,9 +113,28 @@ const ReelsVideo = ({
               url={leelsUrl}
               playing={isPlaying}
               volume={volume}
-              width="35em"
-              height="55em"
+              width="30em"
+              height="50em"
             />
+            <S.reelsInfo>
+              <S.reelsTitle>
+                <ProfileItem
+                  watched={false}
+                  profileURL={author?.profileUrl}
+                  width={3}
+                  marginLeft={2}
+                />
+                <Link to={`/profile/${author?.userId}`}>
+                  {author?.nickName}
+                </Link>
+                <div>{content}</div>
+              </S.reelsTitle>
+              <S.reelsHash>
+                {hashtags?.map((element) => {
+                  return <span key={element}>#{element} </span>;
+                })}
+              </S.reelsHash>
+            </S.reelsInfo>
           </S.videoBox>
 
           {doubleClicked ? (

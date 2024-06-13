@@ -5,7 +5,6 @@ export const reelsCommentContainer = styled.div`
   width: 34em;
   height: 100vh;
   margin-left: 85em;
-  z-index: 2;
 `;
 
 export const commentTab = styled.div`

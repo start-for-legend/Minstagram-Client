@@ -20,11 +20,7 @@ interface reelsCommentProps {
 
 const ReelsComment = ({ reelsCmt, reelsId }: reelsCommentProps) => {
   const [comment, setComment] = useState("");
-  const [reelsCmts, setReelsCmts] = useState<reelsCmtInterface[]>([]);
-
-  useEffect(() => {
-    setReelsCmts(reelsCmt);
-  }, [reelsCmt]);
+  const [reelsCmts, setReelsCmts] = useState<reelsCmtInterface[]>(reelsCmt);
 
   const postCmt = async () => {
     if (comment) {

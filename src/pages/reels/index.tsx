@@ -45,6 +45,9 @@ const Reels = () => {
             이전 릴스
           </button>
         </S.ReelsBtnContainer>
+        {/* {logData?.map((element: reelsInterface) => {
+          return <ReelsVideo key={element.leelsId} {...element} />;
+        })} */}
         <ReelsVideo {...logData[dataIdx]} />
         <S.ReelsBtnContainer>
           <button type="button" onClick={() => onIdxClick("next")}>

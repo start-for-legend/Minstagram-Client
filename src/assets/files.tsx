@@ -1,18 +1,33 @@
+import ReactPlayer from "react-player";
+import styled from "styled-components";
+
 import { styleProps } from "../types/files";
-import B from "./SIUUU.gif";
-import * as S from "./style";
+
+export const Nkunku = styled.div<styleProps>`
+  img {
+    width: ${(props) => (props.width ? props.width : "auto")};
+    height: ${(props) => (props.height ? props.height : "auto")};
+  }
+`;
 
 export const SIUU = ({ height, width }: styleProps) => {
   return (
-    <S.Nkunku width={width} height={height}>
-      <img src={B} alt="왜 안돼 ㅅㅂ" />
-    </S.Nkunku>
+    <Nkunku>
+      <ReactPlayer
+        width="auto"
+        height={height}
+        controls={false}
+        url={`${process.env.PUBLIC_URL}/files/SIUUU.webm`}
+        playing
+        loop
+      />
+    </Nkunku>
   );
 };
 
 export const DarkLogo = ({ height, width }: styleProps) => {
   return (
-    <S.Logo>
+    <div>
       <svg
         version="1.0"
         xmlns="http://www.w3.org/2000/svg"
@@ -42,7 +57,7 @@ l202 145 5 -403 c5 -442 5 -437 65 -437 67 0 65 -16 65 517 0 452 -1 481 -18
           />
         </g>
       </svg>
-    </S.Logo>
+    </div>
   );
 };
 

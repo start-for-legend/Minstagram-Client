@@ -5,7 +5,7 @@ import Sidebar from "../../components/sidebar";
 
 const HomeContainer = styled.div`
   padding-top: 3em;
-  height: 200vh;
+  height: auto;
   width: calc(100vw - 22em);
   margin-left: 22em;
   display: flex;

@@ -7,6 +7,7 @@ import * as S from "./style";
 import RecommendUser from "./recommendUser";
 import { userType } from "../../types/userType";
 import { feedType } from "../../types/feedType";
+import NoHomeData from "../common/noData";
 
 interface mainResponseProps {
   feedResponses: feedType[];
@@ -16,13 +17,17 @@ interface mainResponseProps {
 const HomeTab = () => {
   const [myProfile, setMyProfile] = useState<userType>();
   const [mainData, setMainData] = useState<mainResponseProps>();
+  const [feedResponses, setFeedResponses] = useState<feedType[]>();
 
   useEffect(() => {
     const getMain = async () => {
       await API({
         method: "get",
         url: "/main",
-      }).then((res) => setMainData(res.data));
+      }).then((res) => {
+        setMainData(res.data);
+        setFeedResponses(res.data.feedResponses);
+      });
     };
 
     const getProfile = async () => {
@@ -40,9 +45,10 @@ const HomeTab = () => {
     <S.HomeContainer>
       <S.FeedContainer>
         <FeedHeader />
-        {mainData?.feedResponses.map((element) => {
+        {feedResponses?.map((element) => {
           return <HomeFeedItem element={element} key={element.feedId} />;
         })}
+        {feedResponses ? <NoHomeData /> : ""}
       </S.FeedContainer>
       <RecommendUser
         userNickName={myProfile?.nickName}

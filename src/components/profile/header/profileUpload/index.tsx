@@ -14,6 +14,7 @@ const ProfileUpload = ({
 }) => {
   const [profileURL, setProfileURL] = useState<string>();
   const [profileFile, setProfileFile] = useState<File | null>();
+
   const formData = new FormData();
 
   useEffect(() => {

@@ -1,17 +1,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPaperPlane,
-  faPlusCircle,
-  faXmarkCircle,
-} from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
+import { faPaperPlane, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
 
 import * as S from "./style";
 import CommentItem from "./commentItem";
 import { reelsCmtInterface } from "../../../types/reelsType";
 import ProfileItem from "../../home/items/profileItem";
 import { API } from "../../../API/API";
-import { userType } from "../../../types/userType";
+import NoHomeData from "../../common/noData";
 
 interface reelsCommentProps {
   reelsCmt: reelsCmtInterface[];
@@ -20,11 +16,7 @@ interface reelsCommentProps {
 
 const ReelsComment = ({ reelsCmt, reelsId }: reelsCommentProps) => {
   const [comment, setComment] = useState("");
-  const [reelsCmts, setReelsCmts] = useState<reelsCmtInterface[]>([]);
-
-  useEffect(() => {
-    setReelsCmts(reelsCmt);
-  }, [reelsCmt]);
+  const [reelsCmts, setReelsCmts] = useState<reelsCmtInterface[]>(reelsCmt);
 
   const postCmt = async () => {
     if (comment) {
@@ -55,15 +47,19 @@ const ReelsComment = ({ reelsCmt, reelsId }: reelsCommentProps) => {
     <S.reelsCommentContainer>
       <S.commentTab>
         <S.commentBox>
-          {reelsCmts.map((data) => {
-            return (
-              <CommentItem
-                key={data.leelsCommentId}
-                data={data}
-                reelsId={reelsId}
-              />
-            );
-          })}
+          {reelsCmts.length !== 0 ? (
+            reelsCmts.map((data) => {
+              return (
+                <CommentItem
+                  key={data.leelsCommentId}
+                  data={data}
+                  reelsId={reelsId}
+                />
+              );
+            })
+          ) : (
+            <NoHomeData contentType="comment" />
+          )}
           <div>
             <FontAwesomeIcon
               icon={faPlusCircle}

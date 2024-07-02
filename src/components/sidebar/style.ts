@@ -7,6 +7,8 @@ interface sideBarProps {
 
 export const SideBarContainer = styled.div`
   position: fixed;
+  background-color: #fff;
+  z-index: 1;
   .box {
     float: left;
   }
@@ -14,7 +16,7 @@ export const SideBarContainer = styled.div`
 
 export const SidebarBox = styled.div<any>`
   width: ${({ search, curLocation }: sideBarProps) =>
-    search || curLocation === "message" ? "6em" : "22em"};
+    search || curLocation === "message" ? "6em" : "16em"};
   height: 100vh;
   border-right: 1px solid #c5c5c5;
   display: flex;

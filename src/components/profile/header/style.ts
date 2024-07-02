@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
+interface followBtnProps {
+  backgroundColor?: string;
+}
+
 export const profileHeader = styled.div`
   width: 60em;
   height: 10em;
@@ -29,13 +33,13 @@ export const userName = styled.span`
   margin-right: 0.5em;
 `;
 
-export const followBtn = styled.button`
+export const followBtn = styled.button<followBtnProps>`
   width: auto;
   padding: 0.25em 1em 0.25em 1em;
   font-size: 1.25em;
   margin-right: 0.5em;
   border: none;
-  background-color: #0095f6;
+  background-color: ${(props) => props.backgroundColor || "#0095f6"};
   color: #fff;
   border-radius: 0.25em;
   cursor: pointer;
@@ -50,4 +54,12 @@ export const userInfo = styled.div`
     margin-right: 2em;
     cursor: pointer;
   }
+`;
+
+export const profileHover = styled.div`
+  width: 10em;
+  height: 10em;
+  background-color: rgba(0, 0, 0, 50);
+  border-radius: 10em;
+  text-align: center;
 `;

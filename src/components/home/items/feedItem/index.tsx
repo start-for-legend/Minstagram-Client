@@ -5,7 +5,6 @@ import { faEllipsis, fas } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 import ProfileItem from "../profileItem";
-import { SIUU } from "../../../../assets/files";
 import * as S from "./style";
 import { feedType } from "../../../../types/feedType";
 import { API } from "../../../../API/API";
@@ -27,6 +26,8 @@ const HomeFeedItem = ({
   const [like, setLike] = useState(false);
   const [feedModal, setFeedModal] = useState(false);
   const [doubleClicked, setDoubleClicked] = useState(false);
+  const [heartSum, setHeartSum] = useState(heartCount);
+  const isLike = like ? 1 : 0;
 
   const onDoubleClick = () => {
     setLike(true);
@@ -41,6 +42,7 @@ const HomeFeedItem = ({
     }).then((res) => {
       if (res.data.isTrue) {
         setLike(true);
+        setHeartSum(heartSum - 1);
       }
     });
   }, []);
@@ -93,7 +95,7 @@ const HomeFeedItem = ({
           size="2x"
         />
         <FontAwesomeIcon icon={fas.faPaperPlane} size="2x" />
-        <S.FeedTitle>좋아요 {heartCount}개</S.FeedTitle>
+        <S.FeedTitle>좋아요 {heartSum + isLike}개</S.FeedTitle>
         <S.FeedTitle>
           <Link to={`/profile/${userResponse.userId}`}>
             {userResponse.nickName} |
@@ -111,9 +113,11 @@ const HomeFeedItem = ({
       </S.FeedFooter>
       {feedModal ? (
         <FeedModal
-          element={feedElement}
           modalState={feedModal}
           setModalState={setFeedModal}
+          postType="feed"
+          feedIdProfile={feedId}
+          leelsUrl=""
         />
       ) : (
         ""

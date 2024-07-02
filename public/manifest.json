@@ -1,7 +1,13 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
-  "icons": [{}],
+  "short_name": "Minstagram",
+  "name": "Minstagram",
+  "icons": [
+    {
+      "src": "minstagram.svg",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ],
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",

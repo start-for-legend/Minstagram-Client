@@ -26,6 +26,12 @@ const ProfileHeader = ({
   const [profileModal, setProfileModal] = useState(false);
   const [followModal, setFollowModal] = useState(false);
   const [follow, setFollow] = useState<followType>();
+  const [profileHover, setProfileHover] = useState<boolean>(false);
+
+  const onMouseInOut = () => {
+    setProfileHover(!profileHover);
+    console.log("asdf");
+  };
 
   useEffect(() => {
     console.log(userResponse);
@@ -56,12 +62,21 @@ const ProfileHeader = ({
 
   return (
     <S.profileHeader>
-      <S.profileDiv onClick={() => setProfileModal(!profileModal)}>
+      <S.profileDiv
+        onMouseEnter={onMouseInOut}
+        onMouseLeave={onMouseInOut}
+        onClick={() => (myProfile ? setProfileModal(!profileModal) : "")}
+      >
         <ProfileItem
           watched={false}
           width={10}
           profileURL={userResponse.profileUrl}
         />
+        {profileHover && myProfile ? (
+          <S.profileHover>프로필 변경</S.profileHover>
+        ) : (
+          ""
+        )}
       </S.profileDiv>
       <S.profileHeaderItem>
         <S.userName>{userResponse?.nickName}</S.userName>
@@ -71,14 +86,12 @@ const ProfileHeader = ({
               ? alert(`나 자신은 팔로우 할 수 없습니다!`)
               : followOnClick()
           }
+          backgroundColor={followValid ? "#6d6d6d" : "#0095f6"}
         >
           {followValid ? "팔로잉" : " 팔로우"}
         </S.followBtn>
         <S.followBtn>메세지 보내기</S.followBtn>
-        <S.followBtn>
-          <FontAwesomeIcon icon={faUserFriends} />
-        </S.followBtn>
-        <FontAwesomeIcon icon={faEllipsis} size="2x" />
+        {/*  <FontAwesomeIcon icon={faEllipsis} size="2x" /> */}
         <S.userInfo>
           <span>게시물 {userResponse?.feeds.length}</span>
           <span

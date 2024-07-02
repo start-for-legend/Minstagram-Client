@@ -32,7 +32,7 @@ export const selectTab = styled.div`
   width: 16em;
 `;
 
-export const selectTabItem = styled.div`
+export const selectTabItem = styled.div<feedGridType>`
   width: 6em;
   height: 2em;
   line-height: 2em;
@@ -40,6 +40,7 @@ export const selectTabItem = styled.div`
   cursor: pointer;
   font-size: 1.25em;
   float: left;
+  background-color: ${(props) => (props.curTab ? "#c5c5c5" : "")};
   svg {
     padding-right: 0.5em;
   }

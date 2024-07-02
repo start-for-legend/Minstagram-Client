@@ -48,7 +48,7 @@ const HomeTab = () => {
         {feedResponses?.map((element) => {
           return <HomeFeedItem element={element} key={element.feedId} />;
         })}
-        {feedResponses ? <NoHomeData /> : ""}
+        {feedResponses ? <NoHomeData contentType="home" /> : ""}
       </S.FeedContainer>
       <RecommendUser
         userNickName={myProfile?.nickName}

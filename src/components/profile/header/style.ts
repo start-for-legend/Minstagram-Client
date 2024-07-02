@@ -55,3 +55,11 @@ export const userInfo = styled.div`
     cursor: pointer;
   }
 `;
+
+export const profileHover = styled.div`
+  width: 10em;
+  height: 10em;
+  background-color: rgba(0, 0, 0, 50);
+  border-radius: 10em;
+  text-align: center;
+`;

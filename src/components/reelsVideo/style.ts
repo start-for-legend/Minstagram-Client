@@ -53,7 +53,7 @@ export const reelsVideo = styled.div`
 
 export const videoBox = styled.div`
   width: 30em;
-  height: 55em;
+  height: 95vh;
   border-radius: 1em;
   background-color: #000;
 

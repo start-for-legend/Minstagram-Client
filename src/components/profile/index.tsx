@@ -68,7 +68,7 @@ const ProfileComponent = () => {
           </S.selectTab>
           {(userResponse.feeds.length === 0 && getCurTab("feed")) ||
           (userResponse.leels.length === 0 && getCurTab("leels")) ? (
-            <NoHomeData />
+            <NoHomeData contentType="home" />
           ) : (
             ""
           )}

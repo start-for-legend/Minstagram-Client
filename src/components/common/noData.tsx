@@ -14,11 +14,16 @@ export const NoDataNotice = styled.div`
   margin-top: 2rem;
 `;
 
-const NoHomeData = () => {
+const NoHomeData = ({ contentType }: { contentType: "comment" | "home" }) => {
+  const commentText = "아직 아무런 댓글이 작성되지 않았어요!";
+  const homeText = "아직 아무런 글이 올라오지 않았어요!";
+
   return (
     <NoDataContainer>
       <FontAwesomeIcon icon={faUserSlash} size="3x" />
-      <NoDataNotice>아직 아무런 글이 올라오지 않았어요!</NoDataNotice>
+      <NoDataNotice>
+        {contentType === "comment" ? commentText : homeText}
+      </NoDataNotice>
     </NoDataContainer>
   );
 };

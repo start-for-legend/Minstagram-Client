@@ -26,6 +26,12 @@ const ProfileHeader = ({
   const [profileModal, setProfileModal] = useState(false);
   const [followModal, setFollowModal] = useState(false);
   const [follow, setFollow] = useState<followType>();
+  const [profileHover, setProfileHover] = useState<boolean>(false);
+
+  const onMouseInOut = () => {
+    setProfileHover(!profileHover);
+    console.log("asdf");
+  };
 
   useEffect(() => {
     console.log(userResponse);
@@ -57,6 +63,8 @@ const ProfileHeader = ({
   return (
     <S.profileHeader>
       <S.profileDiv
+        onMouseEnter={onMouseInOut}
+        onMouseLeave={onMouseInOut}
         onClick={() => (myProfile ? setProfileModal(!profileModal) : "")}
       >
         <ProfileItem
@@ -64,6 +72,11 @@ const ProfileHeader = ({
           width={10}
           profileURL={userResponse.profileUrl}
         />
+        {profileHover && myProfile ? (
+          <S.profileHover>프로필 변경</S.profileHover>
+        ) : (
+          ""
+        )}
       </S.profileDiv>
       <S.profileHeaderItem>
         <S.userName>{userResponse?.nickName}</S.userName>

@@ -6,7 +6,7 @@ export const profileModalStyles: ReactModal.Styles = {
     backgroundColor: " rgba(0, 0, 0, 0.4)",
     width: "100%",
     height: "100vh",
-    zIndex: "0",
+    zIndex: "100",
     position: "fixed",
     top: "0",
     left: "0",

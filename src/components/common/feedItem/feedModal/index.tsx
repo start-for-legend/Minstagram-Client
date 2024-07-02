@@ -19,6 +19,7 @@ import { API } from "../../../../API/API";
 import { commentType } from "../../../../types/commentType";
 import { cmtReplyAtom } from "../../../../recoil/Atoms/atoms";
 import { curTabType } from "../../../../types/profileType";
+import NoHomeData from "../../noData";
 
 const FeedModal = ({
   modalState,
@@ -199,7 +200,7 @@ const FeedModal = ({
                 );
               })
             ) : (
-              <div>아직 아무런 댓글이 달리지 않았어요!</div>
+              <NoHomeData contentType="comment" />
             )}
             <FontAwesomeIcon
               onClick={getMoreComment}

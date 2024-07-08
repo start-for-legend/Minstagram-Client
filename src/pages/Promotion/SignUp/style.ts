@@ -5,7 +5,7 @@ interface samePwType {
 }
 
 export const IdInput = styled.input`
-  width: 20rem;
+  width: 20em;
   height: 2em;
   margin-bottom: 0.33em;
   border-radius: 2px;
@@ -20,7 +20,7 @@ export const IdInput = styled.input`
 `;
 
 export const PwInput = styled.input<samePwType>`
-  width: 20rem;
+  width: 20em;
   height: 2em;
   margin-bottom: 0.33em;
   border-radius: 2px;
@@ -30,7 +30,7 @@ export const PwInput = styled.input<samePwType>`
 `;
 
 export const PhoneInput = styled.input`
-  width: 15rem;
+  width: 15em;
   height: 2em;
   margin-bottom: 0.33em;
   border-radius: 2px;
@@ -41,7 +41,7 @@ export const PhoneInput = styled.input`
 `;
 
 export const VerifyBtn = styled.button`
-  width: 4rem;
+  width: 4em;
   height: 2.2em;
   margin-bottom: 0.33em;
   border-radius: 4px;
@@ -62,7 +62,7 @@ export const OtherTool = styled.div`
   }
   hr {
     display: inline-block;
-    width: 8rem;
+    width: 8em;
   }
 `;
 
@@ -72,8 +72,8 @@ export const samePw = styled.div<samePwType>`
 `;
 
 export const RegisterBtn = styled.div`
-  width: 20.5rem;
-  height: 2rem;
+  width: 20.5em;
+  height: 2em;
   background-color: #85c4ff;
   border: none;
   color: #fff;

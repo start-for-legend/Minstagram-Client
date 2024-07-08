@@ -8,7 +8,7 @@ export const LoginForm = styled.div`
 `;
 
 export const IdInput = styled.input`
-  width: 20rem;
+  width: 20em;
   height: 2em;
   margin-bottom: 0.33em;
   border-radius: 2px;
@@ -17,7 +17,7 @@ export const IdInput = styled.input`
 `;
 
 export const LoginBtn = styled.button`
-  width: 20.5rem;
+  width: 20.5em;
   height: 2rem;
   background-color: #85c4ff;
   border: none;
@@ -37,12 +37,12 @@ export const OtherTool = styled.div`
   }
   hr {
     display: inline-block;
-    width: 8rem;
+    width: 8em;
   }
 `;
 
 export const AnyBox = styled.div`
-  width: 20.5rem;
+  width: 20.5em;
   border: 1px solid #c5c5c5;
   height: 2.5rem;
   text-align: center;

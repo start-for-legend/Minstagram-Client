@@ -7,20 +7,15 @@ export const Nkunku = styled.div<styleProps>`
   img {
     width: ${(props) => (props.width ? props.width : "auto")};
     height: ${(props) => (props.height ? props.height : "auto")};
+    object-fit: cover;
+    margin-right: 1em;
   }
 `;
 
 export const SIUU = ({ height, width }: styleProps) => {
   return (
-    <Nkunku>
-      <ReactPlayer
-        width="auto"
-        height={height}
-        controls={false}
-        url={`${process.env.PUBLIC_URL}/files/SIUUU.webm`}
-        playing
-        loop
-      />
+    <Nkunku width="20em" height="32.5em">
+      <img src={`${process.env.PUBLIC_URL}/files/ronaldo.png`} />
     </Nkunku>
   );
 };

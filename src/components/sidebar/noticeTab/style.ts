@@ -70,7 +70,12 @@ export const noticeItemContainer = styled.div<noticeItemProps>`
   padding-left: 1em;
   line-height: 2em;
   padding-bottom: 0.5em;
-  background-color: ${(props) => (props.read ? "" : "#d4ebf2")};
+  background-color: ${(props) => (props.read ? "#fff" : "#cccccc")};
+
+  a {
+    text-decoration: none;
+    color: #000;
+  }
 `;
 
 export const noticeItem = styled.div`

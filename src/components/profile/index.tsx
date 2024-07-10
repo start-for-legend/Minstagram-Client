@@ -16,9 +16,11 @@ const ProfileComponent = () => {
   const userResponse = useRecoilValue(userResponseAtom);
   const searchState = useRecoilValue(searchStateAtom);
   const [curTab, setCurTab] = useState<curTabType>("feed");
-  const [myProfile, setMyProfile] = useState(false);
   const [followValid, setFollowValid] = useState(false);
   const myLocalUserId = Number(window.localStorage.getItem(myUserId));
+  const myProfile = userResponse
+    ? myLocalUserId === userResponse.userId
+    : false;
 
   const getCurTab = (_curTab: curTabType) => {
     return Boolean(curTab === _curTab);
@@ -32,10 +34,6 @@ const ProfileComponent = () => {
           url: `/follow/valid/${userResponse.userId}`,
         }).then((res) => setFollowValid(res.data.isTrue));
       };
-
-      if (myLocalUserId === userResponse.userId) {
-        setMyProfile(true);
-      }
 
       getFollowValid();
     }

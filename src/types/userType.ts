@@ -5,7 +5,7 @@ export interface userType {
   name?: string;
   nickName?: string;
   profileUrl?: string;
-  userId?: number;
+  userId: number;
   feeds: Array<feedType>;
   leels: Array<leelsType>;
 }

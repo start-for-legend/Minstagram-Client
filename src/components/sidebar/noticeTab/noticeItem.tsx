@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
+import { Link } from "react-router-dom";
 
 import { API } from "../../../API/API";
 import { allNoticeReadAtom } from "../../../recoil/Atoms/atoms";
@@ -85,9 +86,12 @@ const NoticeItem = ({
   return (
     <S.noticeItemContainer read={curRead || allNoticeRead}>
       <S.noticeItem>
-        <ProfileItem watched={false} width={3} marginTop={0.5} />
+        <Link to={`../profile/${userId}`}>
+          <ProfileItem watched={false} width={3} marginTop={0.5} />
+        </Link>
         <S.noticeMsg>
-          {name}님이 {noticeIdx ? noticeSort[noticeIdx] : ""}
+          <Link to={`../profile/${userId}`}>{name}</Link>님이{" "}
+          {noticeIdx ? noticeSort[noticeIdx] : ""}
         </S.noticeMsg>
         <S.noticeTime>
           {dayDiff?.time}

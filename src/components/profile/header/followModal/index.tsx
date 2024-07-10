@@ -25,6 +25,7 @@ const FollowModal = ({
   const [follows, setFollows] = useState<userType[]>([]);
 
   const getFollower = async () => {
+    console.log(id);
     if (followState && id) {
       await API({
         method: "get",
@@ -34,9 +35,8 @@ const FollowModal = ({
   };
 
   useEffect(() => {
-    console.log();
-    getFollower();
-  }, [followState]);
+    if (followModal) getFollower();
+  }, [followModal]);
 
   return (
     <ReactModal
@@ -45,6 +45,7 @@ const FollowModal = ({
         setFollowModal(!followModal);
       }}
       style={S.followModalStyles}
+      ariaHideApp={false}
     >
       <S.followHeader>
         {followState === "follower" ? "팔로워" : "팔로잉"}

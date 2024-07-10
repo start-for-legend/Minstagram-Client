@@ -4,10 +4,12 @@ import { faMessage } from "@fortawesome/free-solid-svg-icons";
 
 import * as S from "./style";
 import FollowModal from "../../profile/header/followModal";
+import { myUserId } from "../../../lib/tokens";
 
 const NotSelected = () => {
   const [followModal, setFollowModal] = useState(false);
-  const myUserId = Number(window.localStorage.getItem("myUserId"));
+  const userId = Number(window.localStorage.getItem(myUserId));
+  const followState = "chatting";
 
   return (
     <S.NotSelected>
@@ -22,8 +24,8 @@ const NotSelected = () => {
       <FollowModal
         followModal={followModal}
         setFollowModal={setFollowModal}
-        id={myUserId}
-        followState="chatting"
+        id={userId}
+        followState={followState}
       />
     </S.NotSelected>
   );

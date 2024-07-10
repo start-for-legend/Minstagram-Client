@@ -19,7 +19,7 @@ export const followModalStyles: ReactModal.Styles = {
 
   content: {
     padding: `0 0 0 0`,
-    width: "30em",
+    width: "30rem",
     height: "40em",
     zIndex: "150",
     position: "absolute",
@@ -64,7 +64,7 @@ export const followItem = styled.div`
 `;
 
 export const followBtn = styled.button<followBtnProps>`
-  width: 3.25em;
+  width: 4.25em;
   height: 2em;
   font-size: 1.25em;
   background-color: ${(props) => props.backgroundColor || "#0095f6"};

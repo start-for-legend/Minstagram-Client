@@ -58,9 +58,11 @@ const FollowUserItem = ({
 
   const follow = async (apiId: number) => {
     await API({
-      method: "post",
+      method: followed ? "delete" : "post",
       url: `/follow/${apiId}`,
-    }).catch((err) => console.log(err));
+    })
+      .then(() => setFollowed(!followed))
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -88,9 +90,7 @@ const FollowUserItem = ({
         </S.followBtn>
       ) : (
         <S.followBtn
-          onClick={() =>
-            element.userId ? follow(element.userId) : console.log("err")
-          }
+          onClick={() => follow(element.userId)}
           backgroundColor={followed ? "#6d6d6d" : "#0095f6"}
         >
           {followed ? "팔로잉" : "팔로우"}
